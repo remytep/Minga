@@ -2,18 +2,14 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
 use App\Repository\ProductCategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use ApiPlatform\Metadata\ApiResource;
-use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ProductCategoryRepository::class)]
-#[ApiResource(
-    normalizationContext: ['groups' => ['read']],
-    denormalizationContext: ['groups' => ['write']],
-)]
+#[ApiResource]
 class ProductCategory
 {
     #[ORM\Id]
@@ -24,8 +20,7 @@ class ProductCategory
     #[ORM\Column(length: 255)]
     private ?string $name = null;
 
-    #[ORM\OneToMany(mappedBy: 'category', targetEntity: Product::class)]
-    #[Groups(['read', 'write'])]
+    #[ORM\OneToMany(mappedBy: 'product_category', targetEntity: Product::class)]
     private Collection $products;
 
     public function __construct()
@@ -62,7 +57,7 @@ class ProductCategory
     {
         if (!$this->products->contains($product)) {
             $this->products->add($product);
-            $product->setCategory($this);
+            $product->setProductCategory($this);
         }
 
         return $this;
@@ -72,8 +67,8 @@ class ProductCategory
     {
         if ($this->products->removeElement($product)) {
             // set the owning side to null (unless already changed)
-            if ($product->getCategory() === $this) {
-                $product->setCategory(null);
+            if ($product->getProductCategory() === $this) {
+                $product->setProductCategory(null);
             }
         }
 

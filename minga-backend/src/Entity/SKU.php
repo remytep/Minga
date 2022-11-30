@@ -2,18 +2,14 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
 use App\Repository\SkuRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use ApiPlatform\Metadata\ApiResource;
-use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: SkuRepository::class)]
-#[ApiResource(
-    normalizationContext: ['groups' => ['read']],
-    denormalizationContext: ['groups' => ['write']],
-)]
+#[ApiResource]
 class Sku
 {
     #[ORM\Id]
@@ -21,27 +17,25 @@ class Sku
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
-    private ?string $sku_code = null;
-
-    #[ORM\Column]
-    #[Groups(['read', 'write'])]
-    private ?int $price = null;
-
-    #[ORM\Column]
-    #[Groups(['read', 'write'])]
-    private ?int $in_stock = null;
-
-    #[ORM\OneToMany(mappedBy: 'SKU', targetEntity: SkuValues::class)]
-    private Collection $sku_values;
-
-    #[ORM\ManyToOne(inversedBy: 'SKUs')]
+    #[ORM\ManyToOne(inversedBy: 'skus')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Product $product = null;
 
+    #[ORM\Column]
+    private ?int $price = null;
+
+    #[ORM\Column]
+    private ?int $stock = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $reference_number = null;
+
+    #[ORM\OneToMany(mappedBy: 'Sku', targetEntity: SkuValue::class)]
+    private Collection $skuValues;
+
     public function __construct()
     {
-        $this->sku_values = new ArrayCollection();
+        $this->skuValues = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -61,17 +55,6 @@ class Sku
         return $this;
     }
 
-    public function getSkuCode(): ?string
-    {
-        return $this->sku_code;
-    }
-
-    public function setSkuCode(string $sku_code): self
-    {
-        $this->name = $sku_code;
-        return $this;
-    }
-
     public function getPrice(): ?int
     {
         return $this->price;
@@ -84,39 +67,51 @@ class Sku
         return $this;
     }
 
-    public function getInStock(): ?int
+    public function getStock(): ?int
     {
-        return $this->in_stock;
+        return $this->stock;
     }
 
-    public function setInStock(int $in_stock): self
+    public function setStock(int $stock): self
     {
-        $this->in_stock = $in_stock;
+        $this->stock = $stock;
+
+        return $this;
+    }
+
+    public function getReferenceNumber(): ?string
+    {
+        return $this->reference_number;
+    }
+
+    public function setReferenceNumber(string $reference_number): self
+    {
+        $this->reference_number = $reference_number;
 
         return $this;
     }
 
     /**
-     * @return Collection<int, SKUValues>
+     * @return Collection<int, SkuValue>
      */
     public function getSkuValues(): Collection
     {
-        return $this->sku_values;
+        return $this->skuValues;
     }
 
-    public function addSkuValue(SKUValues $skuValue): self
+    public function addSkuValue(SkuValue $skuValue): self
     {
-        if (!$this->sku_values->contains($skuValue)) {
-            $this->sku_values->add($skuValue);
+        if (!$this->skuValues->contains($skuValue)) {
+            $this->skuValues->add($skuValue);
             $skuValue->setSku($this);
         }
 
         return $this;
     }
 
-    public function removeSkuValue(SKUValues $skuValue): self
+    public function removeSkuValue(SkuValue $skuValue): self
     {
-        if ($this->sku_values->removeElement($skuValue)) {
+        if ($this->skuValues->removeElement($skuValue)) {
             // set the owning side to null (unless already changed)
             if ($skuValue->getSku() === $this) {
                 $skuValue->setSku(null);

@@ -2,11 +2,13 @@
 
 namespace App\Entity;
 
-use App\Repository\SkuValuesRepository;
+use ApiPlatform\Metadata\ApiResource;
+use App\Repository\SkuValueRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: SkuValuesRepository::class)]
-class SkuValues
+#[ORM\Entity(repositoryClass: SkuValueRepository::class)]
+#[ApiResource]
+class SkuValue
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -18,13 +20,16 @@ class SkuValues
     private ?Product $product = null;
 
     #[ORM\ManyToOne]
-    private ?Sku $sku = null;
-
-    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
     private ?ProductOption $product_option = null;
 
     #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
     private ?ProductOptionValue $product_option_value = null;
+
+    #[ORM\ManyToOne(inversedBy: 'skuValues')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Sku $Sku = null;
 
     public function getId(): ?int
     {
@@ -39,18 +44,6 @@ class SkuValues
     public function setProduct(?Product $product): self
     {
         $this->product = $product;
-
-        return $this;
-    }
-
-    public function getSku(): ?Sku
-    {
-        return $this->sku;
-    }
-
-    public function setSku(?Sku $sku): self
-    {
-        $this->sku = $sku;
 
         return $this;
     }
@@ -75,6 +68,18 @@ class SkuValues
     public function setProductOptionValue(?ProductOptionValue $product_option_value): self
     {
         $this->product_option_value = $product_option_value;
+
+        return $this;
+    }
+
+    public function getSku(): ?Sku
+    {
+        return $this->Sku;
+    }
+
+    public function setSku(?Sku $Sku): self
+    {
+        $this->Sku = $Sku;
 
         return $this;
     }
