@@ -10,7 +10,10 @@ use ApiPlatform\Metadata\ApiResource;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ProductCategoryRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    normalizationContext: ['groups' => ['read']],
+    denormalizationContext: ['groups' => ['write']],
+)]
 class ProductCategory
 {
     #[ORM\Id]
@@ -22,6 +25,7 @@ class ProductCategory
     private ?string $name = null;
 
     #[ORM\OneToMany(mappedBy: 'category', targetEntity: Product::class)]
+    #[Groups(['read', 'write'])]
     private Collection $products;
 
     public function __construct()
