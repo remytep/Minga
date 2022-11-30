@@ -2,11 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\SKUValuesRepository;
+use App\Repository\SkuValuesRepository;
 use Doctrine\ORM\Mapping as ORM;
 
-#[ORM\Entity(repositoryClass: SKUValuesRepository::class)]
-class SKUValues
+#[ORM\Entity(repositoryClass: SkuValuesRepository::class)]
+class SkuValues
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -18,7 +18,7 @@ class SKUValues
     private ?Product $product = null;
 
     #[ORM\ManyToOne]
-    private ?SKU $SKU = null;
+    private ?Sku $sku = null;
 
     #[ORM\ManyToOne]
     private ?ProductOption $product_option = null;
@@ -43,14 +43,14 @@ class SKUValues
         return $this;
     }
 
-    public function getSKU(): ?SKU
+    public function getSku(): ?Sku
     {
-        return $this->SKU;
+        return $this->sku;
     }
 
-    public function setSKU(?SKU $SKU): self
+    public function setSku(?Sku $sku): self
     {
-        $this->SKU = $SKU;
+        $this->sku = $sku;
 
         return $this;
     }

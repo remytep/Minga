@@ -2,26 +2,26 @@
 
 namespace App\Repository;
 
-use App\Entity\SKUValues;
+use App\Entity\SkuValues;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<SKUValues>
+ * @extends ServiceEntityRepository<SkuValues>
  *
- * @method SKUValues|null find($id, $lockMode = null, $lockVersion = null)
- * @method SKUValues|null findOneBy(array $criteria, array $orderBy = null)
- * @method SKUValues[]    findAll()
- * @method SKUValues[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method SkuValues|null find($id, $lockMode = null, $lockVersion = null)
+ * @method SkuValues|null findOneBy(array $criteria, array $orderBy = null)
+ * @method SkuValues[]    findAll()
+ * @method SkuValues[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class SKUValuesRepository extends ServiceEntityRepository
+class SkuValuesRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, SKUValues::class);
+        parent::__construct($registry, SkuValues::class);
     }
 
-    public function save(SKUValues $entity, bool $flush = false): void
+    public function save(SkuValues $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
 
@@ -30,7 +30,7 @@ class SKUValuesRepository extends ServiceEntityRepository
         }
     }
 
-    public function remove(SKUValues $entity, bool $flush = false): void
+    public function remove(SkuValues $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);
 
@@ -39,28 +39,28 @@ class SKUValuesRepository extends ServiceEntityRepository
         }
     }
 
-//    /**
-//     * @return SKUValues[] Returns an array of SKUValues objects
-//     */
-//    public function findByExampleField($value): array
-//    {
-//        return $this->createQueryBuilder('s')
-//            ->andWhere('s.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->orderBy('s.id', 'ASC')
-//            ->setMaxResults(10)
-//            ->getQuery()
-//            ->getResult()
-//        ;
-//    }
+    //    /**
+    //     * @return SkuValues[] Returns an array of SkuValues objects
+    //     */
+    //    public function findByExampleField($value): array
+    //    {
+    //        return $this->createQueryBuilder('s')
+    //            ->andWhere('s.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->orderBy('s.id', 'ASC')
+    //            ->setMaxResults(10)
+    //            ->getQuery()
+    //            ->getResult()
+    //        ;
+    //    }
 
-//    public function findOneBySomeField($value): ?SKUValues
-//    {
-//        return $this->createQueryBuilder('s')
-//            ->andWhere('s.exampleField = :val')
-//            ->setParameter('val', $value)
-//            ->getQuery()
-//            ->getOneOrNullResult()
-//        ;
-//    }
+    //    public function findOneBySomeField($value): ?SkuValues
+    //    {
+    //        return $this->createQueryBuilder('s')
+    //            ->andWhere('s.exampleField = :val')
+    //            ->setParameter('val', $value)
+    //            ->getQuery()
+    //            ->getOneOrNullResult()
+    //        ;
+    //    }
 }

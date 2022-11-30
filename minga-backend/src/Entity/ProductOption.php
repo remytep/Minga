@@ -35,13 +35,13 @@ class ProductOption
     #[Groups(['read', 'write'])]
     private Collection $productOptionValues;
 
-    #[ORM\OneToMany(mappedBy: 'product_option', targetEntity: SKUValues::class)]
-    private Collection $sKUValues;
+    #[ORM\OneToMany(mappedBy: 'product_option', targetEntity: SkuValues::class)]
+    private Collection $SkuValues;
 
     public function __construct()
     {
         $this->productOptionValues = new ArrayCollection();
-        $this->sKUValues = new ArrayCollection();
+        $this->SkuValues = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -106,27 +106,27 @@ class ProductOption
     /**
      * @return Collection<int, SKUValues>
      */
-    public function getSKUValues(): Collection
+    public function getSkuValues(): Collection
     {
-        return $this->sKUValues;
+        return $this->SkuValues;
     }
 
-    public function addSKUValue(SKUValues $sKUValue): self
+    public function addSKUValue(SkuValues $SkuValue): self
     {
-        if (!$this->sKUValues->contains($sKUValue)) {
-            $this->sKUValues->add($sKUValue);
-            $sKUValue->setProductOption($this);
+        if (!$this->SkuValues->contains($SkuValue)) {
+            $this->SkuValues->add($SkuValue);
+            $SkuValue->setProductOption($this);
         }
 
         return $this;
     }
 
-    public function removeSKUValue(SKUValues $sKUValue): self
+    public function removeSKUValue(SkuValues $SkuValue): self
     {
-        if ($this->sKUValues->removeElement($sKUValue)) {
+        if ($this->sKUValues->removeElement($SkuValue)) {
             // set the owning side to null (unless already changed)
-            if ($sKUValue->getProductOption() === $this) {
-                $sKUValue->setProductOption(null);
+            if ($SkuValue->getProductOption() === $this) {
+                $SkuValue->setProductOption(null);
             }
         }
 

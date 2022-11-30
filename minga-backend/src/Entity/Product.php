@@ -7,6 +7,9 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
 use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
@@ -49,12 +52,12 @@ class Product
     #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductOptionValue::class)]
     private Collection $productOptionValues;
 
-    #[ORM\OneToMany(mappedBy: 'product', targetEntity: SKUValues::class)]
-    private Collection $SKUValues;
+    #[ORM\OneToMany(mappedBy: 'product', targetEntity: SkuValues::class)]
+    private Collection $SkuValues;
 
-    #[ORM\OneToMany(mappedBy: 'product', targetEntity: SKU::class)]
+    #[ORM\OneToMany(mappedBy: 'product', targetEntity: Sku::class)]
     #[Groups(['read', 'write'])]
-    private Collection $SKUs;
+    private Collection $Skus;
 
 
     public function __construct()
@@ -167,29 +170,29 @@ class Product
     }
 
     /**
-     * @return Collection<int, SKUValues>
+     * @return Collection<int, SkuValues>
      */
-    public function getSKUValues(): Collection
+    public function getSkuValues(): Collection
     {
-        return $this->SKUValues;
+        return $this->SkuValues;
     }
 
-    public function addSKUValue(SKUValues $SKUValue): self
+    public function addSkuValue(SkuValues $SkuValue): self
     {
-        if (!$this->SKUValues->contains($SKUValue)) {
-            $this->SKUValues->add($SKUValue);
-            $SKUValue->setProduct($this);
+        if (!$this->SKUValues->contains($SkuValue)) {
+            $this->SKUValues->add($SkuValue);
+            $SkuValue->setProduct($this);
         }
 
         return $this;
     }
 
-    public function removeSKUValue(SKUValues $sKUValue): self
+    public function removeSkuValue(SKUValues $SkuValue): self
     {
-        if ($this->sKUValues->removeElement($sKUValue)) {
+        if ($this->sKUValues->removeElement($SkuValue)) {
             // set the owning side to null (unless already changed)
-            if ($sKUValue->getProduct() === $this) {
-                $sKUValue->setProduct(null);
+            if ($SkuValue->getProduct() === $this) {
+                $SkuValue->setProduct(null);
             }
         }
 
@@ -199,27 +202,27 @@ class Product
     /**
      * @return Collection<int, SKU>
      */
-    public function getSKUs(): Collection
+    public function getSkus(): Collection
     {
-        return $this->SKUs;
+        return $this->Skus;
     }
 
-    public function addSKUs(SKU $SKUs): self
+    public function addSkus(Sku $Skus): self
     {
-        if (!$this->sKUs->contains($SKUs)) {
-            $this->sKUs->add($SKUs);
-            $SKUs->setProduct($this);
+        if (!$this->Skus->contains($Skus)) {
+            $this->Skus->add($Skus);
+            $Skus->setProduct($this);
         }
 
         return $this;
     }
 
-    public function removeSKUs(SKU $SKUs): self
+    public function removeSKUs(Sku $Skus): self
     {
-        if ($this->sKUs->removeElement($SKUs)) {
+        if ($this->Skus->removeElement($Skus)) {
             // set the owning side to null (unless already changed)
-            if ($SKUs->getProduct() === $this) {
-                $SKUs->setProduct(null);
+            if ($Skus->getProduct() === $this) {
+                $Skus->setProduct(null);
             }
         }
 
