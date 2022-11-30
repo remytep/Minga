@@ -18,7 +18,7 @@ class SKUValues
     private ?Product $product = null;
 
     #[ORM\ManyToOne]
-    private ?SKU $sku = null;
+    private ?SKU $SKU = null;
 
     #[ORM\ManyToOne]
     private ?ProductOption $product_option = null;
@@ -43,14 +43,14 @@ class SKUValues
         return $this;
     }
 
-    public function getSku(): ?SKU
+    public function getSKU(): ?SKU
     {
-        return $this->sku;
+        return $this->SKU;
     }
 
-    public function setSku(?SKU $sku): self
+    public function setSKU(?SKU $SKU): self
     {
-        $this->sku = $sku;
+        $this->SKU = $SKU;
 
         return $this;
     }

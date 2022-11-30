@@ -5,24 +5,34 @@ namespace App\Entity;
 use App\Repository\ProductOptionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use ApiPlatform\Metadata\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ProductOptionRepository::class)]
+#[ApiResource(
+    normalizationContext: ['groups' => ['read']],
+    denormalizationContext: ['groups' => ['write']],
+)]
 class ProductOption
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['read', 'write'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'productOptions')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['read', 'write'])]
     private ?Product $product = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['read', 'write'])]
     private ?string $name = null;
 
     #[ORM\OneToMany(mappedBy: 'product_option', targetEntity: ProductOptionValue::class)]
+    #[Groups(['read', 'write'])]
     private Collection $productOptionValues;
 
     #[ORM\OneToMany(mappedBy: 'product_option', targetEntity: SKUValues::class)]

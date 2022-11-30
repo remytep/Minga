@@ -30,31 +30,6 @@ class Product
     #[Groups(['read', 'write'])]
     private ?string $description = null;
 
-    #[ORM\ManyToOne(inversedBy: 'products')]
-    #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['read', 'write'])]
-    private ?ProductCategory $category = null;
-
-    #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductOption::class)]
-    #[Groups(['read', 'write'])]
-    private Collection $productOptions;
-
-    #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductOptionValue::class)]
-    #[Groups(['read', 'write'])]
-    private Collection $productOptionValues;
-
-    #[ORM\OneToMany(mappedBy: 'product', targetEntity: SKUValues::class)]
-    #[Groups(['read', 'write'])]
-    private Collection $sKUValues;
-
-    #[ORM\OneToMany(mappedBy: 'product', targetEntity: SKU::class)]
-    #[Groups(['read', 'write'])]
-    private Collection $sKUs;
-
-    #[ORM\OneToMany(mappedBy: 'product', targetEntity: SKU::class)]
-    #[Groups(['read', 'write'])]
-    private Collection $skus;
-
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['read', 'write'])]
     private ?string $photo = null;
@@ -63,13 +38,31 @@ class Product
     #[Groups(['read', 'write'])]
     private ?\DateTimeImmutable $created_at = null;
 
+    #[ORM\ManyToOne(inversedBy: 'products')]
+    #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['read', 'write'])]
+    private ?ProductCategory $category = null;
+
+    #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductOption::class)]
+    private Collection $productOptions;
+
+    #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductOptionValue::class)]
+    private Collection $productOptionValues;
+
+    #[ORM\OneToMany(mappedBy: 'product', targetEntity: SKUValues::class)]
+    private Collection $SKUValues;
+
+    #[ORM\OneToMany(mappedBy: 'product', targetEntity: SKU::class)]
+    #[Groups(['read', 'write'])]
+    private Collection $SKUs;
+
+
     public function __construct()
     {
         $this->productOptions = new ArrayCollection();
         $this->productOptionValues = new ArrayCollection();
-        $this->sKUValues = new ArrayCollection();
-        $this->sKUs = new ArrayCollection();
-        $this->skus = new ArrayCollection();
+        $this->SKUValues = new ArrayCollection();
+        $this->SKUs = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -178,14 +171,14 @@ class Product
      */
     public function getSKUValues(): Collection
     {
-        return $this->sKUValues;
+        return $this->SKUValues;
     }
 
-    public function addSKUValue(SKUValues $sKUValue): self
+    public function addSKUValue(SKUValues $SKUValue): self
     {
-        if (!$this->sKUValues->contains($sKUValue)) {
-            $this->sKUValues->add($sKUValue);
-            $sKUValue->setProduct($this);
+        if (!$this->SKUValues->contains($SKUValue)) {
+            $this->SKUValues->add($SKUValue);
+            $SKUValue->setProduct($this);
         }
 
         return $this;
@@ -208,52 +201,31 @@ class Product
      */
     public function getSKUs(): Collection
     {
-        return $this->sKUs;
+        return $this->SKUs;
     }
 
-    public function addSKUs(SKU $sKUs): self
+    public function addSKUs(SKU $SKUs): self
     {
-        if (!$this->sKUs->contains($sKUs)) {
-            $this->sKUs->add($sKUs);
-            $sKUs->setProduct($this);
+        if (!$this->sKUs->contains($SKUs)) {
+            $this->sKUs->add($SKUs);
+            $SKUs->setProduct($this);
         }
 
         return $this;
     }
 
-    public function removeSKUs(SKU $sKUs): self
+    public function removeSKUs(SKU $SKUs): self
     {
-        if ($this->sKUs->removeElement($sKUs)) {
+        if ($this->sKUs->removeElement($SKUs)) {
             // set the owning side to null (unless already changed)
-            if ($sKUs->getProduct() === $this) {
-                $sKUs->setProduct(null);
+            if ($SKUs->getProduct() === $this) {
+                $SKUs->setProduct(null);
             }
         }
 
         return $this;
     }
 
-    public function addSku(SKU $sku): self
-    {
-        if (!$this->skus->contains($sku)) {
-            $this->skus->add($sku);
-            $sku->setProduct($this);
-        }
-
-        return $this;
-    }
-
-    public function removeSku(SKU $sku): self
-    {
-        if ($this->skus->removeElement($sku)) {
-            // set the owning side to null (unless already changed)
-            if ($sku->getProduct() === $this) {
-                $sku->setProduct(null);
-            }
-        }
-
-        return $this;
-    }
 
     public function getPhoto(): ?string
     {
