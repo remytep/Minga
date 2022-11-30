@@ -6,28 +6,38 @@ use App\Repository\SKURepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Metadata\ApiResource;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: SKURepository::class)]
+#[ApiResource(
+    normalizationContext: ['groups' => ['read']],
+    denormalizationContext: ['groups' => ['write']],
+)]
 class SKU
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['read', 'write'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['read', 'write'])]
     private ?string $sku_code = null;
 
     #[ORM\Column]
+    #[Groups(['read', 'write'])]
     private ?int $price = null;
 
     #[ORM\Column]
+    #[Groups(['read', 'write'])]
     private ?int $in_stock = null;
 
-    #[ORM\OneToMany(mappedBy: 'sKU', targetEntity: SKUValues::class)]
+    #[ORM\OneToMany(mappedBy: 'SKU', targetEntity: SKUValues::class)]
     private Collection $sku_values;
 
-    #[ORM\ManyToOne(inversedBy: 'skus')]
+    #[ORM\ManyToOne(inversedBy: 'SKUs')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Product $product = null;
 
