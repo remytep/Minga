@@ -2,26 +2,26 @@
 
 namespace App\Repository;
 
-use App\Entity\Sku;
+use App\Entity\SkuValue;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<Sku>
+ * @extends ServiceEntityRepository<SkuValue>
  *
- * @method Sku|null find($id, $lockMode = null, $lockVersion = null)
- * @method Sku|null findOneBy(array $criteria, array $orderBy = null)
- * @method Sku[]    findAll()
- * @method Sku[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method SkuValue|null find($id, $lockMode = null, $lockVersion = null)
+ * @method SkuValue|null findOneBy(array $criteria, array $orderBy = null)
+ * @method SkuValue[]    findAll()
+ * @method SkuValue[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class SkuRepository extends ServiceEntityRepository
+class SkuValueRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, Sku::class);
+        parent::__construct($registry, SkuValue::class);
     }
 
-    public function save(Sku $entity, bool $flush = false): void
+    public function save(SkuValue $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
 
@@ -30,7 +30,7 @@ class SkuRepository extends ServiceEntityRepository
         }
     }
 
-    public function remove(Sku $entity, bool $flush = false): void
+    public function remove(SkuValue $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);
 
@@ -40,7 +40,7 @@ class SkuRepository extends ServiceEntityRepository
     }
 
 //    /**
-//     * @return Sku[] Returns an array of Sku objects
+//     * @return SkuValue[] Returns an array of SkuValue objects
 //     */
 //    public function findByExampleField($value): array
 //    {
@@ -54,7 +54,7 @@ class SkuRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?Sku
+//    public function findOneBySomeField($value): ?SkuValue
 //    {
 //        return $this->createQueryBuilder('s')
 //            ->andWhere('s.exampleField = :val')
