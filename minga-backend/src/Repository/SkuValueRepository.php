@@ -2,26 +2,26 @@
 
 namespace App\Repository;
 
-use App\Entity\SKUValues;
+use App\Entity\SkuValue;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
- * @extends ServiceEntityRepository<SKUValues>
+ * @extends ServiceEntityRepository<SkuValue>
  *
- * @method SKUValues|null find($id, $lockMode = null, $lockVersion = null)
- * @method SKUValues|null findOneBy(array $criteria, array $orderBy = null)
- * @method SKUValues[]    findAll()
- * @method SKUValues[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method SkuValue|null find($id, $lockMode = null, $lockVersion = null)
+ * @method SkuValue|null findOneBy(array $criteria, array $orderBy = null)
+ * @method SkuValue[]    findAll()
+ * @method SkuValue[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class SKUValuesRepository extends ServiceEntityRepository
+class SkuValueRepository extends ServiceEntityRepository
 {
     public function __construct(ManagerRegistry $registry)
     {
-        parent::__construct($registry, SKUValues::class);
+        parent::__construct($registry, SkuValue::class);
     }
 
-    public function save(SKUValues $entity, bool $flush = false): void
+    public function save(SkuValue $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
 
@@ -30,7 +30,7 @@ class SKUValuesRepository extends ServiceEntityRepository
         }
     }
 
-    public function remove(SKUValues $entity, bool $flush = false): void
+    public function remove(SkuValue $entity, bool $flush = false): void
     {
         $this->getEntityManager()->remove($entity);
 
@@ -40,7 +40,7 @@ class SKUValuesRepository extends ServiceEntityRepository
     }
 
 //    /**
-//     * @return SKUValues[] Returns an array of SKUValues objects
+//     * @return SkuValue[] Returns an array of SkuValue objects
 //     */
 //    public function findByExampleField($value): array
 //    {
@@ -54,7 +54,7 @@ class SKUValuesRepository extends ServiceEntityRepository
 //        ;
 //    }
 
-//    public function findOneBySomeField($value): ?SKUValues
+//    public function findOneBySomeField($value): ?SkuValue
 //    {
 //        return $this->createQueryBuilder('s')
 //            ->andWhere('s.exampleField = :val')
