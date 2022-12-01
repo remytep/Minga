@@ -2,48 +2,78 @@
 
 namespace App\Entity;
 
-use ApiPlatform\Metadata\ApiResource;
 use App\Repository\ProductRepository;
+use App\Entity\ProductCategory;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\DBAL\Types\Types;
+use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Put;
+use ApiPlatform\Metadata\Delete;
+use Symfony\Component\Serializer\Annotation\Groups;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    normalizationContext: ['groups' => ['read', 'productCategory:read']],
+    denormalizationContext: ['groups' => ['write']],
+    operations: [
+        new GetCollection(),
+        new Get(),
+        new Put(),
+        new Post(),
+        new Patch(),
+    ]
+)]
+#[ApiFilter(SearchFilter::class, properties: ['name' => 'partial'])]
 class Product
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['read'])]
     private ?int $id = null;
 
-        #[ORM\ManyToOne(inversedBy: 'products')]
+    #[ORM\ManyToOne(inversedBy: 'products')]
     #[ORM\JoinColumn(nullable: false)]
-    private ?ProductCategory $product_category = null;
+    #[Groups(['read', 'write'])]
+    private ?ProductCategory $productCategory;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['read', 'write'])]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Groups(['read', 'write'])]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[Groups(['read', 'write'])]
     private ?string $thumbnail = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups(['read'])]
     private ?\DateTimeInterface $createdAt = null;
 
     #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductOption::class)]
+    #[Groups(['read'])]
     private Collection $productOptions;
 
     #[ORM\OneToMany(mappedBy: 'product', targetEntity: Sku::class)]
+    #[Groups(['read'])]
     private Collection $skus;
 
 
 
     public function __construct()
     {
+        $this->createdAt = new \DateTimeImmutable();
         $this->productOptions = new ArrayCollection();
         $this->skus = new ArrayCollection();
     }
@@ -51,6 +81,19 @@ class Product
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+
+    public function getProductCategory(): ?ProductCategory
+    {
+        return $this->productCategory;
+    }
+
+    public function setProductCategory(?ProductCategory $productCategory): self
+    {
+        $this->productCategory = $productCategory;
+
+        return $this;
     }
 
     public function getName(): ?string
@@ -94,12 +137,12 @@ class Product
         return $this->createdAt;
     }
 
-    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    /*     public function setCreatedAt(\DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
 
         return $this;
-    }
+    } */
 
     /**
      * @return Collection<int, ProductOption>
@@ -131,17 +174,6 @@ class Product
         return $this;
     }
 
-    public function getProductCategory(): ?ProductCategory
-    {
-        return $this->product_category;
-    }
-
-    public function setProductCategory(?ProductCategory $product_category): self
-    {
-        $this->product_category = $product_category;
-
-        return $this;
-    }
 
     /**
      * @return Collection<int, Sku>
