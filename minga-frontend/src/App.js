@@ -3,12 +3,14 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 
 // Pages
 import Accueil from './pages/Accueil';
-import ProductDetail from './pages/ProductDetail';
 
 // Components
 import Header from './components/homePage/Header'
 import ShoppingBag from './components/homePage/ShoppingBag'
 import Footer from './components/homePage/Footer'
+import Login from './components/users/Login';
+import Register from './components/users/Register';
+import DetailedProduct from './components/detailedProduct/DetailedProduct'
 
 function App() {
   return (
@@ -17,7 +19,9 @@ function App() {
         <Header />
         <Routes>
           <Route path='/' element={<Accueil />} />
-          <Route path='/product/:id' element={<ProductDetail />} />
+          <Route path='/login' element={<Login />} />
+          <Route path='/register' element={<Register />} />
+          <Route path='/products/:id' element={<DetailedProduct />} />
         </Routes>
         <Footer />
         <ShoppingBag />
