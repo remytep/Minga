@@ -6,31 +6,31 @@ import { FiTrash2 } from 'react-icons/fi'
 // components
 import cartItem from './CartItem'
 
-// ShoppingBag contexts
-import { ShoppingBagContext } from '../../contexts/ShoppingBagContext'
+// Filter contexts
+import { FilterContext } from '../../contexts/FilterContext'
 
 // import cart contexts
-import { CartContext } from '../../contexts/CartContext'
+// import { CartContext } from '../../contexts/CartContext'
 
-function ShoppingBag() {
-    const { isOpen, handleClose } = useContext(ShoppingBagContext);
+function Filter() {
+    const { isOpenFilter, handleClose } = useContext(FilterContext);
 
-    const { cart } = useContext(CartContext);
+    // const { cart } = useContext(CartContext);
     return (
-        <div className={`${isOpen ? 'right-0' : '-right-full'} w-full bg-white fixed top-0 h-full shadow-2xl md:w-[35vw] transition-all duration-300 z-20 px-4 lg:px-[35px]`}>
+        <div className={`${isOpenFilter ? 'right-0' : '-right-full'} w-full bg-white fixed top-0 h-full shadow-2xl md:w-[35vw] transition-all duration-300 z-20 px-4 lg:px-[35px]`}>
             <div className='flex justify-between items-center py-6 border-b'>
-                <div className='uppercase text-sm font-semibold text-gray-700'>Mon panier (0)</div>
+                <div className='uppercase text-sm font-semibold text-gray-700'>Mes options</div>
                 <div onClick={handleClose} className='cursor-pointer w-8 h-8 flex justify-center items-center'>
                     <IoMdClose className='text-2xl text-gray-500' />
                 </div>
             </div>
-            <div>
+            {/* <div>
                 {cart.map((item) => {
                     return <div>{item.title}</div>
                 })}
-            </div>
+            </div> */}
         </div>
     )
 }
 
-export default ShoppingBag
+export default Filter
