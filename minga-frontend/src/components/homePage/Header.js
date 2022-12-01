@@ -13,7 +13,7 @@ function Header() {
     <header className='sticky top-0 z-20 bg-[#C9C5BA] py-5'>
       <div className='container mx-auto flex justify-between '>
         <div className='flex justify-between w-40'>
-          <div>Minga</div>
+          <a href="/">Minga</a>
           <div onClick={() => setIsOpen(!isOpen)}>Filter</div>
         </div>
         
@@ -22,10 +22,10 @@ function Header() {
             <BsBag className='text-3xl' />
           </div>
           <div>
-            <Link to={''}>Connexion</Link>
+            <Link to={'/login'}>Connexion</Link>
           </div>
           <div>
-            <Link to={''}>Inscription</Link>
+            <Link to={'/register'}>Inscription</Link>
           </div>
         </div>
       </div>
