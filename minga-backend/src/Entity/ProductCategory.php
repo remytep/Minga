@@ -7,21 +7,42 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Put;
+use ApiPlatform\Metadata\Delete;
 use Symfony\Component\Serializer\Annotation\Groups;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 
 #[ORM\Entity(repositoryClass: ProductCategoryRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    normalizationContext: ['groups' => ['read', 'product:read']],
+    denormalizationContext: ['groups' => ['write']],
+    operations: [
+        new GetCollection(),
+        new Get(),
+        new Put(),
+        new Post(),
+        new Patch(),
+    ]
+)]
 class ProductCategory
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['read', 'write'])]
     private ?string $name = null;
 
-    #[ORM\OneToMany(mappedBy: 'category', targetEntity: Product::class)]
+    #[ORM\OneToMany(mappedBy: 'productCategory', targetEntity: Product::class)]
+    #[Groups(['read'])]
     private Collection $products;
 
     public function __construct()
@@ -58,7 +79,7 @@ class ProductCategory
     {
         if (!$this->products->contains($product)) {
             $this->products->add($product);
-            $product->setCategory($this);
+            $product->setProductCategory($this);
         }
 
         return $this;
@@ -68,8 +89,8 @@ class ProductCategory
     {
         if ($this->products->removeElement($product)) {
             // set the owning side to null (unless already changed)
-            if ($product->getCategory() === $this) {
-                $product->setCategory(null);
+            if ($product->getProductCategory() === $this) {
+                $product->setProductCategory(null);
             }
         }
 

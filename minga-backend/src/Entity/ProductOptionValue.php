@@ -2,52 +2,33 @@
 
 namespace App\Entity;
 
-use App\Repository\ProductOptionValueRepository;
 use ApiPlatform\Metadata\ApiResource;
-use Symfony\Component\Serializer\Annotation\Groups;
+use App\Repository\ProductOptionValueRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 #[ORM\Entity(repositoryClass: ProductOptionValueRepository::class)]
-#[ApiResource(
-    normalizationContext: ['groups' => ['read']],
-    denormalizationContext: ['groups' => ['write']],
-)]
+#[ApiResource]
 class ProductOptionValue
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['read', 'write'])]
     private ?int $id = null;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Product $product = null;
 
     #[ORM\ManyToOne(inversedBy: 'productOptionValues')]
     #[ORM\JoinColumn(nullable: false)]
     private ?ProductOption $product_option = null;
 
-    #[ORM\ManyToOne(inversedBy: 'productOptionValues')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Product $product = null;
-
     #[ORM\Column(length: 255)]
-    #[Groups(['read', 'write'])]
     private ?string $value = null;
-
 
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getProductOption(): ?ProductOption
-    {
-        return $this->product_option;
-    }
-
-    public function setProductOption(?ProductOption $product_option): self
-    {
-        $this->product_option = $product_option;
-
-        return $this;
     }
 
     public function getProduct(): ?Product
@@ -58,6 +39,18 @@ class ProductOptionValue
     public function setProduct(?Product $product): self
     {
         $this->product = $product;
+
+        return $this;
+    }
+
+    public function getProductOption(): ?ProductOption
+    {
+        return $this->product_option;
+    }
+
+    public function setProductOption(?ProductOption $product_option): self
+    {
+        $this->product_option = $product_option;
 
         return $this;
     }
