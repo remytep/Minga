@@ -1,0 +1,34 @@
+[
+    {
+        "id": 1,
+        "name": "Standing desk grey",
+        "categorie": "Standar",
+        "image": "./standarDesks/deskGrey.png"
+    },
+    {
+        "id": 2,
+        "name": "Standing desk black",
+        "categorie": "Standar",
+        "image": "./standarDesks/deskBlack.png"
+    },
+    {
+        "id": 3,
+        "name": "L shaped desk grey ",
+        "image": "./LshapeDesks/LshapedDeskGrey.png"
+    },
+    {
+        "id": 5,
+        "name": "L shaped desk black",
+        "image": "./LshapeDesks/LshapedDeskBlack.png"
+    },
+    {
+        "id": 6,
+        "name": "Standing desk grey",
+        "image": "./standarDesks/deskGrey.png"
+    },
+    {
+        "id": 7,
+        "name": "L shaped desk black",
+        "image": "./LshapeDesks/LshapedDeskBlack.png"
+    }
+]
