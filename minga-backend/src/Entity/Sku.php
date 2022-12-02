@@ -30,7 +30,7 @@ class Sku
     #[ORM\Column(length: 255)]
     private ?string $reference_number = null;
 
-    #[ORM\OneToMany(mappedBy: 'Sku', targetEntity: SkuValue::class)]
+    #[ORM\OneToMany(mappedBy: 'Sku', targetEntity: SkuValues::class)]
     private Collection $skuValues;
 
     public function __construct()
@@ -92,14 +92,14 @@ class Sku
     }
 
     /**
-     * @return Collection<int, SkuValue>
+     * @return Collection<int, SkuValues>
      */
     public function getSkuValues(): Collection
     {
         return $this->skuValues;
     }
 
-    public function addSkuValue(SkuValue $skuValue): self
+    public function addSkuValue(SkuValues $skuValue): self
     {
         if (!$this->skuValues->contains($skuValue)) {
             $this->skuValues->add($skuValue);
@@ -109,7 +109,7 @@ class Sku
         return $this;
     }
 
-    public function removeSkuValue(SkuValue $skuValue): self
+    public function removeSkuValue(SkuValues $skuValue): self
     {
         if ($this->skuValues->removeElement($skuValue)) {
             // set the owning side to null (unless already changed)
