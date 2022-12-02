@@ -5,7 +5,7 @@ import { HydraAdmin } from "@api-platform/admin";
 function App() {
   return (
     <div className="App">
-      <HydraAdmin entrypoint="https://localhost:8000/api" />
+      <HydraAdmin entrypoint="http://localhost:8000/api" />
     </div>
   );
 }
