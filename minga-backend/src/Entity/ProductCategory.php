@@ -19,8 +19,8 @@ use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 
 #[ORM\Entity(repositoryClass: ProductCategoryRepository::class)]
 #[ApiResource(
-    normalizationContext: ['groups' => ['read', 'product:read']],
-    denormalizationContext: ['groups' => ['write']],
+    normalizationContext: ['groups' => ['productCategory:read']],
+    denormalizationContext: ['groups' => ['productCategory:write']],
     operations: [
         new GetCollection(),
         new Get(),
@@ -34,15 +34,15 @@ class ProductCategory
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['read'])]
+    #[Groups(['productCategory:read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['read', 'write'])]
+    #[Groups(['productCategory:read', 'productCategory:write', 'product:read'])]
     private ?string $name = null;
 
     #[ORM\OneToMany(mappedBy: 'productCategory', targetEntity: Product::class)]
-    #[Groups(['read'])]
+    #[Groups(['productCategory:read'])]
     private Collection $products;
 
     public function __construct()
