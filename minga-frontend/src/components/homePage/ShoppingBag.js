@@ -1,10 +1,7 @@
 import React, { useContext } from 'react'
-import { Link } from 'react-router-dom'
 import { IoMdClose } from 'react-icons/io'
-import { FiTrash2 } from 'react-icons/fi'
 
 // components
-import cartItem from './CartItem'
 
 // ShoppingBag contexts
 import { ShoppingBagContext } from '../../contexts/ShoppingBagContext'
