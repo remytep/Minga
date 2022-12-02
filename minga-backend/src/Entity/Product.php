@@ -2,13 +2,13 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
 use App\Repository\ProductRepository;
 use App\Entity\ProductCategory;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Doctrine\DBAL\Types\Types;
-use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
@@ -18,17 +18,19 @@ use ApiPlatform\Metadata\Delete;
 use Symfony\Component\Serializer\Annotation\Groups;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use Symfony\Component\Serializer\Annotation\SerializedName;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 #[ApiResource(
-    normalizationContext: ['groups' => ['product:read']],
-    denormalizationContext: ['groups' => ['product:write']],
+    normalizationContext: ['groups' => ['product.read']],
+    denormalizationContext: ['groups' => ['product.write']],
     operations: [
         new GetCollection(),
         new Get(),
         new Put(),
         new Post(),
         new Patch(),
+        new Delete()
     ]
 )]
 #[ApiFilter(SearchFilter::class, properties: ['name' => 'partial'])]
@@ -37,39 +39,40 @@ class Product
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['product:read'])]
+    #[Groups(['product.read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['product:read', 'product:write', 'productCategory:read'])]
+    #[Groups(['product.read', 'product.write', 'product_category.item.get', 'product_option.read'])]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    #[Groups(['product:read', 'product:write', 'productCategory:read'])]
+    #[Groups(['product.write', 'product_category.item.get'])]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    #[Groups(['product:read', 'product:write', 'productCategory:read'])]
+    #[Groups(['product.read', 'product.write', 'product_category.item.get'])]
     private ?string $thumbnail = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Groups(['product:read', 'productCategory:read'])]
+    #[Groups(['product.read', 'product_category.item.get'])]
     private ?\DateTimeInterface $createdAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'products')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['product:read', 'product:write'])]
+    #[Groups(['product.read', 'product.write'])]
     private ?ProductCategory $productCategory;
 
     #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductOption::class)]
-    #[Groups(['product:read'])]
+    #[Groups(['product.read'])]
     private Collection $productOptions;
 
     #[ORM\OneToMany(mappedBy: 'product', targetEntity: Sku::class)]
-    #[Groups(['product:read'])]
+    #[Groups(['product.read'])]
     private Collection $skus;
 
-
+    #[ORM\Column(length: 255)]
+    private ?string $slug = null;
 
     public function __construct()
     {
@@ -111,6 +114,16 @@ class Product
     public function getDescription(): ?string
     {
         return $this->description;
+    }
+
+    #[SerializedName('description')]
+    #[Groups(['product.read'])]
+    public function getShortDescription(): string
+    {
+        if (strlen($this->description) < 20) {
+            return $this->description;
+        }
+        return substr($this->description, 0, 20) . '...';
     }
 
     public function setDescription(string $description): self
@@ -201,6 +214,18 @@ class Product
                 $sku->setProduct(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): self
+    {
+        $this->slug = $slug;
 
         return $this;
     }
