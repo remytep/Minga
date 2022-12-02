@@ -28,7 +28,6 @@ function CartProvidert({ children }) {
         }
     }
 
-    console.log(cart);
     return (
         <CartContext.Provider value={{ cart, addToCart }}>
             {children}
