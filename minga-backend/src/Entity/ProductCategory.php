@@ -2,11 +2,11 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
 use App\Repository\ProductCategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
@@ -19,30 +19,32 @@ use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 
 #[ORM\Entity(repositoryClass: ProductCategoryRepository::class)]
 #[ApiResource(
-    normalizationContext: ['groups' => ['productCategory:read']],
-    denormalizationContext: ['groups' => ['productCategory:write']],
     operations: [
         new GetCollection(),
-        new Get(),
+        new Get(normalizationContext: ['groups' => ['product_category.read', 'product_category.item.get']]),
         new Put(),
         new Post(),
         new Patch(),
-    ]
+        new Delete()
+    ],
+    normalizationContext: ['groups' => ['product_category.read']],
+    denormalizationContext: ['groups' => ['product_category.write']],
 )]
+
 class ProductCategory
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['productCategory:read'])]
+    #[Groups(['product_category.read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['productCategory:read', 'productCategory:write', 'product:read'])]
+    #[Groups(['product_category.read', 'product_category.write', 'product.read'])]
     private ?string $name = null;
 
     #[ORM\OneToMany(mappedBy: 'productCategory', targetEntity: Product::class)]
-    #[Groups(['productCategory:read'])]
+    #[Groups(['product_category.read', 'product_category.item.get'])]
     private Collection $products;
 
     public function __construct()

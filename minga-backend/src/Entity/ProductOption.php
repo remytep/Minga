@@ -7,24 +7,48 @@ use App\Repository\ProductOptionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Put;
+use ApiPlatform\Metadata\Delete;
+use Symfony\Component\Serializer\Annotation\Groups;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 
 #[ORM\Entity(repositoryClass: ProductOptionRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    normalizationContext: ['groups' => ['product_option.read']],
+    denormalizationContext: ['groups' => ['product_option.write']],
+    operations: [
+        new GetCollection(),
+        new Get(normalizationContext: ['groups' => ['product_option.read', 'product_option.item.read']]),
+        new Put(),
+        new Post(),
+        new Patch(),
+        new Delete()
+    ]
+)]
 class ProductOption
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['product_option.read', 'product.read'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'productOptions')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['product_option.read'])]
     private ?Product $product = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['product_option.read', 'product_option.write', 'product.read'])]
     private ?string $name = null;
 
     #[ORM\OneToMany(mappedBy: 'product_option', targetEntity: ProductOptionValue::class)]
+    #[Groups(['product_option.read', 'product.read'])]
     private Collection $productOptionValues;
 
     public function __construct()

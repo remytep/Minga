@@ -40,9 +40,7 @@ class User
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['read', 'write'])]
-    #[Assert\NotBlank]
-    #[Assert\Email()]
+    #[Assert\NotBlank, Assert\Email(), Groups(['read', 'write'])]
     private ?string $email = null;
 
     #[ORM\Column(length: 255)]
