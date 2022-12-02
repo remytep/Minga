@@ -21,8 +21,8 @@ use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 #[ApiResource(
-    normalizationContext: ['groups' => ['read', 'productCategory:read']],
-    denormalizationContext: ['groups' => ['write']],
+    normalizationContext: ['groups' => ['product:read']],
+    denormalizationContext: ['groups' => ['product:write']],
     operations: [
         new GetCollection(),
         new Get(),
@@ -37,36 +37,36 @@ class Product
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['read'])]
+    #[Groups(['product:read'])]
     private ?int $id = null;
 
-    #[ORM\ManyToOne(inversedBy: 'products')]
-    #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['read', 'write'])]
-    private ?ProductCategory $productCategory;
-
     #[ORM\Column(length: 255)]
-    #[Groups(['read', 'write'])]
+    #[Groups(['product:read', 'product:write', 'productCategory:read'])]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    #[Groups(['read', 'write'])]
+    #[Groups(['product:read', 'product:write', 'productCategory:read'])]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    #[Groups(['read', 'write'])]
+    #[Groups(['product:read', 'product:write', 'productCategory:read'])]
     private ?string $thumbnail = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Groups(['read'])]
+    #[Groups(['product:read', 'productCategory:read'])]
     private ?\DateTimeInterface $createdAt = null;
 
+    #[ORM\ManyToOne(inversedBy: 'products')]
+    #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['product:read', 'product:write'])]
+    private ?ProductCategory $productCategory;
+
     #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductOption::class)]
-    #[Groups(['read'])]
+    #[Groups(['product:read'])]
     private Collection $productOptions;
 
     #[ORM\OneToMany(mappedBy: 'product', targetEntity: Sku::class)]
-    #[Groups(['read'])]
+    #[Groups(['product:read'])]
     private Collection $skus;
 
 

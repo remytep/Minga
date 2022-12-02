@@ -19,7 +19,7 @@ use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 
 #[ORM\Entity(repositoryClass: ProductCategoryRepository::class)]
 #[ApiResource(
-    normalizationContext: ['groups' => ['productCategory:read', 'product:read']],
+    normalizationContext: ['groups' => ['productCategory:read']],
     denormalizationContext: ['groups' => ['productCategory:write']],
     operations: [
         new GetCollection(),
@@ -42,7 +42,7 @@ class ProductCategory
     private ?string $name = null;
 
     #[ORM\OneToMany(mappedBy: 'productCategory', targetEntity: Product::class)]
-    #[Groups(['productCategory:read', 'productCategory:write'])]
+    #[Groups(['productCategory:read'])]
     private Collection $products;
 
     public function __construct()
