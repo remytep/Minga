@@ -11,6 +11,7 @@ import Footer from './components/homePage/Footer'
 import Login from './components/users/Login';
 import Register from './components/users/Register';
 import DetailedProduct from './components/detailedProduct/DetailedProduct'
+import Filter from './components/homePage/Filter';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
         </Routes>
         <Footer />
         <ShoppingBag />
+        <Filter/>
       </Router>
     </div>
   );

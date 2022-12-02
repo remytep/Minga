@@ -12,17 +12,21 @@ import ShoppingBagProvider from './contexts/ShoppingBagContext';
 
 // cart provider
 import CartProvider from './contexts/CartContext';
+import FilterProvider from './contexts/FilterContext';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <ShoppingBagProvider>
-    <CartProvider>
-      <ProductProvider>
-        <React.StrictMode>
-          <App />
-        </React.StrictMode>
-      </ProductProvider>
-    </CartProvider>
+    <FilterProvider>
+      <CartProvider>
+        <ProductProvider>
+          <React.StrictMode>
+            <App />
+          </React.StrictMode>
+        </ProductProvider>
+      </CartProvider>
+    </FilterProvider>
+
   </ShoppingBagProvider>
 );
 
