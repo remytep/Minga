@@ -7,7 +7,6 @@ import Hero from '../components/homePage/Hero';
 
 function Accueil() {
     const { products } = useContext(ProductContext);
-
     // const filteredProducts = products.filter((item) => {
     //     return (
     //         item.category === "electronics");
