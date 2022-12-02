@@ -1,5 +1,6 @@
 import React from "react";
-import desk_model1 from "../../assets/users/desk_example1.jpg";
+import desk_model1 from "../../assets/homePages/auth/desk_example1.jpg";
+
 
 function DetailedProduct() {
   return (
