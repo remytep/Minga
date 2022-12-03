@@ -21,7 +21,7 @@ export const validator = withZod(
       .email("Must be a valid email"),
     password: 
       z.string()
-      .min(1, { message: "Last name is required" }),
+      .min(1, { message: "Password is required" }),
   })
 );
 
