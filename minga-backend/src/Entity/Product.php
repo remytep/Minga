@@ -22,8 +22,6 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 #[ApiResource(
-    normalizationContext: ['groups' => ['product.read']],
-    denormalizationContext: ['groups' => ['product.write']],
     operations: [
         new GetCollection(),
         new Get(),
@@ -31,7 +29,9 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
         new Post(),
         new Patch(),
         new Delete()
-    ]
+    ],
+    //normalizationContext: ['groups' => ['product.read', 'product_category.item.get']],
+    denormalizationContext: ['groups' => ['product.write', 'product_category.item.get']],
 )]
 #[ApiFilter(SearchFilter::class, properties: ['name' => 'partial'])]
 class Product
@@ -72,6 +72,7 @@ class Product
     private Collection $skus;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['product.read', 'product.write'])]
     private ?string $slug = null;
 
     public function __construct()

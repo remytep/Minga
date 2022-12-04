@@ -10,23 +10,25 @@ import DetailedProduct from './components/products/DetailedProduct';
 import Header from './components/homePage/Header'
 import ShoppingBag from './components/homePage/ShoppingBag'
 import Footer from './components/homePage/Footer'
+import Admin from './components/ApiPlatform';
 
 function App() {
   return (
-    
-      <Router>
-        <div>
+
+    <Router>
+      <div>
         <Header />
         <Routes>
           <Route path='/' element={<Accueil />} />
           <Route path='/products/:id' element={<DetailedProduct />} />
-          <Route  path='/login' element={<Login />} />
-          <Route  path='/register' element={<Register />} />
+          <Route path='/login' element={<Login />} />
+          <Route path='/register' element={<Register />} />
+          <Route path='/admin/*' element={<Admin />} />
         </Routes>
         <Footer />
         <ShoppingBag />
-        </div>
-      </Router>
+      </div>
+    </Router>
   );
 }
 
