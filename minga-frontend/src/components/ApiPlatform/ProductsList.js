@@ -10,7 +10,6 @@ import {
     TextField,
     TextInput
 } from "react-admin";
-import { ProductCategoryTitle, ProductTitle } from "./ProductsTitle";
 
 const productFilters = [
     <TextInput label="search" source="q" alwaysOn />

@@ -15,6 +15,7 @@ function Header() {
         <div className='flex justify-between w-40'>
           <a href="/">Minga</a>
           <div onClick={() => setIsOpen(!isOpen)}>Filter</div>
+          <Link to={'/admin'}>Admin</Link>
         </div>
         
         <div className='container flex justify-around w-56'>
