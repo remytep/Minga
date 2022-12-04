@@ -2,6 +2,8 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Login from './components/auth/Login';
 import Register from './components/auth/Register';
+import AdminDashboard from "./components/AdminDashboard";
+import Admin from "./components/ApiPlatform";
 // Pages
 import Accueil from './pages/Accueil';
 import DetailedProduct from './components/products/DetailedProduct';
@@ -9,7 +11,7 @@ import DetailedProduct from './components/products/DetailedProduct';
 // Components
 import Header from './components/homePage/Header'
 import ShoppingBag from './components/homePage/ShoppingBag'
-import Footer from './components/homePage/Footer'
+// import Footer from './components/homePage/Footer'
 
 function App() {
   return (
@@ -22,8 +24,8 @@ function App() {
           <Route path='/products/:id' element={<DetailedProduct />} />
           <Route  path='/login' element={<Login />} />
           <Route  path='/register' element={<Register />} />
+          <Route path='/admin/*' element={< Admin />}></Route>
         </Routes>
-        <Footer />
         <ShoppingBag />
         </div>
       </Router>

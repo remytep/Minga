@@ -8,7 +8,6 @@ import {
     ReferenceArrayField,
     SingleFieldList,
     TextField,
-    useRecordContext
 } from "react-admin";
 import { ProductCategoryTitle, ProductTitle } from "./ProductsTitle";
 

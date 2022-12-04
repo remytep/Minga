@@ -1,15 +1,28 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
+import { useForm } from "react-hook-form";
 import cover_img from "../../assets/homePages/auth/desk_example1.jpg";
+import axios from "axios";
 
 function Login() {
-  const [email, setEmail] = useState("");
-  const [pwd, setPwd] = useState("");
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
-const handleSubmit = (e) => {
-    e.preventDefault();
-    // console.log(email);
-};
+  const onSubmit = (data) => {
+    const userData = JSON.parse(localStorage.getItem(data.email));
+    if (userData) {
+      if (userData.password === data.password) {
+        console.log(userData.name + " You are Successfully Logged In");
+      } else {
+        console.log("Email or Password is not matching with our record");
+      }
+    } else {
+      console.log("Email or Password is not matching with our record");
+    }
+  };
 
   return (
     <div class="w-full h-screen flex items-start">
@@ -35,25 +48,27 @@ const handleSubmit = (e) => {
             </p>
           </div>
 
-          <form onSubmit={handleSubmit}>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <div className="w-full flex flex-col">
               <input
                 type="email"
                 name="email"
                 placeholder="Email"
                 className="w-full text-black border-b border-black outline-none focus:outline-none py-2 my-2 bg-transparent"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
+                {...register("email", {
+                  required: "Please enter a valid email",
+                })}
               />
+              <p>{errors.email?.message}</p>
 
               <input
                 type="password"
                 placeholder="Password"
                 className="w-full text-black border-b border-black outline-none focus:outline-none py-2 mb-10 bg-transparent"
-                value={pwd}
-                onChange={(e) => setPwd(e.target.value)}
+                {...register("password", { required: "Password didn't match" })}
               />
             </div>
+            <p>{errors.password?.message}</p>
 
             <div className="w-full flex items-center justify-between">
               <div className="w-full flex items-center">
@@ -67,7 +82,10 @@ const handleSubmit = (e) => {
             </div>
 
             <div className="w-full h-full flex-col my-4">
-              <button type="submit" className="w-full text-white bg-[#060606] rounded-md p-3 text-center flex items-center justify-center cursor-pointer">
+              <button
+                type="submit"
+                className="w-full text-white bg-[#060606] rounded-md p-3 text-center flex items-center justify-center cursor-pointer"
+              >
                 Log In
               </button>
             </div>

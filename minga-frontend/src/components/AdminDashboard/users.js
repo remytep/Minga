@@ -10,12 +10,10 @@ import {
     EmailField,
     CreateButton,
     ExportButton,
-    ReferenceManyField,
     DatagridConfigurable,
     TextField,
     TopToolbar,
     SelectColumnsButton,
-
 } from 'react-admin';
 
 const ListActions = () => (

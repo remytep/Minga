@@ -11,7 +11,7 @@ import { ProductCategoryShow, ProductShow } from './ProductsShow';
 const Admin = () => (
     <HydraAdmin
         basename="/admin"
-        entrypoint="http://localhost:8000/api"
+        entrypoint="http://127.0.0.1:37153/api"
     >
         <ResourceGuesser name="products" create={ProductCreate} list={ProductList} edit={ProductEdit} show={ProductShow} />
         <ResourceGuesser name="product_categories" create={ProductCategoryCreate} list={ProductCategoryList} edit={ProductCategoryEdit} show={ProductCategoryShow} />

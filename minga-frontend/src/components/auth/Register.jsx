@@ -1,37 +1,42 @@
 import React from "react";
-import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import axios from "axios";
 import cover_img from "../../assets/homePages/auth/signup_desk.jpg";
-import { z } from "zod";
-import { withZod } from "@remix-validated-form/with-zod";
 
-// Start with a lower or uppercase letter
-// Must be followed from 5 to 23 characters that can be lower or uppercase too
-// const USER_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{5, 23}$/;
-
-// Requires at least 1 uppercase case latter, 1 lowercase, 1 digit and 1 special character
-// From 5 to 30 characters
-// const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{5, 30}$/;
-
-export const validator = withZod(
-  z.object({
-    email: z
-      .string()
-      .min(1, { message: "Email is required" })
-      .email("Must be a valid email"),
-    password: 
-      z.string()
-      .min(1, { message: "Password is required" }),
-  })
-);
+const schema = yup.object().shape({
+  email: yup.string().email().required("Email is invalid"),
+  password: yup.string().min(3, "Passwords must be at least 3 characters").max(23).required(),
+  confirmPassword: yup
+    .string()
+    .oneOf([yup.ref("password"), null, "Passwords must match !"])
+    .required("Type your password again"),
+});
 
 function Register() {
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
-  const onSubmit = (data) => console.log(data);
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
+
+  const onSubmit = (data) => {
+    axios
+      .post("http://127.0.0.1:37153/api/users", data, {
+        headers: { "Content-Type": "application/json" },
+      })
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.log(error.data);
+      });
+    console.log(data);
+  };
 
   return (
     <div class="w-full h-screen flex items-start">
@@ -61,10 +66,9 @@ function Register() {
                 name="email"
                 placeholder="Email"
                 className="w-full text-black border-b border-black outline-none focus:outline-none py-2 my-3 bg-transparent"
-                {...register("email", { required: true, maxLength: 80 })}
+                {...register("email")}
               />
-              {errors.email?.type === "required" && "Email is required"}
-              {errors.email?.type === "maxLength" && "Max length exceed"}
+              <p className="text-red-700"> {errors.email?.message} </p>
 
               <input
                 type="password"
@@ -73,13 +77,19 @@ function Register() {
                 className="w-full text-black border-b border-black outline-none focus:outline-none py-2 my-3 bg-transparent"
                 {...register("password")}
               />
+              <p className="text-red-700"> {errors.password?.message} </p>
 
               <input
                 type="password"
+                name="confirmPassword"
                 placeholder="Confirm Password"
                 className="w-full text-black border-b border-black outline-none focus:outline-none py-2 mt-3 mb-4 bg-transparent"
-                {...register("confirmPwd")}
+                {...register("confirmPassword")}
               />
+              <p className="text-red-700">
+                {" "}
+                {errors.confirmPassword?.message}{" "}
+              </p>
             </div>
 
             <div className="w-full flex items-center justify-between">
