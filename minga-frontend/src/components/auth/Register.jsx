@@ -1,47 +1,47 @@
 import React from "react";
-import { Form, Link } from "react-router-dom";
-import { useForm } from "react-hook-form";
-import * as yup from "yup";
-import { yupResolver } from "@hookform/resolvers/yup";
-import axios from "axios";
+import { Link } from "react-router-dom";
+// import { useForm } from "react-hook-form";
+// import * as yup from "yup";
+// import { yupResolver } from "@hookform/resolvers/yup";
+// import axios from "axios";
 import cover_img from "../../assets/homePages/auth/signup_desk.jpg";
 
-const schema = yup.object().shape({
-  email: yup.string().email().required("Email is invalid"),
-  password: yup
-    .string()
-    .min(3, "Passwords must be at least 3 characters")
-    .max(23)
-    .required(),
-  confirmPassword: yup
-    .string()
-    .oneOf([yup.ref("password"), null, "Passwords must match !"])
-    .required("Type your password again"),
-  acceptTerms: yup.bool().oneOf([true], "Accept Terms is required"),
-});
+// const schema = yup.object().shape({
+//   email: yup.string().email().required("Email is invalid"),
+//   password: yup
+//     .string()
+//     .min(3, "Passwords must be at least 3 characters")
+//     .max(23)
+//     .required(),
+//   confirmPassword: yup
+//     .string()
+//     .oneOf([yup.ref("password"), null, "Passwords must match !"])
+//     .required("Type your password again"),
+//   acceptTerms: yup.bool().oneOf([true], "Accept Terms is required"),
+// });
 
 function Register() {
-  const {
-    register,
-    handleSubmit,
-    formState: { errors },
-  } = useForm({
-    resolver: yupResolver(schema),
-  });
+  // const {
+  //   register,
+  //   handleSubmit,
+  //   formState: { errors },
+  // } = useForm({
+  //   resolver: yupResolver(schema),
+  // });
 
-  const onSubmit = (data) => {
-    axios
-      .post("http://127.0.0.1:36783/api/users", data, {
-        headers: { "Content-Type": "application/json" },
-      })
-      .then((response) => {
-        console.log(response.data);
-      })
-      .catch((error) => {
-        console.log(error.data);
-      });
-    console.log(data);
-  };
+  // const onSubmit = (data) => {
+  //   axios
+  //     .post("http://127.0.0.1:36783/api/users", data, {
+  //       headers: { "Content-Type": "application/json" },
+  //     })
+  //     .then((response) => {
+  //       console.log(response.data);
+  //     })
+  //     .catch((error) => {
+  //       console.log(error.data);
+  //     });
+  //   console.log(data);
+  // };
 
   return (
     <div class="w-full h-screen flex items-start">
@@ -64,46 +64,49 @@ function Register() {
             <h3 className="text-2xl font-semibold mb-4">Sign Up</h3>
           </div>
 
-          <Form action="/login" onSubmit={handleSubmit(onSubmit)}>
+          <form> 
+            {/* onSubmit={handleSubmit(onSubmit)} */}
             <div className="w-full flex flex-col mb-4">
               <input
                 type="email"
                 name="email"
                 placeholder="Email"
                 className="w-full text-black border-b border-black outline-none focus:outline-none py-2 my-3 bg-transparent"
-                {...register("email")}
+                // {...register("email")}
               />
-              <p className="text-red-700"> {errors.email?.message} </p>
+              {/* <p className="text-red-700"> {errors.email?.message} </p> */}
 
               <input
                 type="password"
                 name="password"
                 placeholder="Password"
                 className="w-full text-black border-b border-black outline-none focus:outline-none py-2 my-3 bg-transparent"
-                {...register("password")}
+                // {...register("password")}
               />
-              <p className="text-red-700"> {errors.password?.message} </p>
+              {/* <p className="text-red-700"> {errors.password?.message} </p> */}
 
               <input
                 type="password"
                 name="confirmPassword"
                 placeholder="Confirm Password"
                 className="w-full text-black border-b border-black outline-none focus:outline-none py-2 mt-3 mb-4 bg-transparent"
-                {...register("confirmPassword")}
+                // {...register("confirmPassword")}
               />
-              <p className="text-red-700">
+              {/* <p className="text-red-700">
                 {" "}
                 {errors.confirmPassword?.message}{" "}
-              </p>
+              </p> */}
             </div>
 
             <div className="w-full flex items-center justify-between">
               <div className="w-full flex items-center">
-                <input type="checkbox" className="w-4 h-4 mr-2" {...register("acceptTerms")}/>
+                <input type="checkbox" className="w-4 h-4 mr-2" 
+                // {...register("acceptTerms")}
+                />
                 <p className="text-sm">
                   I accept the Terms of Service
                 </p>
-                <p>{errors.acceptTerms?.message}</p>
+                {/* <p>{errors.acceptTerms?.message}</p> */}
               </div>
             </div>
 
@@ -115,7 +118,7 @@ function Register() {
                 Sign Up
               </button>
             </div>
-          </Form>
+          </form>
 
           <div className="w-full flex items-center justify-center relative py-6">
             <div className="w-full h-[1px] bg-black/40"></div>

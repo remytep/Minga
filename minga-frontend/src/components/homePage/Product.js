@@ -26,7 +26,7 @@ function Product({ product }) {
               <BsPlus className='text-2xl' />
             </div>
           </button>
-          <Link to={`/product/${id}`} className='w-8 h-8 flex justify-center items-center text-primary drop-shadow-xl'>
+          <Link to={`/products/${id}`} className='w-8 h-8 flex justify-center items-center text-primary drop-shadow-xl'>
             <BsEyeFill />
           </Link>
         </div>
