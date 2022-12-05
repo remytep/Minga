@@ -10,21 +10,17 @@ import {
     TextField,
     useRecordContext
 } from "react-admin";
-import { ProductCategoryTitle, ProductTitle } from "./ProductsTitle";
+import { ProductCategoryTitle, ProductTitle } from "./TitleComponents";
 
 export const ProductShow = (props) => (
     <ShowGuesser title={<ProductTitle />} {...props} >
         <FieldGuesser source={"name"} />
         <FieldGuesser source={"description"} />
-        <FieldGuesser source={"photo"} />
-        <FieldGuesser source={"created_at"} />
-        <ReferenceField label="Category name" source="category" reference="product_categories">
+        <FieldGuesser source={"thumbnail"} />
+        <ReferenceField source="productCategory" reference="product_categories">
             <TextField source="name" />
         </ReferenceField>
-        <FieldGuesser source={"productOptions"} />
-        <FieldGuesser source={"productOptionValues"} />
-        <FieldGuesser source={"SKUValues"} />
-        <FieldGuesser source={"SKUs"} />
+        <FieldGuesser source={"slug"} />
     </ShowGuesser>
 );
 
