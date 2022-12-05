@@ -16,14 +16,13 @@ import ShoppingBag from './components/homePage/ShoppingBag'
 
 function App() {
   return (
-    
       <Router>
         <div>
         <Header />
         <Routes>
           <Route path='/' element={<Accueil />} />
-          <Route  path='/login' element={<Login />} />
-          <Route  path='/register' element={<Register />} />
+          <Route path='/login' element={<Login />} />
+          <Route path='/register' element={<Register />} />
           <Route path='/admin/*' element={< Admin />}></Route>
           <Route path='/products/:id' element={<DetailedProduct />} />
         </Routes>
