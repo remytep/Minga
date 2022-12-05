@@ -19,6 +19,7 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use Symfony\Component\Serializer\Annotation\SerializedName;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 #[ApiResource(
@@ -63,8 +64,9 @@ class Product
     #[Groups(['product.read', 'product.write'])]
     private ?ProductCategory $productCategory;
 
-    #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductOption::class)]
-    #[Groups(['product.read'])]
+    #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductOption::class, cascade: ["persist"])]
+    #[Groups(['product.read', 'product.write'])]
+    #[Assert\Valid()]
     private Collection $productOptions;
 
     #[ORM\OneToMany(mappedBy: 'product', targetEntity: Sku::class)]
