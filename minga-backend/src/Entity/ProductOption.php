@@ -16,6 +16,7 @@ use ApiPlatform\Metadata\Delete;
 use Symfony\Component\Serializer\Annotation\Groups;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ProductOptionRepository::class)]
 #[ApiResource(
@@ -35,7 +36,7 @@ class ProductOption
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['product_option.read', 'product.read'])]
+    #[Groups(['product_option.read', 'product_option.write', 'product.read'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'productOptions')]
@@ -44,11 +45,12 @@ class ProductOption
     private ?Product $product = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['product_option.read', 'product_option.write', 'product.read'])]
+    #[Groups(['product_option.read', 'product_option.write', 'product.read', 'product.write'])]
     private ?string $name = null;
 
-    #[ORM\OneToMany(mappedBy: 'product_option', targetEntity: ProductOptionValue::class)]
-    #[Groups(['product_option.read', 'product.read'])]
+    #[ORM\OneToMany(mappedBy: 'product_option', targetEntity: ProductOptionValue::class, cascade: ["persist"])]
+    #[Groups(['product_option.read', 'product_option.write', 'product.read'])]
+    #[Assert\Valid()]
     private Collection $productOptionValues;
 
     public function __construct()
