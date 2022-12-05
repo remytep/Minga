@@ -2,72 +2,101 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
 use App\Repository\ProductRepository;
+use App\Entity\ProductCategory;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use ApiPlatform\Metadata\ApiResource;
+use Doctrine\DBAL\Types\Types;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Put;
+use ApiPlatform\Metadata\Delete;
 use Symfony\Component\Serializer\Annotation\Groups;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use Symfony\Component\Serializer\Annotation\SerializedName;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 #[ApiResource(
-    normalizationContext: ['groups' => ['read']],
-    denormalizationContext: ['groups' => ['write']],
+    normalizationContext: ['groups' => ['product.read']],
+    denormalizationContext: ['groups' => ['product.write']],
+    operations: [
+        new GetCollection(),
+        new Get(),
+        new Put(),
+        new Post(),
+        new Patch(),
+        new Delete()
+    ]
 )]
+#[ApiFilter(SearchFilter::class, properties: ['name' => 'partial'])]
 class Product
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['read', 'write'])]
+    #[Groups(['product.read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['read', 'write'])]
+    #[Groups(['product.read', 'product.write', 'product_category.item.get', 'product_option.read'])]
     private ?string $name = null;
 
-    #[ORM\Column(length: 255)]
-    #[Groups(['read', 'write'])]
+    #[ORM\Column(type: Types::TEXT)]
+    #[Groups(['product.write', 'product_category.item.get'])]
     private ?string $description = null;
 
-    #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['read', 'write'])]
-    private ?string $photo = null;
+    #[ORM\Column(type: Types::TEXT)]
+    #[Groups(['product.read', 'product.write', 'product_category.item.get'])]
+    private ?string $thumbnail = null;
 
-    #[ORM\Column(nullable: true)]
-    #[Groups(['read', 'write'])]
-    private ?\DateTimeImmutable $created_at = null;
+    #[ORM\Column(type: Types::DATETIME_MUTABLE)]
+    #[Groups(['product.read', 'product_category.item.get'])]
+    private ?\DateTimeInterface $createdAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'products')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['read', 'write'])]
-    private ?ProductCategory $category = null;
+    #[Groups(['product.read', 'product.write'])]
+    private ?ProductCategory $productCategory;
 
     #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductOption::class)]
+    #[Groups(['product.read'])]
     private Collection $productOptions;
 
-    #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductOptionValue::class)]
-    private Collection $productOptionValues;
+    #[ORM\OneToMany(mappedBy: 'product', targetEntity: Sku::class)]
+    #[Groups(['product.read'])]
+    private Collection $skus;
 
-    #[ORM\OneToMany(mappedBy: 'product', targetEntity: SKUValues::class)]
-    private Collection $SKUValues;
-
-    #[ORM\OneToMany(mappedBy: 'product', targetEntity: SKU::class)]
-    #[Groups(['read', 'write'])]
-    private Collection $SKUs;
-
+    #[ORM\Column(length: 255)]
+    private ?string $slug = null;
 
     public function __construct()
     {
+        $this->createdAt = new \DateTimeImmutable();
         $this->productOptions = new ArrayCollection();
-        $this->productOptionValues = new ArrayCollection();
-        $this->SKUValues = new ArrayCollection();
-        $this->SKUs = new ArrayCollection();
+        $this->skus = new ArrayCollection();
     }
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+
+    public function getProductCategory(): ?ProductCategory
+    {
+        return $this->productCategory;
+    }
+
+    public function setProductCategory(?ProductCategory $productCategory): self
+    {
+        $this->productCategory = $productCategory;
+
+        return $this;
     }
 
     public function getName(): ?string
@@ -87,6 +116,16 @@ class Product
         return $this->description;
     }
 
+    #[SerializedName('description')]
+    #[Groups(['product.read'])]
+    public function getShortDescription(): string
+    {
+        if (strlen($this->description) < 20) {
+            return $this->description;
+        }
+        return substr($this->description, 0, 20) . '...';
+    }
+
     public function setDescription(string $description): self
     {
         $this->description = $description;
@@ -94,17 +133,29 @@ class Product
         return $this;
     }
 
-    public function getCategory(): ?ProductCategory
+    public function getThumbnail(): ?string
     {
-        return $this->category;
+        return $this->thumbnail;
     }
 
-    public function setCategory(?ProductCategory $category): self
+    public function setThumbnail(string $thumbnail): self
     {
-        $this->category = $category;
+        $this->thumbnail = $thumbnail;
 
         return $this;
     }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    /*     public function setCreatedAt(\DateTimeInterface $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    } */
 
     /**
      * @return Collection<int, ProductOption>
@@ -136,117 +187,45 @@ class Product
         return $this;
     }
 
+
     /**
-     * @return Collection<int, ProductOptionValue>
+     * @return Collection<int, Sku>
      */
-    public function getProductOptionValues(): Collection
+    public function getSkus(): Collection
     {
-        return $this->productOptionValues;
+        return $this->skus;
     }
 
-    public function addProductOptionValue(ProductOptionValue $productOptionValue): self
+    public function addSku(Sku $sku): self
     {
-        if (!$this->productOptionValues->contains($productOptionValue)) {
-            $this->productOptionValues->add($productOptionValue);
-            $productOptionValue->setProduct($this);
+        if (!$this->skus->contains($sku)) {
+            $this->skus->add($sku);
+            $sku->setProduct($this);
         }
 
         return $this;
     }
 
-    public function removeProductOptionValue(ProductOptionValue $productOptionValue): self
+    public function removeSku(Sku $sku): self
     {
-        if ($this->productOptionValues->removeElement($productOptionValue)) {
+        if ($this->skus->removeElement($sku)) {
             // set the owning side to null (unless already changed)
-            if ($productOptionValue->getProduct() === $this) {
-                $productOptionValue->setProduct(null);
+            if ($sku->getProduct() === $this) {
+                $sku->setProduct(null);
             }
         }
 
         return $this;
     }
 
-    /**
-     * @return Collection<int, SKUValues>
-     */
-    public function getSKUValues(): Collection
+    public function getSlug(): ?string
     {
-        return $this->SKUValues;
+        return $this->slug;
     }
 
-    public function addSKUValue(SKUValues $SKUValue): self
+    public function setSlug(string $slug): self
     {
-        if (!$this->SKUValues->contains($SKUValue)) {
-            $this->SKUValues->add($SKUValue);
-            $SKUValue->setProduct($this);
-        }
-
-        return $this;
-    }
-
-    public function removeSKUValue(SKUValues $sKUValue): self
-    {
-        if ($this->sKUValues->removeElement($sKUValue)) {
-            // set the owning side to null (unless already changed)
-            if ($sKUValue->getProduct() === $this) {
-                $sKUValue->setProduct(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, SKU>
-     */
-    public function getSKUs(): Collection
-    {
-        return $this->SKUs;
-    }
-
-    public function addSKUs(SKU $SKUs): self
-    {
-        if (!$this->sKUs->contains($SKUs)) {
-            $this->sKUs->add($SKUs);
-            $SKUs->setProduct($this);
-        }
-
-        return $this;
-    }
-
-    public function removeSKUs(SKU $SKUs): self
-    {
-        if ($this->sKUs->removeElement($SKUs)) {
-            // set the owning side to null (unless already changed)
-            if ($SKUs->getProduct() === $this) {
-                $SKUs->setProduct(null);
-            }
-        }
-
-        return $this;
-    }
-
-
-    public function getPhoto(): ?string
-    {
-        return $this->photo;
-    }
-
-    public function setPhoto(?string $photo): self
-    {
-        $this->photo = $photo;
-
-        return $this;
-    }
-
-    public function getCreatedAt(): ?\DateTimeImmutable
-    {
-        return $this->created_at;
-    }
-
-    public function setCreatedAt(?\DateTimeImmutable $created_at): self
-    {
-        $this->created_at = $created_at;
+        $this->slug = $slug;
 
         return $this;
     }

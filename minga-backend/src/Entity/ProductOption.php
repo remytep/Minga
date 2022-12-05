@@ -2,46 +2,58 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiResource;
 use App\Repository\ProductOptionRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
-use ApiPlatform\Metadata\ApiResource;
-use Symfony\Component\Serializer\Annotation\Groups;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Put;
+use ApiPlatform\Metadata\Delete;
+use Symfony\Component\Serializer\Annotation\Groups;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 
 #[ORM\Entity(repositoryClass: ProductOptionRepository::class)]
 #[ApiResource(
-    normalizationContext: ['groups' => ['read']],
-    denormalizationContext: ['groups' => ['write']],
+    normalizationContext: ['groups' => ['product_option.read']],
+    denormalizationContext: ['groups' => ['product_option.write']],
+    operations: [
+        new GetCollection(),
+        new Get(normalizationContext: ['groups' => ['product_option.read', 'product_option.item.read']]),
+        new Put(),
+        new Post(),
+        new Patch(),
+        new Delete()
+    ]
 )]
 class ProductOption
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['read', 'write'])]
+    #[Groups(['product_option.read', 'product.read'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'productOptions')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['read', 'write'])]
+    #[Groups(['product_option.read'])]
     private ?Product $product = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['read', 'write'])]
+    #[Groups(['product_option.read', 'product_option.write', 'product.read'])]
     private ?string $name = null;
 
     #[ORM\OneToMany(mappedBy: 'product_option', targetEntity: ProductOptionValue::class)]
-    #[Groups(['read', 'write'])]
+    #[Groups(['product_option.read', 'product.read'])]
     private Collection $productOptionValues;
-
-    #[ORM\OneToMany(mappedBy: 'product_option', targetEntity: SKUValues::class)]
-    private Collection $sKUValues;
 
     public function __construct()
     {
         $this->productOptionValues = new ArrayCollection();
-        $this->sKUValues = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -97,36 +109,6 @@ class ProductOption
             // set the owning side to null (unless already changed)
             if ($productOptionValue->getProductOption() === $this) {
                 $productOptionValue->setProductOption(null);
-            }
-        }
-
-        return $this;
-    }
-
-    /**
-     * @return Collection<int, SKUValues>
-     */
-    public function getSKUValues(): Collection
-    {
-        return $this->sKUValues;
-    }
-
-    public function addSKUValue(SKUValues $sKUValue): self
-    {
-        if (!$this->sKUValues->contains($sKUValue)) {
-            $this->sKUValues->add($sKUValue);
-            $sKUValue->setProductOption($this);
-        }
-
-        return $this;
-    }
-
-    public function removeSKUValue(SKUValues $sKUValue): self
-    {
-        if ($this->sKUValues->removeElement($sKUValue)) {
-            // set the owning side to null (unless already changed)
-            if ($sKUValue->getProductOption() === $this) {
-                $sKUValue->setProductOption(null);
             }
         }
 

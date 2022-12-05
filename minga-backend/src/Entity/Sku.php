@@ -7,30 +7,56 @@ use App\Repository\SkuRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use ApiPlatform\Metadata\Get;
+use ApiPlatform\Metadata\GetCollection;
+use ApiPlatform\Metadata\Post;
+use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Put;
+use ApiPlatform\Metadata\Delete;
+use Symfony\Component\Serializer\Annotation\Groups;
+use ApiPlatform\Metadata\ApiFilter;
+use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 
 #[ORM\Entity(repositoryClass: SkuRepository::class)]
-#[ApiResource]
+#[ApiResource(
+    normalizationContext: ['groups' => ['sku.read']],
+    denormalizationContext: ['groups' => ['sku.write']],
+    operations: [
+        new GetCollection(),
+        new Get(),
+        new Put(),
+        new Post(),
+        new Patch(),
+        new Delete()
+    ]
+)]
 class Sku
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['sku.read', 'product.read'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'skus')]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['sku.read'])]
     private ?Product $product = null;
 
     #[ORM\Column]
+    #[Groups(['sku.read', 'product.read'])]
     private ?int $price = null;
 
     #[ORM\Column]
+    #[Groups(['sku.read', 'product.read'])]
     private ?int $stock = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['sku.read', 'product.read'])]
     private ?string $reference_number = null;
 
-    #[ORM\OneToMany(mappedBy: 'Sku', targetEntity: SkuValues::class)]
+    #[ORM\OneToMany(mappedBy: 'Sku', targetEntity: SkuValue::class)]
+    #[Groups(['sku.read', 'product.read'])]
     private Collection $skuValues;
 
     public function __construct()
@@ -92,14 +118,14 @@ class Sku
     }
 
     /**
-     * @return Collection<int, SkuValues>
+     * @return Collection<int, SkuValue>
      */
     public function getSkuValues(): Collection
     {
         return $this->skuValues;
     }
 
-    public function addSkuValue(SkuValues $skuValue): self
+    public function addSkuValue(SkuValue $skuValue): self
     {
         if (!$this->skuValues->contains($skuValue)) {
             $this->skuValues->add($skuValue);
@@ -109,7 +135,7 @@ class Sku
         return $this;
     }
 
-    public function removeSkuValue(SkuValues $skuValue): self
+    public function removeSkuValue(SkuValue $skuValue): self
     {
         if ($this->skuValues->removeElement($skuValue)) {
             // set the owning side to null (unless already changed)

@@ -3,7 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
-use App\Repository\ProductOptionValueRepository;
+use App\Repository\SkuValueRepository;
 use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
@@ -15,10 +15,10 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 
-#[ORM\Entity(repositoryClass: ProductOptionValueRepository::class)]
+#[ORM\Entity(repositoryClass: SkuValueRepository::class)]
 #[ApiResource(
-    normalizationContext: ['groups' => ['product_option_value.read']],
-    denormalizationContext: ['groups' => ['product_option_value.write']],
+    normalizationContext: ['groups' => ['sku_value.read']],
+    denormalizationContext: ['groups' => ['sku_value.write']],
     operations: [
         new GetCollection(),
         new Get(),
@@ -28,27 +28,33 @@ use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
         new Delete()
     ]
 )]
-class ProductOptionValue
+class SkuValue
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['product_option_value.read', 'product_option.item.read'])]
+    #[Groups(['sku_value.read'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['product_option_value.read'])]
+    #[Groups(['sku_value.read'])]
     private ?Product $product = null;
 
-    #[ORM\ManyToOne(inversedBy: 'productOptionValues')]
+    #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['product_option_value.read'])]
+    #[Groups(['sku_value.read'])]
     private ?ProductOption $product_option = null;
 
-    #[ORM\Column(length: 255)]
-    #[Groups(['product_option_value.read', 'product_option.item.read', 'product.read'])]
-    private ?string $value = null;
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['sku_value.read'])]
+    private ?ProductOptionValue $product_option_value = null;
+
+    #[ORM\ManyToOne(inversedBy: 'skuValues')]
+    #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['sku_value.read'])]
+    private ?Sku $Sku = null;
 
     public function getId(): ?int
     {
@@ -79,15 +85,28 @@ class ProductOptionValue
         return $this;
     }
 
-    public function getValue(): ?string
+    public function getProductOptionValue(): ?ProductOptionValue
     {
-        return $this->value;
+        return $this->product_option_value;
     }
 
-    public function setValue(string $value): self
+    public function setProductOptionValue(?ProductOptionValue $product_option_value): self
     {
-        $this->value = $value;
+        $this->product_option_value = $product_option_value;
+
+        return $this;
+    }
+
+    public function getSku(): ?Sku
+    {
+        return $this->Sku;
+    }
+
+    public function setSku(?Sku $Sku): self
+    {
+        $this->Sku = $Sku;
 
         return $this;
     }
 }
+

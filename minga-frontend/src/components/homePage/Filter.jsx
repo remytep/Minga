@@ -1,11 +1,8 @@
 import React, { useContext } from 'react'
-import { Link } from 'react-router-dom'
 import { IoMdClose } from 'react-icons/io'
 import { HiArrowLongRight } from 'react-icons/hi2'
-import { FiTrash2 } from 'react-icons/fi'
 
 // components
-import cartItem from './CartItem'
 
 // Filter contexts
 import { FilterContext } from '../../contexts/FilterContext'

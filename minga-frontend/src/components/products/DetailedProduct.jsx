@@ -14,6 +14,7 @@ function DetailedProduct() {
           <h1 className="text-2xl text-[#060606] font-Inder mb-8">
             Desk Model
           </h1>
+
           
           <div className="w-full flex flex-row items-center justify-start relative mb-12">
             <h3 className="text-md absolute text-black/80 bg-[#f5f5f5] pr-2">
@@ -62,6 +63,7 @@ function DetailedProduct() {
               Total : 557 €
             </button>
           </div>
+        
       </div>
     </div>
   );
