@@ -1,5 +1,5 @@
 import React from "react";
-import { Link } from "react-router-dom";
+import { Form, Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
@@ -8,11 +8,16 @@ import cover_img from "../../assets/homePages/auth/signup_desk.jpg";
 
 const schema = yup.object().shape({
   email: yup.string().email().required("Email is invalid"),
-  password: yup.string().min(3, "Passwords must be at least 3 characters").max(23).required(),
+  password: yup
+    .string()
+    .min(3, "Passwords must be at least 3 characters")
+    .max(23)
+    .required(),
   confirmPassword: yup
     .string()
     .oneOf([yup.ref("password"), null, "Passwords must match !"])
     .required("Type your password again"),
+  acceptTerms: yup.bool().oneOf([true], "Accept Terms is required"),
 });
 
 function Register() {
@@ -26,7 +31,7 @@ function Register() {
 
   const onSubmit = (data) => {
     axios
-      .post("http://127.0.0.1:37153/api/users", data, {
+      .post("http://127.0.0.1:36783/api/users", data, {
         headers: { "Content-Type": "application/json" },
       })
       .then((response) => {
@@ -59,7 +64,7 @@ function Register() {
             <h3 className="text-2xl font-semibold mb-4">Sign Up</h3>
           </div>
 
-          <form id="form" onSubmit={handleSubmit(onSubmit)}>
+          <Form action="/login" onSubmit={handleSubmit(onSubmit)}>
             <div className="w-full flex flex-col mb-4">
               <input
                 type="email"
@@ -94,8 +99,11 @@ function Register() {
 
             <div className="w-full flex items-center justify-between">
               <div className="w-full flex items-center">
-                <input type="checkbox" className="w-4 h-4 mr-2" />
-                <p className="text-sm">I accept the Terms of Service</p>
+                <input type="checkbox" className="w-4 h-4 mr-2" {...register("acceptTerms")}/>
+                <p className="text-sm">
+                  I accept the Terms of Service
+                </p>
+                <p>{errors.acceptTerms?.message}</p>
               </div>
             </div>
 
@@ -107,7 +115,7 @@ function Register() {
                 Sign Up
               </button>
             </div>
-          </form>
+          </Form>
 
           <div className="w-full flex items-center justify-center relative py-6">
             <div className="w-full h-[1px] bg-black/40"></div>

@@ -1,24 +1,24 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import App from "./App";
 
 // product provideer
-import ProductProvider from './contexts/ProductContext';
+import ProductProvider from "./contexts/ProductContext";
 
 // ShoppingBag provider
-import ShoppingBagProvider from './contexts/ShoppingBagContext';
+import ShoppingBagProvider from "./contexts/ShoppingBagContext";
 
 // cart provider
-import CartProvider from './contexts/CartContext';
+import CartProvider from "./contexts/CartContext";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <ShoppingBagProvider>
     <CartProvider>
       <ProductProvider>
         <React.StrictMode>
-          <App />
+            <App />
         </React.StrictMode>
       </ProductProvider>
     </CartProvider>

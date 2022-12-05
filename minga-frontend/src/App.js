@@ -4,6 +4,7 @@ import Login from './components/auth/Login';
 import Register from './components/auth/Register';
 import AdminDashboard from "./components/AdminDashboard";
 import Admin from "./components/ApiPlatform";
+
 // Pages
 import Accueil from './pages/Accueil';
 import DetailedProduct from './components/products/DetailedProduct';
@@ -21,10 +22,10 @@ function App() {
         <Header />
         <Routes>
           <Route path='/' element={<Accueil />} />
-          <Route path='/products/:id' element={<DetailedProduct />} />
           <Route  path='/login' element={<Login />} />
           <Route  path='/register' element={<Register />} />
           <Route path='/admin/*' element={< Admin />}></Route>
+          <Route path='/products/:id' element={<DetailedProduct />} />
         </Routes>
         <ShoppingBag />
         </div>
