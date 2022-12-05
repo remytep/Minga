@@ -3,14 +3,14 @@ import React, { useState, createContext } from 'react'
 export const FilterContext = createContext();
 
 function FilterProvider({children}) {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpenFilter, setIsOpenFilter] = useState(false);
   
   const handleClose = () => {
-    setIsOpen(false);
+    setIsOpenFilter(false);
   }
 
   return (
-    <FilterContext.Provider value={{ isOpen, setIsOpen, handleClose }}>{children}</FilterContext.Provider>
+    <FilterContext.Provider value={{ isOpenFilter, setIsOpenFilter, handleClose }}>{children}</FilterContext.Provider>
   )
 }
 
