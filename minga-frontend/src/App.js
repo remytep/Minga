@@ -15,7 +15,6 @@ import Filter from './components/homePage/Filter';
 
 function App() {
   return (
-    <div>
       <Router>
         <Header />
         <Routes>
@@ -28,7 +27,6 @@ function App() {
         <ShoppingBag />
         <Filter/>
       </Router>
-    </div>
   );
 }
 

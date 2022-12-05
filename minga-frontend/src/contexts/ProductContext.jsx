@@ -6,15 +6,17 @@ export const ProductContext = createContext();
 function ProductProvider({ children }) {
     const [products, setProducts] = useState([]);
 
-    useEffect(() => {
-        const fetchProducts = async() =>{
-            const response = await fetch("http://127.0.0.1:59822/api/products");
-            const data = await response.json();
-            setProducts(data);
-            console.log(data);
 
+    useEffect(() => {
+        const getProducts = async () => {
+            const response = await axios({
+                method: 'GET',
+                url: "https://fakestoreapi.com/products",
+                headers: { "content-type": "application/json" },
+            });
+            setProducts(response.data);
         };
-        fetchProducts();
+        getProducts();
     }, [])
     return (
         <ProductContext.Provider value={{ products }}>{children}</ProductContext.Provider>
