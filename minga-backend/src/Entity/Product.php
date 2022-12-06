@@ -23,13 +23,7 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
-#[ApiResource(
-    uriTemplate: '/product_category/{productCategoryId}/products',
-    uriVariables: [
-        'productCategoryId' => new Link(fromClass: ProductCategory::class, toProperty: 'productCategory'),
-    ],
-    operations: [new GetCollection()]
-)]
+
 #[ApiResource(
     operations: [
         new GetCollection(),
@@ -41,6 +35,13 @@ use Symfony\Component\Validator\Constraints as Assert;
     ],
     normalizationContext: ['groups' => ['product.read', 'product_category.item.get']],
     denormalizationContext: ['groups' => ['product.write', 'product_category.item.get']],
+)]
+#[ApiResource(
+    uriTemplate: '/product_category/{productCategoryId}/products',
+    uriVariables: [
+        'productCategoryId' => new Link(fromClass: ProductCategory::class, toProperty: 'productCategory'),
+    ],
+    operations: [new GetCollection()]
 )]
 #[ApiFilter(SearchFilter::class, properties: ['name' => 'partial', 'productCategory.name' => 'exact', 'productOptions.name' => 'exact',  'productOptions.productOptionValues.value' => 'exact'])]
 class Product
