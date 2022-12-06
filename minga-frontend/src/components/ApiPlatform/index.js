@@ -16,7 +16,7 @@ import { ProductCategoryEdit, ProductEdit } from "./EditComponents";
 import { ProductCategoryShow, ProductShow } from "./ShowComponents";
 
 const Admin = () => (
-  <HydraAdmin basename="/admin" entrypoint="http://localhost:8000/api">
+  <HydraAdmin basename="/admin" entrypoint="https://localhost:8000/api">
     <ResourceGuesser
       name="products"
       create={ProductCreate}
