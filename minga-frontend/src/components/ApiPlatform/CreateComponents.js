@@ -6,7 +6,6 @@ import {
     AutocompleteInput,
     PasswordInput,
     ReferenceInput,
-    TextInput
 } from "react-admin";
 
 export const ProductCreate = (props) => (

@@ -2,8 +2,6 @@ import React from "react";
 import { useForm } from "react-hook-form";
 import { Link } from "react-router-dom";
 import cover_img from "../../assets/homePages/auth/signup_desk.jpg";
-import { z } from "zod";
-import { withZod } from "@remix-validated-form/with-zod";
 
 // Start with a lower or uppercase letter
 // Must be followed from 5 to 23 characters that can be lower or uppercase too
@@ -12,18 +10,6 @@ import { withZod } from "@remix-validated-form/with-zod";
 // Requires at least 1 uppercase case latter, 1 lowercase, 1 digit and 1 special character
 // From 5 to 30 characters
 // const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{5, 30}$/;
-
-export const validator = withZod(
-  z.object({
-    email: z
-      .string()
-      .min(1, { message: "Email is required" })
-      .email("Must be a valid email"),
-    password: 
-      z.string()
-      .min(1, { message: "Password is required" }),
-  })
-);
 
 function Register() {
   const {
