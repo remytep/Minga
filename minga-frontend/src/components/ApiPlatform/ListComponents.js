@@ -12,15 +12,22 @@ import {
 import { ProductCategoryTitle, ProductTitle } from "./TitleComponents";
 
 
+const format = ({ source }) => {
+    console.log(source)
+}
+
 export const ProductList = (props) => (
     <ListGuesser {...props}>
         <FieldGuesser source={"name"} />
         <FieldGuesser source={"description"} />
         <FieldGuesser source={"thumbnail"} />
+        <FieldGuesser source={"createdAt"} />
         {/* Use react-admin components directly when you want complex fields. */}
-        <ReferenceField source="productCategory" reference="product_categories">
-            <TextField source="name" />
+        <ReferenceField source="productCategory.@id" reference="product_categories" >
+            <FieldGuesser source="name" />
         </ReferenceField>
+        <FieldGuesser source={"productOptions"} />
+        <FieldGuesser source={"skus"} />
         <FieldGuesser source={"slug"} />
     </ListGuesser>
 );

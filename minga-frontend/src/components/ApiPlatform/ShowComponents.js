@@ -17,8 +17,9 @@ export const ProductShow = (props) => (
         <FieldGuesser source={"name"} />
         <FieldGuesser source={"description"} />
         <FieldGuesser source={"thumbnail"} />
-        <ReferenceField source="productCategory" reference="product_categories">
-            <TextField source="name" />
+        <FieldGuesser source={"createdAt"} />
+        <ReferenceField source="productCategory.@id" reference="product_categories" >
+            <FieldGuesser source="name" />
         </ReferenceField>
         <FieldGuesser source={"slug"} />
     </ShowGuesser>
