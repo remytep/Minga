@@ -20,14 +20,7 @@ use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ProductOptionRepository::class)]
-#[ApiResource(
-    uriTemplate: '/product/{productId}/options',
-    uriVariables: [
-        'productId' => new Link(fromClass: Product::class, toProperty: 'product'),
-    ],
-    operations: [new GetCollection(normalizationContext: ['groups' => ['product_option.read']],)],
 
-)]
 #[ApiResource(
     normalizationContext: ['groups' => ['product_option.read']],
     denormalizationContext: ['groups' => ['product_option.write']],
@@ -39,6 +32,14 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Patch(),
         new Delete()
     ]
+)]
+#[ApiResource(
+    uriTemplate: '/product/{productId}/options',
+    uriVariables: [
+        'productId' => new Link(fromClass: Product::class, toProperty: 'product'),
+    ],
+    operations: [new GetCollection(normalizationContext: ['groups' => ['product_option.read']],)],
+
 )]
 #[ApiFilter(SearchFilter::class, properties: ['name' => 'partial', 'productOptionValues.value' => 'exact'])]
 class ProductOption
