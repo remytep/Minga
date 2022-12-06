@@ -21,13 +21,13 @@ use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 #[ApiResource(
     operations: [
         new GetCollection(),
-        new Get(),
+        new Get(normalizationContext: ['groups' => ['product_category.read', 'product_category.item.get']]),
         new Put(),
         new Post(),
         new Patch(),
         new Delete()
     ],
-    //normalizationContext: ['groups' => ['product_category.read']],
+    normalizationContext: ['groups' => ['product_category.read']],
     denormalizationContext: ['groups' => ['product_category.write']],
 )]
 

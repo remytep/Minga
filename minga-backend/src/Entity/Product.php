@@ -31,7 +31,7 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Patch(),
         new Delete()
     ],
-    //normalizationContext: ['groups' => ['product.read', 'product_category.item.get']],
+    normalizationContext: ['groups' => ['product.read', 'product_category.item.get']],
     denormalizationContext: ['groups' => ['product.write', 'product_category.item.get']],
 )]
 #[ApiFilter(SearchFilter::class, properties: ['name' => 'partial'])]
