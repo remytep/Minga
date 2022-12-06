@@ -47,7 +47,7 @@ class ProductOptionValue
     private ?ProductOption $product_option = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['product_option_value.read', 'product_option.item.read', 'product.read', 'product.write', 'product_option.write'])]
+    #[Groups(['product_option_value.read', 'product_option.item.read', 'product.read', 'product.write', 'product_option.read', 'product_option.write'])]
     private ?string $value = null;
 
     public function getId(): ?int
