@@ -8,28 +8,20 @@ import {
     ReferenceField,
     SingleFieldList,
     TextField,
-    TextInput
 } from "react-admin";
-import { ProductCategoryTitle, ProductTitle } from "./ProductsTitle";
+import { ProductCategoryTitle, ProductTitle } from "./TitleComponents";
 
-const productFilters = [
-    <TextInput label="search" source="q" alwaysOn />
-]
 
 export const ProductList = (props) => (
-    <ListGuesser {...props} filters={productFilters}>
+    <ListGuesser {...props}>
         <FieldGuesser source={"name"} />
         <FieldGuesser source={"description"} />
-        <FieldGuesser source={"photo"} />
-        <FieldGuesser source={"created_at"} />
+        <FieldGuesser source={"thumbnail"} />
         {/* Use react-admin components directly when you want complex fields. */}
-        <ReferenceField label="Category name" source="category" reference="product_categories">
+        <ReferenceField source="productCategory" reference="product_categories">
             <TextField source="name" />
         </ReferenceField>
-        <FieldGuesser source={"productOptions"} />
-        <FieldGuesser source={"productOptionValues"} />
-        <FieldGuesser source={"SKUValues"} />
-        <FieldGuesser source={"SKUs"} />
+        <FieldGuesser source={"slug"} />
     </ListGuesser>
 );
 
