@@ -26,14 +26,14 @@ function Product({ product }) {
               <BsPlus className='text-2xl' />
             </div>
           </button>
-          <Link to={`/product/${id}`} className='w-8 h-8 flex justify-center items-center text-primary drop-shadow-xl'>
+          <Link to={`/products/${id}`} className='w-8 h-8 flex justify-center items-center text-primary drop-shadow-xl'>
             <BsEyeFill />
           </Link>
         </div>
       </div>
       <div className='text-left'>
         <div className='text-sm capitalize text-grey-500 font-semibold opacity-50 mb-1'>{category}</div>
-        <Link to={`/product/${id}`}>
+        <Link to={`/products/${id}`}>
           <h3 className='font-semibold opacity-90 mb-1'>{title}</h3>
         </Link>
         <div className='font-semibold opacity-90'>{price} €</div>

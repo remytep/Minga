@@ -3,14 +3,14 @@ import React, { useState, createContext } from 'react'
 export const ShoppingBagContext = createContext();
 
 function ShoppingBagProvider({children}) {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isOpenBag, setIsOpenBag] = useState(false);
   
   const handleClose = () => {
-    setIsOpen(false);
+    setIsOpenBag(false);
   }
 
   return (
-    <ShoppingBagContext.Provider value={{ isOpen, setIsOpen, handleClose }}>{children}</ShoppingBagContext.Provider>
+    <ShoppingBagContext.Provider value={{ isOpenBag, setIsOpenBag, handleClose }}>{children}</ShoppingBagContext.Provider>
   )
 }
 

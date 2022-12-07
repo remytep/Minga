@@ -14,7 +14,10 @@ export const ProductCreate = (props) => (
         <InputGuesser source="description" fullWidth multiline />
         <InputGuesser source="thumbnail" fullWidth multiline />
         <ReferenceInput source="productCategory" reference="product_categories">
-            <AutocompleteInput optionText="name" fullWidth />
+            <AutocompleteInput
+                optionText="name"
+                fullWidth
+            />
         </ReferenceInput>
         <InputGuesser source="slug" fullWidth />
     </CreateGuesser>

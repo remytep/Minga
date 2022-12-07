@@ -109,3 +109,4 @@ class SkuValue
         return $this;
     }
 }
+

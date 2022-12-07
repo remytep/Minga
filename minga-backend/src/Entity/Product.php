@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Link;
 use App\Repository\ProductRepository;
 use App\Entity\ProductCategory;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -22,6 +23,7 @@ use Symfony\Component\Serializer\Annotation\SerializedName;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
+
 #[ApiResource(
     operations: [
         new GetCollection(),
@@ -31,10 +33,17 @@ use Symfony\Component\Validator\Constraints as Assert;
         new Patch(),
         new Delete()
     ],
-    //normalizationContext: ['groups' => ['product.read', 'product_category.item.get']],
+    normalizationContext: ['groups' => ['product.read', 'product_category.item.get']],
     denormalizationContext: ['groups' => ['product.write', 'product_category.item.get']],
 )]
-#[ApiFilter(SearchFilter::class, properties: ['name' => 'partial'])]
+#[ApiResource(
+    uriTemplate: '/product_category/{productCategoryId}/products',
+    uriVariables: [
+        'productCategoryId' => new Link(fromClass: ProductCategory::class, toProperty: 'productCategory'),
+    ],
+    operations: [new GetCollection()]
+)]
+#[ApiFilter(SearchFilter::class, properties: ['name' => 'partial', 'productCategory.name' => 'exact', 'productOptions.name' => 'exact',  'productOptions.productOptionValues.value' => 'exact'])]
 class Product
 {
     #[ORM\Id]

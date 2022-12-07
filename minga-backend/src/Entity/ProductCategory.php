@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Link;
 use App\Repository\ProductCategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -18,16 +19,17 @@ use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 
 #[ORM\Entity(repositoryClass: ProductCategoryRepository::class)]
+
 #[ApiResource(
     operations: [
         new GetCollection(),
-        new Get(),
+        new Get(normalizationContext: ['groups' => ['product_category.read', 'product_category.item.get']]),
         new Put(),
         new Post(),
         new Patch(),
         new Delete()
     ],
-    //normalizationContext: ['groups' => ['product_category.read']],
+    normalizationContext: ['groups' => ['product_category.read']],
     denormalizationContext: ['groups' => ['product_category.write']],
 )]
 

@@ -34,7 +34,7 @@ const Admin = () => (
     <ResourceGuesser name="users" create={UserCreate} />
     {/* <ResourceGuesser name="product_options" list={ProductOptionList} /> */}
     {/* <ResourceGuesser name="product_option_values" create={ProductOptionValueCreate} /> */}
-    {/* <ResourceGuesser name="s_k_us" />  */}
+    {/* <ResourceGuesser name="skus" />  */}
   </HydraAdmin>
 );
 
