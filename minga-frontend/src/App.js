@@ -7,8 +7,8 @@ import Accueil from './pages/Accueil';
 import Header from './components/homePage/Header'
 import ShoppingBag from './components/homePage/ShoppingBag'
 import Footer from './components/homePage/Footer'
-import Login from './components/users/Login';
-import Register from './components/users/Register';
+import Login from './components/auth/Login';
+import Register from './components/auth/Register';
 import DetailedProduct from './components/detailedProduct/DetailedProduct'
 import Filter from './components/homePage/Filter';
 import Admin from './components/ApiPlatform';
