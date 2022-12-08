@@ -21,17 +21,25 @@ use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use Symfony\Component\Serializer\Annotation\SerializedName;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Constraints\Length;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
-
 #[ApiResource(
     operations: [
         new GetCollection(),
         new Get(),
-        new Put(),
-        new Post(),
-        new Patch(),
-        new Delete()
+        new Put(security: 'is_granted("ROLE_ADMIN")', openapiContext: [
+            'security' => [['bearerAuth' => []]]
+        ]),
+        new Post(security: 'is_granted("ROLE_ADMIN")', openapiContext: [
+            'security' => [['bearerAuth' => []]]
+        ]),
+        new Patch(security: 'is_granted("ROLE_ADMIN")', openapiContext: [
+            'security' => [['bearerAuth' => []]]
+        ]),
+        new Delete(security: 'is_granted("ROLE_ADMIN")', openapiContext: [
+            'security' => [['bearerAuth' => []]]
+        ])
     ],
     normalizationContext: ['groups' => ['product.read', 'product_category.item.get']],
     denormalizationContext: ['groups' => ['product.write', 'product_category.item.get']],
@@ -53,11 +61,11 @@ class Product
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['product.read', 'product.write', 'product_category.item.get', 'product_option.read'])]
+    #[Groups(['product.read', 'product.write', 'product_category.item.get', 'product_option.read']), Length(min: 3)]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    #[Groups(['product.write', 'product_category.item.get'])]
+    #[Groups(['product.write', 'product_category.item.get']), Length(min: 10)]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::TEXT)]

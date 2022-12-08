@@ -1,15 +1,27 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import cover_img from "../../assets/users/desk_example1.jpg";
+import axios from "axios";
 
 function Login() {
   const [email, setEmail] = useState("");
-  const [pwd, setPwd] = useState("");
+  const [password, setPassword] = useState("");
 
-const handleSubmit = (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
     // console.log(email);
-};
+    axios
+      .post("https://localhost:8000/api/login", {
+        email,
+        password,
+      })
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.log(error.data);
+      });
+  };
 
   return (
     <div class="w-full h-screen flex items-start">
@@ -50,8 +62,8 @@ const handleSubmit = (e) => {
                 type="password"
                 placeholder="Password"
                 className="w-full text-black border-b border-black outline-none focus:outline-none py-2 mb-10 bg-transparent"
-                value={pwd}
-                onChange={(e) => setPwd(e.target.value)}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
             </div>
 
@@ -67,7 +79,10 @@ const handleSubmit = (e) => {
             </div>
 
             <div className="w-full h-full flex-col my-4">
-              <button type="submit" className="w-full text-white bg-[#060606] rounded-md p-3 text-center flex items-center justify-center cursor-pointer">
+              <button
+                type="submit"
+                className="w-full text-white bg-[#060606] rounded-md p-3 text-center flex items-center justify-center cursor-pointer"
+              >
                 Log In
               </button>
             </div>
