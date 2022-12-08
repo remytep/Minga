@@ -9,8 +9,6 @@ import {
     SingleFieldList,
     TextField,
 } from "react-admin";
-import { ProductCategoryTitle, ProductTitle } from "./TitleComponents";
-
 
 const format = ({ source }) => {
     console.log(source)
