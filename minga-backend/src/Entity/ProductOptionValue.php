@@ -22,10 +22,18 @@ use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
     operations: [
         new GetCollection(),
         new Get(),
-        new Put(),
-        new Post(),
-        new Patch(),
-        new Delete()
+        new Put(security: 'is_granted("ROLE_ADMIN")', openapiContext: [
+            'security' => [['bearerAuth' => []]]
+        ]),
+        new Post(security: 'is_granted("ROLE_ADMIN")', openapiContext: [
+            'security' => [['bearerAuth' => []]]
+        ]),
+        new Patch(security: 'is_granted("ROLE_ADMIN")', openapiContext: [
+            'security' => [['bearerAuth' => []]]
+        ]),
+        new Delete(security: 'is_granted("ROLE_ADMIN")', openapiContext: [
+            'security' => [['bearerAuth' => []]]
+        ])
     ]
 )]
 class ProductOptionValue
@@ -42,7 +50,7 @@ class ProductOptionValue
     private ?Product $product = null;
 
     #[ORM\ManyToOne(inversedBy: 'productOptionValues')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn()]
     #[Groups(['product_option_value.read', 'product.write', 'product_option.write'])]
     private ?ProductOption $product_option = null;
 

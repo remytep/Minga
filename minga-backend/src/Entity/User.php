@@ -2,62 +2,76 @@
 
 namespace App\Entity;
 
-use App\Repository\UserRepository;
-use Doctrine\DBAL\Types\Types;
-use Doctrine\ORM\Mapping as ORM;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Delete;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
-use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Patch;
+use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
-use ApiPlatform\Metadata\Delete;
+use App\Controller\MeController;
+use App\Repository\UserRepository;
+use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
-use ApiPlatform\Metadata\ApiFilter;
-use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
-use Symfony\Component\Validator\Constraints as Assert;
-
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
+use Lexik\Bundle\JWTAuthenticationBundle\Security\User\JWTUserInterface;
 
 #[ORM\Entity(repositoryClass: UserRepository::class)]
-#[UniqueEntity('email')]
-#[ApiResource(
-    normalizationContext: ['groups' => ['read']],
-    denormalizationContext: ['groups' => ['write']],
-    operations: [
-        new GetCollection(),
-        new Get(),
-        new Put(),
-        new Post(),
-        new Patch(),
-    ]
-)]
-#[ApiFilter(SearchFilter::class, properties: ['email' => 'partial'])]
-class User
+#[
+    ApiResource(
+        security: 'is_granted("ROLE_USER")',
+        operations: [
+            new GetCollection(),
+            new Get(),
+            new Get(
+                uriTemplate: '/me',
+                controller: MeController::class,
+                read: false,
+                openapiContext: [
+                    'security' => [['bearerAuth' => []]]
+                ]
+            ),
+            new Post(),
+            new Put(),
+            new Patch(),
+            new Delete()
+
+        ],
+        normalizationContext: ['groups' => 'user.read']
+    )
+]
+class User implements UserInterface, PasswordAuthenticatedUserInterface, JWTUserInterface
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['user.read'])]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
-    #[Assert\NotBlank, Assert\Email(), Groups(['read', 'write'])]
+    #[ORM\Column(length: 180, unique: true)]
+    #[Groups(['user.read'])]
     private ?string $email = null;
 
-    #[ORM\Column(length: 255)]
-    #[Groups(['write'])]
-    private ?string $password = null;
-
-    #[ORM\Column(type: Types::SIMPLE_ARRAY)]
+    #[ORM\Column]
+    #[Groups(['user.read'])]
     private array $roles = [];
 
-    public function __construct()
-    {
-        $this->roles = ['USER'];
-    }
+    /**
+     * @var string The hashed password
+     */
+    #[ORM\Column]
+    private ?string $password = null;
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function setId(?int $id): self
+    {
+        $this->id = $id;
+        return $this;
     }
 
     public function getEmail(): ?string
@@ -72,7 +86,39 @@ class User
         return $this;
     }
 
-    public function getPassword(): ?string
+    /**
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
+     */
+    public function getUserIdentifier(): string
+    {
+        return (string) $this->email;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+        // guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_USER';
+
+        return array_unique($roles);
+    }
+
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
+
+    /**
+     * @see PasswordAuthenticatedUserInterface
+     */
+    public function getPassword(): string
     {
         return $this->password;
     }
@@ -84,15 +130,17 @@ class User
         return $this;
     }
 
-    public function getRoles(): array
+    /**
+     * @see UserInterface
+     */
+    public function eraseCredentials()
     {
-        return $this->roles;
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
     }
 
-    public function setRoles(array $roles): self
+    public static function createFromPayload($id, array $payload)
     {
-        $this->roles = $roles;
-
-        return $this;
+        return (new User())->setId($id)->setEmail($payload['email'] ?? '')->setRoles($payload['roles'] ?? ["ROLE_USER"]);
     }
 }
