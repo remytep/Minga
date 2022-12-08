@@ -9,7 +9,6 @@ import {
     SingleFieldList,
     TextField,
 } from "react-admin";
-import { ProductCategoryTitle, ProductTitle } from "./TitleComponents";
 
 
 const format = ({ source }) => {
@@ -43,15 +42,3 @@ export const ProductCategoryList = (props) => (
     </ListGuesser>
 );
 
-
-export const ProductOptionList = (props) => (
-    <ListGuesser {...props} >
-        <ReferenceField label="Product name" source="product" reference="products">
-            <TextField source="name" />
-        </ReferenceField>
-        <FieldGuesser source="name" />
-        <ReferenceField label="Product option value" source="product_option_values" reference="product_option_values">
-            <TextField source="value" />
-        </ReferenceField>
-    </ListGuesser>
-);

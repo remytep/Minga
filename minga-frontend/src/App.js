@@ -1,5 +1,10 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Login from './components/auth/Login';
+import Register from './components/auth/Register';
+import AdminDashboard from "./components/AdminDashboard";
+import Admin from "./components/ApiPlatform";
+
 // Pages
 import Accueil from './pages/Accueil';
 
@@ -15,19 +20,19 @@ import Admin from './components/ApiPlatform';
 
 function App() {
   return (
-    <Router>
-      <Header />
-      <Routes>
-        <Route path='/' element={<Accueil />} />
-        <Route path='/login' element={<Login />} />
-        <Route path='/register' element={<Register />} />
-        <Route path='/products/:id' element={<DetailedProduct />} />
-        <Route path='/admin/*' element={<Admin />} />
-      </Routes>
-      <Footer />
-      <ShoppingBag />
-      <Filter />
-    </Router>
+      <Router>
+        <div>
+        <Header />
+        <Routes>
+          <Route path='/' element={<Accueil />} />
+          <Route path='/login' element={<Login />} />
+          <Route path='/register' element={<Register />} />
+          <Route path='/admin/*' element={< Admin />}></Route>
+          <Route path='/products/:id' element={<DetailedProduct />} />
+        </Routes>
+        <ShoppingBag />
+        </div>
+      </Router>
   );
 }
 
