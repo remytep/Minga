@@ -27,10 +27,18 @@ use Symfony\Component\Validator\Constraints as Assert;
     operations: [
         new GetCollection(),
         new Get(normalizationContext: ['groups' => ['product_option.read', 'product_option.item.read']]),
-        new Put(),
-        new Post(),
-        new Patch(),
-        new Delete()
+        new Put(security: 'is_granted("ROLE_ADMIN")', openapiContext: [
+            'security' => [['bearerAuth' => []]]
+        ]),
+        new Post(security: 'is_granted("ROLE_ADMIN")', openapiContext: [
+            'security' => [['bearerAuth' => []]]
+        ]),
+        new Patch(security: 'is_granted("ROLE_ADMIN")', openapiContext: [
+            'security' => [['bearerAuth' => []]]
+        ]),
+        new Delete(security: 'is_granted("ROLE_ADMIN")', openapiContext: [
+            'security' => [['bearerAuth' => []]]
+        ])
     ]
 )]
 #[ApiResource(
@@ -51,7 +59,7 @@ class ProductOption
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'productOptions')]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn()]
     #[Groups(['product_option.read'])]
     private ?Product $product = null;
 

@@ -22,10 +22,18 @@ use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
     operations: [
         new GetCollection(),
         new Get(),
-        new Put(),
-        new Post(),
-        new Patch(),
-        new Delete()
+        new Put(security: 'is_granted("ROLE_ADMIN")', openapiContext: [
+            'security' => [['bearerAuth' => []]]
+        ]),
+        new Post(security: 'is_granted("ROLE_ADMIN")', openapiContext: [
+            'security' => [['bearerAuth' => []]]
+        ]),
+        new Patch(security: 'is_granted("ROLE_ADMIN")', openapiContext: [
+            'security' => [['bearerAuth' => []]]
+        ]),
+        new Delete(security: 'is_granted("ROLE_ADMIN")', openapiContext: [
+            'security' => [['bearerAuth' => []]]
+        ])
     ]
 )]
 class SkuValue
@@ -109,4 +117,3 @@ class SkuValue
         return $this;
     }
 }
-

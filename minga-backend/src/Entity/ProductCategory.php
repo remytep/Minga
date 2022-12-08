@@ -17,6 +17,7 @@ use ApiPlatform\Metadata\Delete;
 use Symfony\Component\Serializer\Annotation\Groups;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use Symfony\Component\Validator\Constraints\Length;
 
 #[ORM\Entity(repositoryClass: ProductCategoryRepository::class)]
 
@@ -24,10 +25,18 @@ use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
     operations: [
         new GetCollection(),
         new Get(normalizationContext: ['groups' => ['product_category.read', 'product_category.item.get']]),
-        new Put(),
-        new Post(),
-        new Patch(),
-        new Delete()
+        new Put(security: 'is_granted("ROLE_ADMIN")', openapiContext: [
+            'security' => [['bearerAuth' => []]]
+        ]),
+        new Post(security: 'is_granted("ROLE_ADMIN")', openapiContext: [
+            'security' => [['bearerAuth' => []]]
+        ]),
+        new Patch(security: 'is_granted("ROLE_ADMIN")', openapiContext: [
+            'security' => [['bearerAuth' => []]]
+        ]),
+        new Delete(security: 'is_granted("ROLE_ADMIN")', openapiContext: [
+            'security' => [['bearerAuth' => []]]
+        ])
     ],
     normalizationContext: ['groups' => ['product_category.read']],
     denormalizationContext: ['groups' => ['product_category.write']],
@@ -42,7 +51,7 @@ class ProductCategory
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['product_category.read', 'product_category.write', 'product.read'])]
+    #[Groups(['product_category.read', 'product_category.write', 'product.read']), Length(min: 3)]
     private ?string $name = null;
 
     #[ORM\OneToMany(mappedBy: 'productCategory', targetEntity: Product::class)]
