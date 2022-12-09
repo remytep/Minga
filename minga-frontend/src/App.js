@@ -7,7 +7,7 @@ import Admin from "./components/ApiPlatform";
 
 // Pages
 import Accueil from './pages/Accueil';
-import DetailedProduct from './components/products/DetailedProduct';
+import DetailedProduct from './components/detailedProduct/DetailedProduct';
 
 // Components
 import Header from './components/homePage/Header'

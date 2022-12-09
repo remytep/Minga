@@ -1,8 +1,6 @@
 import React from 'react'
 import { Link } from 'react-router-dom';
-
 import HeroDesk from '../../assets/homePages/hero/hero.jpg'
-
 
 function Hero() {
   return (
@@ -29,6 +27,7 @@ function Hero() {
         <div className='hidden lg:block'>
           <img src={HeroDesk} className='h-[550px]' alt='' />
         </div>
+
       </div>
     </section>
   )
