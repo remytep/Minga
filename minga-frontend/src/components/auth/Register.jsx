@@ -34,7 +34,7 @@ function Register() {
   const onSubmit = (data) => console.log(data);
 
   return (
-    <div class="w-full h-screen flex items-start">
+    <div className="w-full h-screen flex items-start">
       <div className="relative w-1/2 h-full flex flex-col">
         <div className="absolute top-[20%] left-[10%] flex flex-col">
           <h1 className="text-2xl text-white font-bold my-4">
