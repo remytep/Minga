@@ -1,32 +1,29 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import React from "react";
+import ReactDOM from "react-dom/client";
+import "./index.css";
+import App from "./App";
+import reportWebVitals from "./reportWebVitals";
 
 // product provideer
-import ProductProvider from './contexts/ProductContext';
+import ProductProvider from "./contexts/ProductContext";
 
 // ShoppingBag provider
-import ShoppingBagProvider from './contexts/ShoppingBagContext';
+import ShoppingBagProvider from "./contexts/ShoppingBagContext";
 
 // cart provider
-import CartProvider from './contexts/CartContext';
-import FilterProvider from './contexts/FilterContext';
+import CartProvider from "./contexts/CartContext";
+import FilterProvider from "./contexts/FilterContext";
 
-const root = ReactDOM.createRoot(document.getElementById('root'));
+const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
   <ShoppingBagProvider>
     <FilterProvider>
       <CartProvider>
         <ProductProvider>
-          <React.StrictMode>
-            <App />
-          </React.StrictMode>
+          <App />
         </ProductProvider>
       </CartProvider>
     </FilterProvider>
-
   </ShoppingBagProvider>
 );
 
