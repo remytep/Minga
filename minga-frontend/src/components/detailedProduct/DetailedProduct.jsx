@@ -1,7 +1,6 @@
 import React from "react";
 import desk_model1 from "../../assets/homePages/auth/desk_example1.jpg";
 
-
 function DetailedProduct() {
   return (
     <div class="w-full h-screen flex items-start">

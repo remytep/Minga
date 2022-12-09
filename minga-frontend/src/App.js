@@ -1,17 +1,18 @@
 import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Login from './components/auth/Login';
+import Register from './components/auth/Register';
+import AdminDashboard from "./components/AdminDashboard";
+import Admin from "./components/ApiPlatform";
+
 // Pages
 import Accueil from './pages/Accueil';
-import Search from './pages/Search';
+import DetailedProduct from './components/detailedProduct/DetailedProduct';
 
 // Components
 import Header from './components/homePage/Header'
 import ShoppingBag from './components/homePage/ShoppingBag'
-import Footer from './components/homePage/Footer'
-import Login from './components/users/Login';
-import Register from './components/users/Register';
-import DetailedProduct from './components/detailedProduct/DetailedProduct'
-import Filter from './components/homePage/Filter';
+// import Footer from './components/homePage/Footer'
 
 function App() {
   return (
@@ -19,9 +20,9 @@ function App() {
         <Header />
         <Routes>
           <Route path='/' element={<Accueil />} />
-          <Route path='/search' element={<Search />} />
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<Register />} />
+          <Route path='/admin/*' element={< Admin />}></Route>
           <Route path='/products/:id' element={<DetailedProduct />} />
         </Routes>
         <ShoppingBag />
