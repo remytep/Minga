@@ -1,18 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import AuthContext from "../../contexts/AuthContext";
 import cover_img from "../../assets/homePages/auth/desk_example1.jpg";
 
 function Login() {
   const [email, setEmail] = useState("");
-  const [pwd, setPwd] = useState("");
-
-const handleSubmit = (e) => {
+  const [password, setPassword] = useState("");
+  const { login } = useContext(AuthContext);
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // console.log(email);
-};
+    let payload = {
+      email,
+      password,
+    };
+    await login(payload);
+  };
 
   return (
-    <div class="w-full h-screen flex items-start">
+    <div className="w-full h-screen flex items-start">
       <div className="relative w-1/2 h-full flex flex-col">
         <div className="absolute top-[20%] left-[10%] flex flex-col">
           <h1 className="text-2xl text-white font-bold my-4">
@@ -50,8 +56,8 @@ const handleSubmit = (e) => {
                 type="password"
                 placeholder="Password"
                 className="w-full text-black border-b border-black outline-none focus:outline-none py-2 mb-10 bg-transparent"
-                value={pwd}
-                onChange={(e) => setPwd(e.target.value)}
+                value={password}
+                onChange={(e) => setPassword(e.target.value)}
               />
             </div>
 
@@ -67,7 +73,11 @@ const handleSubmit = (e) => {
             </div>
 
             <div className="w-full h-full flex-col my-4">
-              <button type="submit" className="w-full text-white bg-[#060606] rounded-md p-3 text-center flex items-center justify-center cursor-pointer">
+              <button
+                type="submit"
+                onClick={(e) => handleSubmit(e)}
+                className="w-full text-white bg-[#060606] rounded-md p-3 text-center flex items-center justify-center cursor-pointer"
+              >
                 Log In
               </button>
             </div>

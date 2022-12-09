@@ -4,7 +4,7 @@ import desk_model1 from "../../assets/homePages/auth/desk_example1.jpg";
 
 function DetailedProduct() {
   return (
-    <div class="w-full h-screen flex items-start">
+    <div className="w-full h-screen flex items-start">
       <div className="relative w-1/2 h-full flex flex-col">
         <img src={desk_model1} alt="" className="w-full h-full object-cover" />
       </div>
