@@ -20,7 +20,7 @@ function Hero() {
             WE HAVE THE BEST<br />
             <span className='font-semibold'>STANDING DESK</span>
           </h1>
-          <Link to={'/'} className='self-start uppercase font-semibold border-b-2 border-primary'>
+          <Link to={'#allProducts'} className='self-start uppercase font-semibold border-b-2 border-primary'>
             Star shopping
           </Link>
         </div>

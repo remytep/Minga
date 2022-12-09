@@ -6,15 +6,15 @@ export const ProductContext = createContext();
 function ProductProvider({ children }) {
     const [products, setProducts] = useState([]);
 
-
     useEffect(() => {
         const getProducts = async () => {
             const response = await axios({
                 method: 'GET',
-                url: "https://fakestoreapi.com/products",
+                url: "http://127.0.0.1:39017/api/products",
                 headers: { "content-type": "application/json" },
             });
-            setProducts(response.data);
+            console.log(response.data);
+            setProducts(Object.values(response.data["hydra:member"]));
         };
         getProducts();
     }, [])
