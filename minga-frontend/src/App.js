@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 // Pages
 import Accueil from './pages/Accueil';
+import Search from './pages/Search';
 
 // Components
 import Header from './components/homePage/Header'
@@ -18,13 +19,14 @@ function App() {
         <Header />
         <Routes>
           <Route path='/' element={<Accueil />} />
+          <Route path='/search' element={<Search />} />
           <Route path='/login' element={<Login />} />
           <Route path='/register' element={<Register />} />
           <Route path='/products/:id' element={<DetailedProduct />} />
         </Routes>
-        <Footer />
         <ShoppingBag />
         <Filter/>
+        <Footer />
       </Router>
   );
 }
