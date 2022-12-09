@@ -2,7 +2,7 @@ import React, { useState, useEffect, createContext } from "react";
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
-import axios from "axios";
+// import axios from "axios";
 
 function Dropdown() {
   const [categories, setCategories] = useState([]);
@@ -12,16 +12,16 @@ function Dropdown() {
   }
 
   useEffect(() => {
-    axios
-      .get("http://localhost:8000/api/product_categories")
-      .then((res) => {
-        console.log(res.data["hydra:member"]);
-        setCategories(Object.values(res.data["hydra:member"]));
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    return;
+    // axios
+    //   .get("http://localhost:8000/api/product_categories")
+    //   .then((res) => {
+    //     console.log(res.data["hydra:member"]);
+    //     setCategories(Object.values(res.data["hydra:member"]));
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
+    // return;
   }, []);
 
   return (
