@@ -41,5 +41,3 @@ function Product({ product }) {
     </div>
   )
 }
-
-export default Product

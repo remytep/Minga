@@ -1,15 +1,42 @@
-import React, { useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
+import axios from "axios";
+import { Formik, Field, Form, ErrorMessage } from "formik";
+// import { useForm } from "react-hook-form";
+// import { yupResolver } from "@hookform/resolvers/yup";
+import * as Yup from "yup";
 import cover_img from "../../assets/homePages/auth/desk_example1.jpg";
 
 function Login() {
-  const [email, setEmail] = useState("");
-  const [pwd, setPwd] = useState("");
+  const initialValues = {
+    email: "",
+    password: "",
+  };
 
-const handleSubmit = (e) => {
-    e.preventDefault();
-    // console.log(email);
-};
+  const validationSchema = Yup.object().shape({
+    email: Yup.string().required("Email is required").email("Email is invalid"),
+    password: Yup.string()
+      .required("Password is required")
+      .min(3, "Password must be at least 3 characters")
+      .max(23, "Password must not exceed 23 characters"),
+  });
+
+  const handleSubmit = (data) => {
+    axios
+      .get("http://127.0.0.1:36783/api/users/13", data, {
+        headers: { "Content-Type": "application/json" },
+      })
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((error) => {
+        console.log(error.data);
+      });
+    console.log(data);
+  };
+
+  // const onSubmit = (data) => {
+  // };
 
   return (
     <div class="w-full h-screen flex items-start">
@@ -35,43 +62,57 @@ const handleSubmit = (e) => {
             </p>
           </div>
 
-          <form onSubmit={handleSubmit}>
-            <div className="w-full flex flex-col">
-              <input
-                type="email"
-                name="email"
-                placeholder="Email"
-                className="w-full text-black border-b border-black outline-none focus:outline-none py-2 my-2 bg-transparent"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
+          <Formik
+            initialValues={initialValues}
+            validationSchema={validationSchema}
+            onSubmit={(data) => handleSubmit(data)}
+          >
+            <Form>
+              <div className="w-full flex flex-col">
+                <Field
+                  type="email"
+                  id="email"
+                  name="email"
+                  placeholder="Email"
+                  className="w-full text-black border-b border-black outline-none focus:outline-none py-2 my-2 bg-transparent"
+                />
+                <ErrorMessage name="email" component="small" />
 
-              <input
-                type="password"
-                placeholder="Password"
-                className="w-full text-black border-b border-black outline-none focus:outline-none py-2 mb-10 bg-transparent"
-                value={pwd}
-                onChange={(e) => setPwd(e.target.value)}
-              />
-            </div>
-
-            <div className="w-full flex items-center justify-between">
-              <div className="w-full flex items-center">
-                <input type="checkbox" className="w-4 h-4 mr-2" />
-                <p className="text-sm">Remember Me</p>
+                <Field
+                  type="password"
+                  id="password"
+                  name="password"
+                  autocomplete="off"
+                  placeholder="Password"
+                  className="w-full text-black border-b border-black outline-none focus:outline-none py-2 mb-10 bg-transparent"
+                />
+                <ErrorMessage
+                  name="password"
+                  component="small"
+                />
               </div>
 
-              <p className="text-sm font-medium whitespace-nowrap cursor-pointer underline underline-offset-2">
-                Forgot Password
-              </p>
-            </div>
+              <div className="w-full flex items-center justify-between">
+                <div className="w-full flex items-center">
+                  <input type="checkbox" className="w-4 h-4 mr-2" />
+                  <p className="text-sm">Remember Me</p>
+                </div>
 
-            <div className="w-full h-full flex-col my-4">
-              <button type="submit" className="w-full text-white bg-[#060606] rounded-md p-3 text-center flex items-center justify-center cursor-pointer">
-                Log In
-              </button>
-            </div>
-          </form>
+                <p className="text-sm font-medium whitespace-nowrap cursor-pointer underline underline-offset-2">
+                  Forgot Password
+                </p>
+              </div>
+
+              <div className="w-full h-full flex-col my-4">
+                <button
+                  type="submit"
+                  className="w-full text-white bg-[#060606] rounded-md p-3 text-center flex items-center justify-center cursor-pointer mb-1"
+                >
+                  Log In
+                </button>
+              </div>
+            </Form>
+          </Formik>
 
           <div className="w-full flex items-center justify-center relative py-6">
             <div className="w-full h-[1px] bg-black/40"></div>
