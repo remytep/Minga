@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
-import AuthContext from "../../contexts/AuthContext";
+import { AuthContext } from "../../contexts/AuthContext";
 import cover_img from "../../assets/homePages/auth/desk_example1.jpg";
 
 function Login() {
@@ -10,11 +10,7 @@ function Login() {
   const { login } = useContext(AuthContext);
   const handleSubmit = async (e) => {
     e.preventDefault();
-    let payload = {
-      email,
-      password,
-    };
-    await login(payload);
+    await login(email, password);
   };
 
   return (
