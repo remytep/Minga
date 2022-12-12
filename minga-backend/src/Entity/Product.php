@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\Link;
 use App\Repository\ProductRepository;
 use App\Entity\ProductCategory;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -19,21 +20,38 @@ use Symfony\Component\Serializer\Annotation\Groups;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use Symfony\Component\Serializer\Annotation\SerializedName;
+use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\Validator\Constraints\Length;
 
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 #[ApiResource(
-    normalizationContext: ['groups' => ['product.read']],
-    denormalizationContext: ['groups' => ['product.write']],
     operations: [
         new GetCollection(),
         new Get(),
-        new Put(),
-        new Post(),
-        new Patch(),
-        new Delete()
-    ]
+        new Put(security: 'is_granted("ROLE_ADMIN")', openapiContext: [
+            'security' => [['bearerAuth' => []]]
+        ]),
+        new Post(security: 'is_granted("ROLE_ADMIN")', openapiContext: [
+            'security' => [['bearerAuth' => []]]
+        ]),
+        new Patch(security: 'is_granted("ROLE_ADMIN")', openapiContext: [
+            'security' => [['bearerAuth' => []]]
+        ]),
+        new Delete(security: 'is_granted("ROLE_ADMIN")', openapiContext: [
+            'security' => [['bearerAuth' => []]]
+        ])
+    ],
+    normalizationContext: ['groups' => ['product.read', 'product_category.item.get']],
+    denormalizationContext: ['groups' => ['product.write', 'product_category.item.get']],
 )]
-#[ApiFilter(SearchFilter::class, properties: ['name' => 'partial'])]
+#[ApiResource(
+    uriTemplate: '/product_category/{productCategoryId}/products',
+    uriVariables: [
+        'productCategoryId' => new Link(fromClass: ProductCategory::class, toProperty: 'productCategory'),
+    ],
+    operations: [new GetCollection()]
+)]
+#[ApiFilter(SearchFilter::class, properties: ['name' => 'partial', 'productCategory.name' => 'exact', 'productOptions.name' => 'exact',  'productOptions.productOptionValues.value' => 'exact'])]
 class Product
 {
     #[ORM\Id]
@@ -43,11 +61,11 @@ class Product
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['product.read', 'product.write', 'product_category.item.get', 'product_option.read'])]
+    #[Groups(['product.read', 'product.write', 'product_category.item.get', 'product_option.read']), Length(min: 3)]
     private ?string $name = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    #[Groups(['product.write', 'product_category.item.get'])]
+    #[Groups(['product.write', 'product_category.item.get']), Length(min: 10)]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::TEXT)]
@@ -63,8 +81,9 @@ class Product
     #[Groups(['product.read', 'product.write'])]
     private ?ProductCategory $productCategory;
 
-    #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductOption::class)]
-    #[Groups(['product.read'])]
+    #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductOption::class, cascade: ["persist"])]
+    #[Groups(['product.read', 'product.write'])]
+    #[Assert\Valid()]
     private Collection $productOptions;
 
     #[ORM\OneToMany(mappedBy: 'product', targetEntity: Sku::class)]
@@ -72,6 +91,7 @@ class Product
     private Collection $skus;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['product.read', 'product.write'])]
     private ?string $slug = null;
 
     public function __construct()

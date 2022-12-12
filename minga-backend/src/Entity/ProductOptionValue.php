@@ -22,10 +22,18 @@ use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
     operations: [
         new GetCollection(),
         new Get(),
-        new Put(),
-        new Post(),
-        new Patch(),
-        new Delete()
+        new Put(security: 'is_granted("ROLE_ADMIN")', openapiContext: [
+            'security' => [['bearerAuth' => []]]
+        ]),
+        new Post(security: 'is_granted("ROLE_ADMIN")', openapiContext: [
+            'security' => [['bearerAuth' => []]]
+        ]),
+        new Patch(security: 'is_granted("ROLE_ADMIN")', openapiContext: [
+            'security' => [['bearerAuth' => []]]
+        ]),
+        new Delete(security: 'is_granted("ROLE_ADMIN")', openapiContext: [
+            'security' => [['bearerAuth' => []]]
+        ])
     ]
 )]
 class ProductOptionValue
@@ -33,21 +41,21 @@ class ProductOptionValue
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['product_option_value.read', 'product_option.item.read'])]
+    #[Groups(['product_option_value.read', 'product_option.item.read', 'product.write', 'product_option.write'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['product_option_value.read'])]
+    #[Groups(['product_option_value.read', 'product.write', 'product_option.write'])]
     private ?Product $product = null;
 
     #[ORM\ManyToOne(inversedBy: 'productOptionValues')]
-    #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['product_option_value.read'])]
+    #[ORM\JoinColumn()]
+    #[Groups(['product_option_value.read', 'product.write', 'product_option.write'])]
     private ?ProductOption $product_option = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['product_option_value.read', 'product_option.item.read', 'product.read'])]
+    #[Groups(['product_option_value.read', 'product_option.item.read', 'product.read', 'product.write', 'product_option.read', 'product_option.write'])]
     private ?string $value = null;
 
     public function getId(): ?int

@@ -11,6 +11,7 @@ import ShoppingBagProvider from "./contexts/ShoppingBagContext";
 
 // cart provider
 import CartProvider from "./contexts/CartContext";
+import FilterProvider from "./contexts/FilterContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(

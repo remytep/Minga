@@ -1,24 +1,53 @@
-import React from 'react';
+import React, { useContext } from "react";
+import { HydraAdmin, ResourceGuesser } from "@api-platform/admin";
+import { AuthContext } from "../../contexts/AuthContext";
 import {
-    HydraAdmin,
-    ResourceGuesser
-} from "@api-platform/admin";
-import { ProductCategoryList, ProductList, ProductOptionList } from './ProductsList';
-import { ProductCategoryCreate, ProductCreate, ProductOptionCreate, ProductOptionValueCreate } from "./ProductsCreate";
-import { ProductCategoryEdit, ProductEdit } from './ProductsEdit';
-import { ProductCategoryShow, ProductShow } from './ProductsShow';
+  ProductCategoryList,
+  ProductList,
+  ProductOptionList,
+} from "./ListComponents";
+import {
+  ProductCategoryCreate,
+  ProductCreate,
+  ProductOptionCreate,
+  ProductOptionValueCreate,
+  UserCreate,
+} from "./CreateComponents";
+import { ProductCategoryEdit, ProductEdit } from "./EditComponents";
+import { ProductCategoryShow, ProductShow } from "./ShowComponents";
+import { useNavigate } from "react-router-dom";
 
-const Admin = () => (
-    <HydraAdmin
-        basename="/admin"
-        entrypoint="http://127.0.0.1:36783/api"
-    >
-        <ResourceGuesser name="products" create={ProductCreate} list={ProductList} edit={ProductEdit} show={ProductShow} />
-        <ResourceGuesser name="product_categories" create={ProductCategoryCreate} list={ProductCategoryList} edit={ProductCategoryEdit} show={ProductCategoryShow} />
-        <ResourceGuesser name="product_options" create={ProductOptionCreate} list={ProductOptionList} />
-        <ResourceGuesser name="product_option_values" create={ProductOptionValueCreate} />
-        <ResourceGuesser name="s_k_us" />
-    </HydraAdmin>
-);
+const Admin = () => {
+  const navigate = useNavigate();
+  const { user } = useContext(AuthContext);
+  if (user) {
+    if (user.roles.includes("ROLE_ADMIN")) {
+      return (
+        <HydraAdmin basename="/admin" entrypoint="https://localhost:8000/api">
+          <ResourceGuesser
+            name="products"
+            create={ProductCreate}
+            list={ProductList}
+            edit={ProductEdit}
+            show={ProductShow}
+          />
+          <ResourceGuesser
+            name="product_categories"
+            create={ProductCategoryCreate}
+            list={ProductCategoryList}
+            edit={ProductCategoryEdit}
+            show={ProductCategoryShow}
+          />
+          <ResourceGuesser name="users" create={UserCreate} />
+          {/* <ResourceGuesser name="product_options" list={ProductOptionList} /> */}
+          {/* <ResourceGuesser name="product_option_values" create={ProductOptionValueCreate} /> */}
+          {/* <ResourceGuesser name="skus" />  */}
+        </HydraAdmin>
+      );
+    } else {
+      navigate("/");
+    }
+  }
+};
 
 export default Admin;
