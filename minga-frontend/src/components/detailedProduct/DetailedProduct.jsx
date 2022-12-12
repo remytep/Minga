@@ -7,7 +7,7 @@ function DetailedProduct() {
   const [stocks, setStocks] = useState([]);
   const [products, setProducts] = useState([]);
   const productId = useLocation();
-  // console.log("display id product : ", productId);
+  console.log("display id product : ", productId);
 
   useEffect(() => {
     const result = productId["pathname"].split("/");
