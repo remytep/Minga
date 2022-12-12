@@ -1,8 +1,7 @@
-.red {
-    color: red;
-    width: 50px !important;
-    height: 50px;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
+.no-stock {
+    color: #ff0000;
+}
+
+.in-stock {
+    color: #00ff00;
 }

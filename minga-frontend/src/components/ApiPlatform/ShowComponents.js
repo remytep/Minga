@@ -49,7 +49,7 @@ export const ProductShow = (props) => (
 
             <Tab label="SKU">
                 <ArrayField source="productOptionValues" reference="product_option_values">
-                    <Datagrid>
+                    <Datagrid rowClick={"edit"}>
                         <ReferenceField source="productOption.@id" reference="product_options">
                             <TextField source="name" />
                         </ReferenceField>

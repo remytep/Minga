@@ -50,20 +50,20 @@ class Sku
 
     #[ORM\ManyToOne(inversedBy: 'skus')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['sku.read'])]
+    #[Groups(['sku.read', 'sku.write'])]
     private ?Product $product = null;
 
     #[ORM\Column]
-    #[Groups(['sku.read', 'product.read'])]
+    #[Groups(['sku.read', 'sku.write','product.read'])]
     private ?int $price = null;
 
     #[ORM\Column]
-    #[Groups(['sku.read', 'product.read'])]
+    #[Groups(['sku.read', 'sku.write', 'product.read'])]
     private ?int $stock = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['sku.read', 'product.read'])]
-    private ?string $reference_number = null;
+    #[Groups(['sku.read', 'sku.write', 'product.read'])]
+    private ?string $referenceNumber = null;
 
     #[ORM\OneToMany(mappedBy: 'Sku', targetEntity: SkuValue::class)]
     #[Groups(['sku.read', 'product.read'])]
@@ -117,12 +117,12 @@ class Sku
 
     public function getReferenceNumber(): ?string
     {
-        return $this->reference_number;
+        return $this->referenceNumber;
     }
 
-    public function setReferenceNumber(string $reference_number): self
+    public function setReferenceNumber(string $referenceNumber): self
     {
-        $this->reference_number = $reference_number;
+        $this->referenceNumber = $referenceNumber;
 
         return $this;
     }

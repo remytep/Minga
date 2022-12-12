@@ -3,10 +3,10 @@ import {
     InputGuesser
 } from "@api-platform/admin";
 import {
+    AutocompleteInput,
+    AutocompleteArrayInput,
     ReferenceInput,
     ReferenceArrayInput,
-    AutocompleteInput,
-    AutocompleteArrayInput
 } from "react-admin";
 import { ProductCategoryTitle, ProductTitle } from "./TitleComponents";
 
@@ -15,7 +15,7 @@ export const ProductEdit = (props) => (
         <InputGuesser source={"name"} fullWidth />
         <InputGuesser source={"description"} fullWidth multiline />
         <InputGuesser source={"thumbnail"} fullWidth />
-        <ReferenceInput source="productCategory.@id" reference="product_categories">
+        <ReferenceInput defaultValue={2} source="productCategory" reference="product_categories">
             <AutocompleteInput
                 optionText="name"
                 fullWidth

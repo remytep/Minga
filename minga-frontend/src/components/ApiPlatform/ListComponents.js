@@ -12,9 +12,16 @@ import {
     SingleFieldList,
     TextField,
     FunctionField,
+    useRecordContext,
+    useListContext,
+    NumberField,
+    WithRecord,
 } from "react-admin";
 import { ProductCategoryTitle, ProductTitle } from "./TitleComponents";
 import "./style.css";
+import classNames from "classnames";
+import { makeStyles } from "@mui/styles";
+import { useRef } from "react";
 
 export const ProductList = (props) => (
     <ListGuesser {...props}>
@@ -46,9 +53,35 @@ export const ProductCategoryList = (props) => (
     </ListGuesser>
 );
 
-
 export const ProductOptionList = (props) => (
     <ListGuesser {...props} >
         <FieldGuesser source="name" />
     </ListGuesser>
 );
+
+export const SkuList = (props) => {
+
+    const isOutOfStock = price => price == "0";
+
+    return (
+        <ListGuesser {...props} >
+            <ReferenceField source="product" reference="products" >
+                <FieldGuesser source="name" />
+            </ReferenceField>
+            <FunctionField
+                label="Price"
+                render={record => record ? record["price"] + " €" : null}
+            />
+
+            <WithRecord
+                label="Stock"
+                render={record => record.stock === 0 ? <span className="no-stock">Out of stock</span> : <span className="in-stock">{record.stock}</span>}
+            >
+
+            </WithRecord >
+
+            <FieldGuesser source="referenceNumber" />
+
+        </ListGuesser >
+    );
+}
