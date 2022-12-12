@@ -1,21 +1,12 @@
-<<<<<<< HEAD
 import React, { useContext } from "react";
-=======
-import React from "react";
->>>>>>> feature/Categories
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-<<<<<<< HEAD
 import { AuthContext } from "../../contexts/AuthContext";
 
 import cover_img from "../../assets/homePages/auth/signup_desk.jpg";
 
-=======
-import cover_img from "../../assets/homePages/auth/signup_desk.jpg";
-
->>>>>>> feature/Categories
 const schema = yup.object().shape({
   email: yup.string().email().required("Email is invalid"),
   password: yup
@@ -25,11 +16,7 @@ const schema = yup.object().shape({
     .required(),
   confirmPassword: yup
     .string()
-<<<<<<< HEAD
     .oneOf([yup.ref("password"), null], "Passwords must match")
-=======
-    .oneOf([yup.ref("password"), null, "Passwords must match !"])
->>>>>>> feature/Categories
     .required("Type your password again"),
   acceptTerms: yup.bool().oneOf([true], "Accept Terms is required"),
 });
@@ -45,11 +32,7 @@ function Register() {
   });
 
   const onSubmit = (data) => {
-<<<<<<< HEAD
     registration(data.email, data.password);
-=======
-    console.log(data);
->>>>>>> feature/Categories
   };
 
   return (
@@ -73,11 +56,7 @@ function Register() {
             <h3 className="text-2xl font-semibold mb-4">Sign Up</h3>
           </div>
 
-<<<<<<< HEAD
           <form onSubmit={handleSubmit(onSubmit)}>
-=======
-          <form onSubmit={handleSubmit(onSubmit)}> 
->>>>>>> feature/Categories
             <div className="w-full flex flex-col mb-4">
               <input
                 type="email"
@@ -104,34 +83,17 @@ function Register() {
                 className="w-full text-black border-b border-black outline-none focus:outline-none py-2 mt-3 mb-4 bg-transparent"
                 {...register("confirmPassword")}
               />
-<<<<<<< HEAD
               <p className="text-red-700">{errors.confirmPassword?.message} </p>
-=======
-              <p className="text-red-700">
-                {" "}
-                {errors.confirmPassword?.message}{" "}
-              </p>
->>>>>>> feature/Categories
             </div>
 
             <div className="w-full flex justify-between flex-col">
               <div className="w-full flex items-center">
-<<<<<<< HEAD
                 <input
                   type="checkbox"
                   className="w-4 h-4 mr-2"
                   {...register("acceptTerms")}
                 />
                 <p className="text-sm">I accept the Terms of Service</p>
-=======
-                <input type="checkbox" className="w-4 h-4 mr-2" 
-                {...register("acceptTerms")}
-                />
-                <p className="text-sm">
-                  I accept the Terms of Service
-                </p>
-                <p>{errors.acceptTerms?.message}</p>
->>>>>>> feature/Categories
               </div>
               <p className="text-red-700">{errors.acceptTerms?.message}</p>
             </div>

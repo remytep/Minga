@@ -22,7 +22,7 @@ function Search() {
         const getResults = async () => {
             const response = await axios({
                 method: 'GET',
-                url: `http://localhost:8000/api/products?name=${search}`,
+                url: `https://localhost:8000/api/products?name=${search}`,
                 headers: { "content-type": "application/json" },
             });
             console.log(response.data);

@@ -12,7 +12,7 @@ function DetailedProduct() {
   useEffect(() => {
     const result = productId["pathname"].split("/");
     axios
-      .get(`http://localhost:8000/api/products/${result[2]}`)
+      .get(`https://localhost:8000/api/products/${result[2]}`)
       .then((res) => {
         console.log(res.data.skus);
         setStocks(Object.values(res.data.skus));
@@ -26,7 +26,7 @@ function DetailedProduct() {
   useEffect(() => {
     const result = productId["pathname"].split("/");
     axios
-      .get(`http://localhost:8000/api/products/${result[2]}`)
+      .get(`https://localhost:8000/api/products/${result[2]}`)
       .then((res) => {
         console.log(res.data);
         setProducts(Object.values(res.data));
@@ -61,7 +61,6 @@ function DetailedProduct() {
               </p>
             ))}
           </div>
-
 
           <div className="w-full flex flex-row items-center justify-start relative mb-12">
             <h3 className="text-md absolute text-black/80 bg-[#f5f5f5] pr-2">
