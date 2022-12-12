@@ -1,6 +1,6 @@
 import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
-import { BsPlus, BsEyeFill } from 'react-icons/bs'
+import { BsPlus, BsEyeFill } from 'react-icons/bs';
 
 // cart context
 import { CartContext } from '../../contexts/CartContext'

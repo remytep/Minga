@@ -21,7 +21,7 @@ const Slider = () => {
             <img src={desk4} alt="" className='w-[100vw] h-full object-cover'/>
             <img src={desk5} alt="" className='w-[100vw] h-full object-cover'/>
         </div>
-        <div className='flex w-[100px] gap-10 absolute left-0 right-0 m-auto bottom-[100px] w-fit'>
+        <div className='flex w-[100px] gap-10 absolute left-0 right-0 m-auto bottom-[100px]'>
             <div className='cursor-pointer items-center' onClick={prevSlide}>
                 <GrPrevious className='text-4xl justify-center text-white'/>
             </div>

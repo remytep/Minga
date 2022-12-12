@@ -1,9 +1,9 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
+import Dropdown from "./categories-menu/Dropdown";
 
 // icons
 import { BsBag } from "react-icons/bs";
-import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import { CgProfile } from "react-icons/cg";
 import { AiOutlineHeart } from "react-icons/ai";
 
@@ -21,10 +21,8 @@ function Header() {
               Minga
             </a>
             <div className="flex cursor-pointer">
-              <p className="">Categories</p>
-              <ArrowDropDownIcon />
+              <Dropdown />
             </div>
-
             {/* <Link to={'/admin'}>Admin</Link> */}
           </div>
         </div>

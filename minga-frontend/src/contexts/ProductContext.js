@@ -4,7 +4,6 @@ export const ProductContext = createContext();
 
 function ProductProvider({ children }) {
     const [products, setProducts] = useState([]);
-    console.log(products);
 
     useEffect(() => {
         const fetchProducts = async() =>{
@@ -19,4 +18,4 @@ function ProductProvider({ children }) {
     )
 }
 
-export default ProductProvider
+export default ProductProvider;

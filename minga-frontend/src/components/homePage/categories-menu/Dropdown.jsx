@@ -1,71 +1,39 @@
-import React, { useState, useEffect, createContext } from "react";
-import { Fragment } from "react";
-import { Menu, Transition } from "@headlessui/react";
+import React, { useState, useEffect } from "react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
-// import axios from "axios";
+import axios from "axios";
 
 function Dropdown() {
   const [categories, setCategories] = useState([]);
-
-  function classNames(...classes) {
-    return classes.filter(Boolean).join(" ");
-  }
+  const [open, setOpen] = useState(false);
 
   useEffect(() => {
-    // axios
-    //   .get("http://localhost:8000/api/product_categories")
-    //   .then((res) => {
-    //     console.log(res.data["hydra:member"]);
-    //     setCategories(Object.values(res.data["hydra:member"]));
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
-    // return;
+    axios
+      .get("http://localhost:8000/api/product_categories")
+      .then((res) => {
+        console.log(res.data["hydra:member"]);
+        setCategories(Object.values(res.data["hydra:member"]));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    return;
   }, []);
 
   return (
-    <div>
-      <Menu as="div" className="relative inline-block text-left">
-        <div>
-          <Menu.Button className="inline-flex w-full justify-center rounded-md px-4 py-2 text-sm text-black focus:outline-none">
-            Categories
-            <ChevronDownIcon
-              className="-mr-1 ml-2 h-5 w-5"
-              aria-hidden="true"
-            />
-          </Menu.Button>
+    <div className="flex cursor-pointer">
+      <div className="w-45 font-medium" onClick={() => setOpen(!open)}>
+        <div className="w-full flex items-center justify-between rounded">
+          Categories
+          <ChevronDownIcon className="-mr-1 ml-2 h-5 w-5" aria-hidden="true" />
         </div>
-
-        <Transition
-          as={Fragment}
-          enter="transition ease-out duration-100"
-          enterFrom="transform opacity-0 scale-95"
-          enterTo="transform opacity-100 scale-100"
-          leave="transition ease-in duration-75"
-          leaveFrom="transform opacity-100 scale-100"
-          leaveTo="transform opacity-0 scale-95"
-        >
-          <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-            <div className="py-1">
-              
-                <ul>
-                {categories.map((categorie) => ({ active }) => (
-                  <li
-                    className={classNames(
-                      active ? "bg-gray-100 text-gray-900" : "text-gray-700",
-                      "block px-4 py-2 text-sm"
-                    )}
-                  >
-                    {categorie.name}
-                  </li>
-                ))}
-                </ul>
-
-            </div>
-          </Menu.Items>
-        </Transition>
-      </Menu>
+        <ul className={`bg-white mt-2 overflow-y-auto text-black ${open ? 'max-h-50' : 'max-h-0'}`}>
+          {
+            categories.map((categorie) => (
+              <li key={categorie.id} className="p-2 text-sm hover:bg-sky-200">{ categorie.name }</li>
+            ))
+          }
+        </ul>
+      </div>
     </div>
   );
 }

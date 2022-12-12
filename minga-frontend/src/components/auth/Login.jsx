@@ -39,7 +39,7 @@ function Login() {
   // };
 
   return (
-    <div class="w-full h-screen flex items-start">
+    <div className="w-full h-screen flex items-start">
       <div className="relative w-1/2 h-full flex flex-col">
         <div className="absolute top-[20%] left-[10%] flex flex-col">
           <h1 className="text-2xl text-white font-bold my-4">
@@ -82,7 +82,7 @@ function Login() {
                   type="password"
                   id="password"
                   name="password"
-                  autocomplete="off"
+                  autoComplete="off"
                   placeholder="Password"
                   className="w-full text-black border-b border-black outline-none focus:outline-none py-2 mb-10 bg-transparent"
                 />
