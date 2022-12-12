@@ -10,10 +10,9 @@ function ProductProvider({ children }) {
         const getProducts = async () => {
             const response = await axios({
                 method: 'GET',
-                url: "http://127.0.0.1:39017/api/products",
+                url: "http://localhost:8000/api/products",
                 headers: { "content-type": "application/json" },
             });
-            console.log(response.data);
             setProducts(Object.values(response.data["hydra:member"]));
         };
         getProducts();
