@@ -42,8 +42,8 @@ use Lexik\Bundle\JWTAuthenticationBundle\Security\User\JWTUserInterface;
             new Delete()
 
         ],
-        normalizationContext: ['groups' => 'user.read'],
-        denormalizationContext: ['groups' => 'user.write']
+        normalizationContext: ['groups' => ['user.read']],
+        denormalizationContext: ['groups' => ['user.write']],
     )
 ]
 class User implements UserInterface, PasswordAuthenticatedUserInterface, JWTUserInterface
@@ -67,7 +67,9 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, JWTUser
      */
     #[ORM\Column]
     private ?string $password = null;
-    #[Assert\NotBlank(groups: ['user.write'])]
+
+
+    #[Assert\NotBlank]
     #[Groups(['user.write'])]
     private ?string $plainPassword = null;
 
