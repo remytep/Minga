@@ -46,6 +46,7 @@ function CartProvidert({ children }) {
         }
       });
       setCart(newCart);
+      localStorage.setItem(newCart, JSON.stringify(newCart));
     } else {
       setCart([...cart, newItem]);
     }

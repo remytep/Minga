@@ -3,7 +3,10 @@ import { Link } from "react-router-dom";
 
 // icons
 import { BsBag } from "react-icons/bs";
-import { IoOptionsOutline } from "react-icons/io5";
+import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
+import { CgProfile } from "react-icons/cg";
+import { AiOutlineHeart } from "react-icons/ai";
+import { FiSearch } from 'react-icons/fi'
 
 import { AuthContext } from "../../contexts/AuthContext";
 // shoppingBag contexts
@@ -16,7 +19,6 @@ import { CartContext } from "../../contexts/CartContext";
 function Header() {
   const { user, logout } = useContext(AuthContext);
   const { isOpenBag, setIsOpenBag } = useContext(ShoppingBagContext);
-  const { isOpenFilter, setIsOpenFilter } = useContext(FilterContext);
   const { itemAmount } = useContext(CartContext);
 
   return (
