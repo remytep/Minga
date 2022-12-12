@@ -37,16 +37,21 @@ function Login() {
             </p>
           </div>
 
-          <form onSubmit={handleSubmit}>
-            <div className="w-full flex flex-col">
-              <input
-                type="email"
-                name="email"
-                placeholder="Email"
-                className="w-full text-black border-b border-black outline-none focus:outline-none py-2 my-2 bg-transparent"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-              />
+          <Formik
+            initialValues={initialValues}
+            validationSchema={validationSchema}
+            onSubmit={(data) => handleSubmit(data)}
+          >
+            <Form>
+              <div className="w-full flex flex-col">
+                <Field
+                  type="email"
+                  id="email"
+                  name="email"
+                  placeholder="Email"
+                  className="w-full text-black border-b border-black outline-none focus:outline-none py-2 my-2 bg-transparent"
+                />
+                <ErrorMessage name="email" component="small" />
 
               <input
                 type="password"
@@ -57,16 +62,16 @@ function Login() {
               />
             </div>
 
-            <div className="w-full flex items-center justify-between">
-              <div className="w-full flex items-center">
-                <input type="checkbox" className="w-4 h-4 mr-2" />
-                <p className="text-sm">Remember Me</p>
-              </div>
+              <div className="w-full flex items-center justify-between">
+                <div className="w-full flex items-center">
+                  <input type="checkbox" className="w-4 h-4 mr-2" />
+                  <p className="text-sm">Remember Me</p>
+                </div>
 
-              <p className="text-sm font-medium whitespace-nowrap cursor-pointer underline underline-offset-2">
-                Forgot Password
-              </p>
-            </div>
+                <p className="text-sm font-medium whitespace-nowrap cursor-pointer underline underline-offset-2">
+                  Forgot Password
+                </p>
+              </div>
 
             <div className="w-full h-full flex-col my-4">
               <button
