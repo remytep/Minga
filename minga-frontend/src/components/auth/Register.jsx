@@ -1,37 +1,39 @@
-import React from "react";
-import { useForm } from "react-hook-form";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import * as yup from "yup";
+import { yupResolver } from "@hookform/resolvers/yup";
+import { AuthContext } from "../../contexts/AuthContext";
+
 import cover_img from "../../assets/homePages/auth/signup_desk.jpg";
-import { z } from "zod";
-import { withZod } from "@remix-validated-form/with-zod";
 
-// Start with a lower or uppercase letter
-// Must be followed from 5 to 23 characters that can be lower or uppercase too
-// const USER_REGEX = /^[a-zA-Z][a-zA-Z0-9-_]{5, 23}$/;
-
-// Requires at least 1 uppercase case latter, 1 lowercase, 1 digit and 1 special character
-// From 5 to 30 characters
-// const PWD_REGEX = /^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{5, 30}$/;
-
-export const validator = withZod(
-  z.object({
-    email: z
-      .string()
-      .min(1, { message: "Email is required" })
-      .email("Must be a valid email"),
-    password: 
-      z.string()
-      .min(1, { message: "Last name is required" }),
-  })
-);
+const schema = yup.object().shape({
+  email: yup.string().email().required("Email is invalid"),
+  password: yup
+    .string()
+    .min(3, "Passwords must be at least 3 characters")
+    .max(23)
+    .required(),
+  confirmPassword: yup
+    .string()
+    .oneOf([yup.ref("password"), null], "Passwords must match")
+    .required("Type your password again"),
+  acceptTerms: yup.bool().oneOf([true], "Accept Terms is required"),
+});
 
 function Register() {
+  const { registration } = useContext(AuthContext);
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
-  const onSubmit = (data) => console.log(data);
+  } = useForm({
+    resolver: yupResolver(schema),
+  });
+
+  const onSubmit = (data) => {
+    registration(data.email, data.password);
+  };
 
   return (
     <div className="w-full h-screen flex items-start">
@@ -54,17 +56,16 @@ function Register() {
             <h3 className="text-2xl font-semibold mb-4">Sign Up</h3>
           </div>
 
-          <form id="form" onSubmit={handleSubmit(onSubmit)}>
+          <form onSubmit={handleSubmit(onSubmit)}>
             <div className="w-full flex flex-col mb-4">
               <input
                 type="email"
                 name="email"
                 placeholder="Email"
                 className="w-full text-black border-b border-black outline-none focus:outline-none py-2 my-3 bg-transparent"
-                {...register("email", { required: true, maxLength: 80 })}
+                {...register("email")}
               />
-              {errors.email?.type === "required" && "Email is required"}
-              {errors.email?.type === "maxLength" && "Max length exceed"}
+              <p className="text-red-700"> {errors.email?.message} </p>
 
               <input
                 type="password"
@@ -73,20 +74,28 @@ function Register() {
                 className="w-full text-black border-b border-black outline-none focus:outline-none py-2 my-3 bg-transparent"
                 {...register("password")}
               />
+              <p className="text-red-700"> {errors.password?.message} </p>
 
               <input
                 type="password"
+                name="confirmPassword"
                 placeholder="Confirm Password"
                 className="w-full text-black border-b border-black outline-none focus:outline-none py-2 mt-3 mb-4 bg-transparent"
-                {...register("confirmPwd")}
+                {...register("confirmPassword")}
               />
+              <p className="text-red-700">{errors.confirmPassword?.message} </p>
             </div>
 
-            <div className="w-full flex items-center justify-between">
+            <div className="w-full flex justify-between flex-col">
               <div className="w-full flex items-center">
-                <input type="checkbox" className="w-4 h-4 mr-2" />
+                <input
+                  type="checkbox"
+                  className="w-4 h-4 mr-2"
+                  {...register("acceptTerms")}
+                />
                 <p className="text-sm">I accept the Terms of Service</p>
               </div>
+              <p className="text-red-700">{errors.acceptTerms?.message}</p>
             </div>
 
             <div className="w-full h-full flex-col my-2">

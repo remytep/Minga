@@ -12,12 +12,12 @@ import Register from "./components/auth/Register";
 import DetailedProduct from "./components/detailedProduct/DetailedProduct";
 import Filter from "./components/homePage/Filter";
 import Admin from "./components/ApiPlatform";
-import { AuthContextProvider } from "./contexts/AuthContext";
+import { AuthProvider } from "./contexts/AuthContext";
 
 function App() {
   return (
     <Router>
-      <AuthContextProvider>
+      <AuthProvider>
         <Header />
         <Routes>
           <Route path="/" element={<Accueil />} />
@@ -29,7 +29,7 @@ function App() {
         <Footer />
         <ShoppingBag />
         <Filter />
-      </AuthContextProvider>
+      </AuthProvider>
     </Router>
   );
 }
