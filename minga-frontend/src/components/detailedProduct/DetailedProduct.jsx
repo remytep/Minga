@@ -1,7 +1,42 @@
-import React from "react";
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { useLocation } from "react-router-dom";
 import desk_model1 from "../../assets/homePages/auth/desk_example1.jpg";
 
 function DetailedProduct() {
+  const [stocks, setStocks] = useState([]);
+  const [products, setProducts] = useState([]);
+  const productId = useLocation();
+  // console.log("display id product : ", productId);
+
+  useEffect(() => {
+    const result = productId["pathname"].split("/");
+    axios
+      .get(`http://localhost:8000/api/products/${result[2]}`)
+      .then((res) => {
+        console.log(res.data.skus);
+        setStocks(Object.values(res.data.skus));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    return;
+  }, [productId]);
+
+  useEffect(() => {
+    const result = productId["pathname"].split("/");
+    axios
+      .get(`https://localhost:8000/api/products/${result[2]}`)
+      .then((res) => {
+        console.log(res.data);
+        setProducts(Object.values(res.data));
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    return;
+  }, [productId]);
+
   return (
     <div class="w-full h-screen flex items-start">
       <div className="relative w-1/2 h-full flex flex-col">
@@ -10,10 +45,24 @@ function DetailedProduct() {
 
       <div className="w-1/2 h-full bg-[#f5f5f5] flex flex-col px-8 py-10 justify-between items-center">
         <div className="w-full flex flex-col max-w-[500px]">
-          <h1 className="text-2xl text-[#060606] font-Inder mb-8">
-            Desk Model
-          </h1>
-          
+          <div className="flex flex-row justify-between">
+            {products.map((product) => (
+              <div
+                key={product.id}
+                className="text-2xl text-[#060606] font-Inder mb-8"
+              >
+                <h1>{product.name}</h1>
+              </div>
+            ))}
+
+            {stocks.map((stock) => (
+              <p key={stock.id} className="p-2 text-sm">
+                Stock : {stock.stock}
+              </p>
+            ))}
+          </div>
+
+
           <div className="w-full flex flex-row items-center justify-start relative mb-12">
             <h3 className="text-md absolute text-black/80 bg-[#f5f5f5] pr-2">
               Customize your desk
@@ -45,22 +94,20 @@ function DetailedProduct() {
           </div>
 
           <div className="w-full flex items-center justify-between">
-            <div className="w-full flex items-center">
-            </div>
+            <div className="w-full flex items-center"></div>
 
-            <p className="text-sm font-medium whitespace-nowrap cursor-pointer underline underline-offset-2">
-            </p>
+            <p className="text-sm font-medium whitespace-nowrap cursor-pointer underline underline-offset-2"></p>
           </div>
         </div>
 
         <div className="w-full h-full flex-col mt-28">
-            <button
-              type="submit"
-              className="w-full text-white bg-[#060606] rounded-md p-3 text-center flex items-center justify-center cursor-pointer"
-            >
-              Total : 557 €
-            </button>
-          </div>
+          <button
+            type="submit"
+            className="w-full text-white bg-[#060606] rounded-md p-3 text-center flex items-center justify-center cursor-pointer"
+          >
+            Total : 557 €
+          </button>
+        </div>
       </div>
     </div>
   );
