@@ -26,6 +26,21 @@ const AuthProvider = ({ children }) => {
       });
     }
   }, []);
+
+  const registration = (email, password) => {
+    return axios
+      .post(`${API_URL}/users`, {
+        email,
+        plainPassword: password,
+      })
+      .then((response) => {
+        if (response.status === 201) {
+          login(email, password);
+        }
+      })
+      .catch((error) => console.log(error));
+  };
+
   const login = (email, password) => {
     return axios
       .post(`${API_URL}/login`, {
@@ -86,6 +101,7 @@ const AuthProvider = ({ children }) => {
         isAuthenticated: state.isAuthenticated,
         login,
         logout,
+        registration,
         refreshToken,
       }}
     >
