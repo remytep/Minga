@@ -26,7 +26,7 @@ function DetailedProduct() {
   useEffect(() => {
     const result = productId["pathname"].split("/");
     axios
-      .get(`https://localhost:8000/api/products/${result[2]}`)
+      .get(`http://localhost:8000/api/products/${result[2]}`)
       .then((res) => {
         console.log(res.data);
         setProducts(Object.values(res.data));
@@ -38,7 +38,7 @@ function DetailedProduct() {
   }, [productId]);
 
   return (
-    <div class="w-full h-screen flex items-start">
+    <div className="w-full h-screen flex items-start">
       <div className="relative w-1/2 h-full flex flex-col">
         <img src={desk_model1} alt="" className="w-full h-full object-cover" />
       </div>
