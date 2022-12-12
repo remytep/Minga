@@ -3,29 +3,33 @@ import {
     ListGuesser,
 } from "@api-platform/admin";
 import {
+    ArrayField,
     ChipField,
+    Datagrid,
     ReferenceArrayField,
+    ReferenceManyField,
     ReferenceField,
     SingleFieldList,
     TextField,
+    FunctionField,
 } from "react-admin";
-
-
-const format = ({ source }) => {
-    console.log(source)
-}
+import { ProductCategoryTitle, ProductTitle } from "./TitleComponents";
+import "./style.css";
 
 export const ProductList = (props) => (
     <ListGuesser {...props}>
         <FieldGuesser source={"name"} />
-        <FieldGuesser source={"description"} />
+        <FunctionField
+            label="Description"
+            render={record => record["description"].length > 20 ? record["description"].substring(0, 20) + "..." : record["description"]}
+        />
         <FieldGuesser source={"thumbnail"} />
         <FieldGuesser source={"createdAt"} />
         {/* Use react-admin components directly when you want complex fields. */}
         <ReferenceField source="productCategory.@id" reference="product_categories" >
             <FieldGuesser source="name" />
         </ReferenceField>
-        <FieldGuesser source={"productOptions"} />
+
         <FieldGuesser source={"skus"} />
         <FieldGuesser source={"slug"} />
     </ListGuesser>
@@ -45,12 +49,6 @@ export const ProductCategoryList = (props) => (
 
 export const ProductOptionList = (props) => (
     <ListGuesser {...props} >
-        <ReferenceField label="Product name" source="product" reference="products">
-            <TextField source="name" />
-        </ReferenceField>
         <FieldGuesser source="name" />
-        <ReferenceField label="Product option value" source="product_option_values" reference="product_option_values">
-            <TextField source="value" />
-        </ReferenceField>
     </ListGuesser>
 );

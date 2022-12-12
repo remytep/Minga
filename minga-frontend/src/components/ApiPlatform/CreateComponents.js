@@ -1,18 +1,21 @@
 import React from "react";
 import {
     CreateGuesser,
-    FieldGuesser,
     InputGuesser
 } from "@api-platform/admin";
 import {
     ArrayInput,
     AutocompleteInput,
     PasswordInput,
+    SelectArrayInput,
     SimpleFormIterator,
+    ReferenceField,
     ReferenceInput,
+    ReferenceArrayInput,
     TextInput,
     useCreate,
-    useCreateSuggestionContext
+    useCreateSuggestionContext,
+    useRecordContext
 } from "react-admin";
 import {
     Box,
@@ -29,12 +32,14 @@ const CreateOption = () => {
     const { filter, onCancel, onCreate } = useCreateSuggestionContext();
     const [create] = useCreate();
     const [value, setValue] = React.useState(filter || '');
+    const record = useRecordContext();
+    const product = record.product;
 
     const handleSubmit = event => {
         event.preventDefault();
         create(
-            'product_options',
-            { data: { name: value } },
+            'product_option_values',
+            { data: { value: value, product } },
             {
                 onSuccess: (data) => {
                     setValue('');
@@ -49,11 +54,12 @@ const CreateOption = () => {
             <form onSubmit={handleSubmit}>
                 <DialogContent>
                     <TextField
-                        label="New product option name"
+                        label="New product option value"
                         value={value}
                         onChange={event => setValue(event.target.value)}
                         autoFocus
                     />
+
 
                 </DialogContent>
                 <DialogActions>
@@ -76,19 +82,6 @@ export const ProductCreate = (props) => (
                 fullWidth
             />
         </ReferenceInput>
-        <ReferenceInput source="productOptions" reference="product_options">
-            <AutocompleteInput
-                optionText="name"
-                fullWidth
-                create={<CreateOption />}
-            />
-        </ReferenceInput>
-        {/* <ArrayInput source="productOptions">
-            <SimpleFormIterator inline>
-
-            </SimpleFormIterator>
-        </ArrayInput> */}
-
         <InputGuesser source="slug" fullWidth />
     </CreateGuesser>
 );
@@ -101,16 +94,17 @@ export const ProductCategoryCreate = (props) => (
 
 export const ProductOptionCreate = (props) => (
     <CreateGuesser {...props}>
-        <InputGuesser source="name" fullWidth />
+        <InputGuesser label="Option value name" source="name" fullWidth />
     </CreateGuesser>
 );
 
+
 export const ProductOptionValueCreate = (props) => (
     <CreateGuesser {...props}>
-        <ReferenceInput label="product" source="products" reference="products">
-            <AutocompleteInput optionText="name" />
+        <ReferenceInput source="product" reference="products">
+            <AutocompleteInput optionText="name" disabled />
         </ReferenceInput>
-        <ReferenceInput label="product option name" source="product_options" reference="product_options">
+        <ReferenceInput source="productOption" reference="product_options">
             <AutocompleteInput optionText="name" />
         </ReferenceInput>
         <InputGuesser source="value" />

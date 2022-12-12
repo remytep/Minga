@@ -50,6 +50,7 @@ class ProductCategory
     #[Groups(['product_category.read'])]
     private ?int $id = null;
 
+    #[Assert\Unique]
     #[ORM\Column(length: 255)]
     #[Groups(['product_category.read', 'product_category.write', 'product.read']), Length(min: 3)]
     private ?string $name = null;

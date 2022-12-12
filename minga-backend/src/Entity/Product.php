@@ -51,6 +51,7 @@ use Symfony\Component\Validator\Constraints\Length;
     ],
     operations: [new GetCollection()]
 )]
+
 #[ApiFilter(SearchFilter::class, properties: ['name' => 'partial', 'productCategory.name' => 'exact', 'productOptions.name' => 'exact',  'productOptions.productOptionValues.value' => 'exact'])]
 class Product
 {
@@ -81,10 +82,10 @@ class Product
     #[Groups(['product.read', 'product.write'])]
     private ?ProductCategory $productCategory;
 
-    #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductOption::class, cascade: ["persist"])]
-    #[Groups(['product.read', 'product.write'])]
+    #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductOptionValue::class, cascade: ["persist"])]
+    #[Groups(['product.read'])]
     #[Assert\Valid()]
-    private Collection $productOptions;
+    private Collection $productOptionValues;
 
     #[ORM\OneToMany(mappedBy: 'product', targetEntity: Sku::class)]
     #[Groups(['product.read'])]
@@ -136,15 +137,6 @@ class Product
         return $this->description;
     }
 
-    #[SerializedName('description')]
-    #[Groups(['product.read'])]
-    public function getShortDescription(): string
-    {
-        if (strlen($this->description) < 20) {
-            return $this->description;
-        }
-        return substr($this->description, 0, 20) . '...';
-    }
 
     public function setDescription(string $description): self
     {
@@ -180,27 +172,27 @@ class Product
     /**
      * @return Collection<int, ProductOption>
      */
-    public function getProductOptions(): Collection
+    public function getProductOptionValues(): Collection
     {
-        return $this->productOptions;
+        return $this->productOptionValues;
     }
 
-    public function addProductOption(ProductOption $productOption): self
+    public function addProductOptionValue(ProductOptionValue $productOptionValue): self
     {
-        if (!$this->productOptions->contains($productOption)) {
-            $this->productOptions->add($productOption);
-            $productOption->setProduct($this);
+        if (!$this->productOptionValues->contains($productOptionValue)) {
+            $this->productOptionValues->add($productOptionValue);
+            $productOptionValue->setProduct($this);
         }
 
         return $this;
     }
 
-    public function removeProductOption(ProductOption $productOption): self
+    public function removeProductOptionValue(ProductOptionValue $productOptionValue): self
     {
-        if ($this->productOptions->removeElement($productOption)) {
+        if ($this->productOptionValues->removeElement($productOptionValue)) {
             // set the owning side to null (unless already changed)
-            if ($productOption->getProduct() === $this) {
-                $productOption->setProduct(null);
+            if ($productOptionValue->getProduct() === $this) {
+                $productOptionValue->setProduct(null);
             }
         }
 

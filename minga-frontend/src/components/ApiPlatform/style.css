@@ -1,0 +1,8 @@
+.red {
+    color: red;
+    width: 50px !important;
+    height: 50px;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
+}

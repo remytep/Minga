@@ -20,10 +20,8 @@ use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ProductOptionRepository::class)]
-
+#[UniqueEntity('name')]
 #[ApiResource(
-    normalizationContext: ['groups' => ['product_option.read']],
-    denormalizationContext: ['groups' => ['product_option.write']],
     operations: [
         new GetCollection(),
         new Get(normalizationContext: ['groups' => ['product_option.read', 'product_option.item.read']]),
@@ -67,8 +65,8 @@ class ProductOption
     #[Groups(['product_option.read', 'product_option.write', 'product.read', 'product.write'])]
     private ?string $name = null;
 
-    #[ORM\OneToMany(mappedBy: 'product_option', targetEntity: ProductOptionValue::class, cascade: ["persist"])]
-    #[Groups(['product_option.read', 'product_option.write', 'product.read'])]
+    #[ORM\OneToMany(mappedBy: 'productOption', targetEntity: ProductOptionValue::class)]
+    #[Groups(['product_option.read', 'product_option.write',  'product_option.item.get',])]
     #[Assert\Valid()]
     private Collection $productOptionValues;
 
@@ -107,7 +105,7 @@ class ProductOption
     }
 
     /**
-     * @return Collection<int, ProductOptionValue>
+     * @return Collection<int, ProductOptionValues>
      */
     public function getProductOptionValues(): Collection
     {

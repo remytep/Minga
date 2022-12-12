@@ -15,7 +15,7 @@ export const ProductEdit = (props) => (
         <InputGuesser source={"name"} fullWidth />
         <InputGuesser source={"description"} fullWidth multiline />
         <InputGuesser source={"thumbnail"} fullWidth />
-        <ReferenceInput source="productCategory" reference="product_categories">
+        <ReferenceInput source="productCategory.@id" reference="product_categories">
             <AutocompleteInput
                 optionText="name"
                 fullWidth

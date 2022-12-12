@@ -23,7 +23,7 @@ const Admin = () => {
   if (user) {
     if (user.roles.includes("ROLE_ADMIN")) {
       return (
-        <HydraAdmin basename="/admin" entrypoint="https://localhost:8000/api">
+        <HydraAdmin basename="/admin" entrypoint="http://localhost:8000/api">
           <ResourceGuesser
             name="products"
             create={ProductCreate}
