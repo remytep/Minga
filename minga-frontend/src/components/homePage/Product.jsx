@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, {  useContext } from 'react'
 import { Link } from 'react-router-dom'
 import { BsPlus, BsEyeFill } from 'react-icons/bs';
 
@@ -9,14 +9,14 @@ function Product({ product }) {
   const { addToCart } = useContext(CartContext);
 
   // product value
-  const { id, image, category, title, price } = product;
+  const { id, thumbnail, category, title, price, name, description } = product;
   return (
     <div>
       <div className='border border-[#e4e4e4] h-[300px] mb-4 relative overflow-hidden group transion'>
         {/* product image */}
         <div className='w-full h-full flex justify-center items-center'>
           <div className='w-[200px] mx-auto flex justify-center items-center'>
-            <img className='max-h-[170px] group-hover:scale-110 transition duration-300' src={image} alt="" />
+            <img className='max-h-[170px] group-hover:scale-110 transition duration-300' src={thumbnail} alt="" />
           </div>
         </div>
         {/* product icon */}
@@ -34,7 +34,7 @@ function Product({ product }) {
       <div className='text-left'>
         <div className='text-sm capitalize text-grey-500 font-semibold opacity-50 mb-1'>{category}</div>
         <Link to={`/products/${id}`}>
-          <h3 className='font-semibold opacity-90 mb-1'>{title}</h3>
+          <h3 className='font-semibold opacity-90 mb-1'>{name}</h3>
         </Link>
         <div className='font-semibold opacity-90'>{price} €</div>
       </div>
@@ -42,4 +42,4 @@ function Product({ product }) {
   )
 }
 
-export default Product
+export default Product;

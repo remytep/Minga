@@ -93,17 +93,18 @@ function Login() {
                 />
                 <ErrorMessage name="email" component="small" /> */}
 
-          <form onSubmit={handleSubmit}>
+         
+
+          <form onSubmit={(data) => handleSubmit(data)}>
             <div className="w-full flex flex-col">
               <input
                 type="email"
+                id="email"
                 name="email"
                 placeholder="Email"
                 className="w-full text-black border-b border-black outline-none focus:outline-none py-2 my-2 bg-transparent"
-                value={email}
                 onChange={(e) => setEmail(e.target.value)}
               />
-
               <input
                 type="password"
                 placeholder="Password"

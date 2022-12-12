@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import Dropdown from "./categories-menu/Dropdown";
 
@@ -6,46 +6,65 @@ import Dropdown from "./categories-menu/Dropdown";
 import { BsBag } from "react-icons/bs";
 import { CgProfile } from "react-icons/cg";
 import { AiOutlineHeart } from "react-icons/ai";
+import { FiSearch } from "react-icons/fi";
 
+import { AuthContext } from "../../contexts/AuthContext";
 // shoppingBag contexts
 import { ShoppingBagContext } from "../../contexts/ShoppingBagContext";
+// filter contexts
+import { FilterContext } from "../../contexts/FilterContext";
+// cart contexts
+import { CartContext } from "../../contexts/CartContext";
 
 function Header() {
-  const { isOpen, setIsOpen } = useContext(ShoppingBagContext);
+  const { user, logout } = useContext(AuthContext);
+  const { isOpenBag, setIsOpenBag } = useContext(ShoppingBagContext);
+  const { itemAmount } = useContext(CartContext);
+
   return (
     <header className="sticky top-0 z-20 bg-[#C9C5BA] py-5">
-      <div className="container mx-auto flex justify-between">
+      <div className="container mx-auto flex justify-between ">
         <div className="flex justify-between w-40">
-          <div className="flex flex-row gap-3 justify-center items-center">
-            <a href="/" className="text-2xl">
-              Minga
-            </a>
-            <div className="flex cursor-pointer">
-              <Dropdown />
-            </div>
-            {/* <Link to={'/admin'}>Admin</Link> */}
+          <a href="/">Minga</a>
+          <div
+            /*      onClick={() => setIsOpenFilter(!isOpenFilter)} */
+            className="cursor-pointer flex relative"
+          >
+            {/*            <IoOptionsOutline className="text-3xl" /> */}
           </div>
         </div>
 
-        <div className="container gap-3 flex flex-row justify-around items-center w-56">
-          <div>
-            <Link to={"/login"}>Connexion</Link>
-          </div>
-          <div>
-            <Link to={"/register"}>Inscription</Link>
-          </div>
-          <div>
-            <CgProfile className="text-3xl" />
-          </div>
-          <div>
-            <AiOutlineHeart className="text-3xl" />
-          </div>
+        <div className="container flex justify-around w-56">
           <div
-            onClick={() => setIsOpen(!isOpen)}
+            onClick={() => setIsOpenBag(!isOpenBag)}
             className="cursor-pointer flex relative"
           >
             <BsBag className="text-3xl" />
+            <div className="bg-red-500 absolute -right-2 -bottom-2 text-[12px] w-[18px] h-[18px] text-white rounded-full flex justify-center items-center">
+              {itemAmount}
+            </div>
           </div>
+          {user ? (
+            <>
+              {user.roles.includes("ROLE_ADMIN") ? (
+                <div>
+                  <Link to={"/admin"}>Admin Panel</Link>
+                </div>
+              ) : null}
+              <div>
+                <Link onClick={() => logout()}>Logout</Link>
+              </div>
+            </>
+          ) : (
+            <>
+              <div>
+                <Link to={"/login"}>Connexion</Link>
+              </div>
+              <div>
+                <Link to={"/register"}>Inscription</Link>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </header>
