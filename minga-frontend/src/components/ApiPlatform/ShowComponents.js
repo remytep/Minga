@@ -17,17 +17,17 @@ import {
 } from "react-admin";
 import { ProductCategoryTitle, ProductTitle } from "./TitleComponents";
 
-const AddProductValue = () => {
+const AddSkuValue = () => {
     const record = useRecordContext();
     return (
         <Button
             component={Link}
             to={{
-                pathname: "/admin/product_option_values/create",
+                pathname: "/admin/skus/create",
                 // Here we specify the initial record for the create view
                 state: { record: { product: record["@id"] } },
             }}
-            label="Add product value"
+            label="Add sku value"
         >
         </Button>
     );
@@ -56,7 +56,7 @@ export const ProductShow = (props) => (
                         <TextField source="value" />
                     </Datagrid>
                 </ArrayField>
-                <AddProductValue {...props} />
+                <AddSkuValue {...props} />
             </Tab>
         </TabbedShowLayout>
     </ShowGuesser>
@@ -65,7 +65,7 @@ export const ProductShow = (props) => (
 export const ProductCategoryShow = (props) => (
     <ShowGuesser title={<ProductCategoryTitle />}  {...props}>
         <FieldGuesser source={"name"} />
-        <ReferenceArrayField label="Products name" source="products" reference="products">
+        <ReferenceArrayField source="products.id" reference="products">
             <SingleFieldList>
                 <ChipField source="name" />
             </SingleFieldList>

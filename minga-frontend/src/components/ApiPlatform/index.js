@@ -67,11 +67,9 @@ const Admin = () => (
       create={ProductCategoryCreate}
       list={ProductCategoryList}
       edit={ProductCategoryEdit}
-      show={ProductCategoryShow}
     />
     <ResourceGuesser name="users" create={UserCreate} />
     <ResourceGuesser name="product_options" create={ProductOptionCreate} list={ProductOptionList} />
-    <ResourceGuesser name="product_option_values" create={ProductOptionValueCreate} />
     <ResourceGuesser name="skus" create={SkuCreate} list={SkuList} />
   </HydraAdmin>
 );

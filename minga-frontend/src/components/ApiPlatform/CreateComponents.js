@@ -114,8 +114,12 @@ export const ProductOptionValueCreate = (props) => (
 export const SkuCreate = (props) => (
     <CreateGuesser {...props}>
         <ReferenceInput source="product" reference="products">
+            <AutocompleteInput optionText="name" disabled />
+        </ReferenceInput>
+        <ReferenceInput source="productOption" reference="product_options">
             <AutocompleteInput optionText="name" />
         </ReferenceInput>
+        <InputGuesser source="optionValue" fullWidth />
         <InputGuesser source="price" fullWidth />
         <InputGuesser source="stock" fullWidth />
         <InputGuesser source="referenceNumber" fullWidth />

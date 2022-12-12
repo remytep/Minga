@@ -82,13 +82,9 @@ class Product
     #[Groups(['product.read', 'product.write'])]
     private ?ProductCategory $productCategory;
 
-    #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductOptionValue::class, cascade: ["persist"])]
+    #[ORM\OneToMany(mappedBy: 'product', targetEntity: Sku::class, cascade: ["persist"])]
     #[Groups(['product.read'])]
     #[Assert\Valid()]
-    private Collection $productOptionValues;
-
-    #[ORM\OneToMany(mappedBy: 'product', targetEntity: Sku::class)]
-    #[Groups(['product.read'])]
     private Collection $skus;
 
     #[ORM\Column(length: 255)]
@@ -98,7 +94,6 @@ class Product
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
-        $this->productOptions = new ArrayCollection();
         $this->skus = new ArrayCollection();
     }
 
@@ -169,38 +164,19 @@ class Product
         return $this;
     } */
 
-    /**
-     * @return Collection<int, ProductOption>
-     */
-    public function getProductOptionValues(): Collection
+    public function getSlug(): ?string
     {
-        return $this->productOptionValues;
+        return $this->slug;
     }
 
-    public function addProductOptionValue(ProductOptionValue $productOptionValue): self
+    public function setSlug(string $slug): self
     {
-        if (!$this->productOptionValues->contains($productOptionValue)) {
-            $this->productOptionValues->add($productOptionValue);
-            $productOptionValue->setProduct($this);
-        }
+        $this->slug = $slug;
 
         return $this;
     }
 
-    public function removeProductOptionValue(ProductOptionValue $productOptionValue): self
-    {
-        if ($this->productOptionValues->removeElement($productOptionValue)) {
-            // set the owning side to null (unless already changed)
-            if ($productOptionValue->getProduct() === $this) {
-                $productOptionValue->setProduct(null);
-            }
-        }
-
-        return $this;
-    }
-
-
-    /**
+        /**
      * @return Collection<int, Sku>
      */
     public function getSkus(): Collection
@@ -212,7 +188,7 @@ class Product
     {
         if (!$this->skus->contains($sku)) {
             $this->skus->add($sku);
-            $sku->setProduct($this);
+            $sku->setSkuCategory($this);
         }
 
         return $this;
@@ -222,22 +198,10 @@ class Product
     {
         if ($this->skus->removeElement($sku)) {
             // set the owning side to null (unless already changed)
-            if ($sku->getProduct() === $this) {
-                $sku->setProduct(null);
+            if ($sku->getSkuCategory() === $this) {
+                $sku->setSkuCategory(null);
             }
         }
-
-        return $this;
-    }
-
-    public function getSlug(): ?string
-    {
-        return $this->slug;
-    }
-
-    public function setSlug(string $slug): self
-    {
-        $this->slug = $slug;
 
         return $this;
     }

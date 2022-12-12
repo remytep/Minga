@@ -22,6 +22,8 @@ import "./style.css";
 import classNames from "classnames";
 import { makeStyles } from "@mui/styles";
 import { useRef } from "react";
+import { Chip } from "@mui/material";
+import { Field } from "@api-platform/api-doc-parser";
 
 export const ProductList = (props) => (
     <ListGuesser {...props}>
@@ -37,7 +39,30 @@ export const ProductList = (props) => (
             <FieldGuesser source="name" />
         </ReferenceField>
 
-        <FieldGuesser source={"skus"} />
+        {/* <ReferenceField source="skuValues" reference="sku_values">
+            <FieldGuesser source="id" />
+        </ReferenceField> */}
+
+
+        <ReferenceArrayField source="skus" reference="skus">
+            <Datagrid rowClick={"edit"}>
+                <ReferenceField source="productOption" reference="product_options">
+                    <TextField source="name" />
+                </ReferenceField>
+                <FieldGuesser source="optionValue" />
+                <FunctionField
+                    label="Price"
+                    render={record => record && record["price"] + " €"}
+                />
+                <WithRecord
+                    label="Stock"
+                    render={record => record.stock === 0 ?
+                        <span className="no-stock">Out of stock</span>
+                        : <span className="in-stock">{record.stock}</span>
+                    }
+                />
+            </Datagrid>
+        </ReferenceArrayField>
         <FieldGuesser source={"slug"} />
     </ListGuesser>
 );
@@ -45,7 +70,7 @@ export const ProductList = (props) => (
 export const ProductCategoryList = (props) => (
     <ListGuesser {...props} >
         <FieldGuesser source={"name"} />
-        <ReferenceArrayField label="Products name" source="products" reference="products">
+        <ReferenceArrayField source="products" reference="products">
             <SingleFieldList>
                 <ChipField source="name" />
             </SingleFieldList>
@@ -59,29 +84,34 @@ export const ProductOptionList = (props) => (
     </ListGuesser>
 );
 
-export const SkuList = (props) => {
+export const ProductOptionValueList = (props) => (
+    <ListGuesser {...props} >
+        <FieldGuesser source="value" />
+    </ListGuesser>
+);
 
-    const isOutOfStock = price => price == "0";
 
-    return (
-        <ListGuesser {...props} >
-            <ReferenceField source="product" reference="products" >
-                <FieldGuesser source="name" />
-            </ReferenceField>
-            <FunctionField
-                label="Price"
-                render={record => record ? record["price"] + " €" : null}
-            />
+export const SkuList = (props) => (
 
-            <WithRecord
-                label="Stock"
-                render={record => record.stock === 0 ? <span className="no-stock">Out of stock</span> : <span className="in-stock">{record.stock}</span>}
-            >
-
-            </WithRecord >
-
-            <FieldGuesser source="referenceNumber" />
-
-        </ListGuesser >
-    );
-}
+    <ListGuesser {...props} >
+        <ReferenceField source="product" reference="products" >
+            <FieldGuesser source="name" />
+        </ReferenceField>
+        <ReferenceField source="productOption" reference="product_options" >
+            <FieldGuesser source="name" />
+        </ReferenceField>
+        <FieldGuesser source={"optionValue"} />
+        <FunctionField
+            label="Price"
+            render={record => record ? record["price"] + " €" : null}
+        />
+        <WithRecord
+            label="Stock"
+            render={record => record.stock === 0 ?
+                <span className="no-stock">Out of stock</span>
+                : <span className="in-stock">{record.stock}</span>
+            }
+        />
+        <FieldGuesser source="referenceNumber" />
+    </ListGuesser >
+);
