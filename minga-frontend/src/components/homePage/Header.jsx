@@ -6,7 +6,7 @@ import { BsBag } from "react-icons/bs";
 import ArrowDropDownIcon from "@mui/icons-material/ArrowDropDown";
 import { CgProfile } from "react-icons/cg";
 import { AiOutlineHeart } from "react-icons/ai";
-import { FiSearch } from 'react-icons/fi'
+import { FiSearch } from "react-icons/fi";
 
 import { AuthContext } from "../../contexts/AuthContext";
 // shoppingBag contexts
@@ -27,10 +27,10 @@ function Header() {
         <div className="flex justify-between w-40">
           <a href="/">Minga</a>
           <div
-            onClick={() => setIsOpenFilter(!isOpenFilter)}
+            /*      onClick={() => setIsOpenFilter(!isOpenFilter)} */
             className="cursor-pointer flex relative"
           >
-            <IoOptionsOutline className="text-3xl" />
+            {/*            <IoOptionsOutline className="text-3xl" /> */}
           </div>
         </div>
 
