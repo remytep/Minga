@@ -120,6 +120,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, JWTUser
 
     public function setRoles(array $roles): self
     {
+        // guarantee every user at least has ROLE_USER
+        $roles[] = 'ROLE_USER';
         $this->roles = $roles;
 
         return $this;
