@@ -41,7 +41,7 @@ class ProductOptionValue
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['product_option_value.read', 'product_option.item.read', 'product.write', 'product_option.write'])]
+    #[Groups(['product_option_value.read', 'product_option.item.read', 'product.read', 'product.write', 'product_option.write'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne]
