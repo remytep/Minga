@@ -10,8 +10,8 @@ import ProductProvider from "./contexts/ProductContext";
 import ShoppingBagProvider from "./contexts/ShoppingBagContext";
 
 // cart provider
-import CartProvider from './contexts/CartContext';
-import FilterProvider from './contexts/FilterContext';
+import CartProvider from "./contexts/CartContext";
+import FilterProvider from "./contexts/FilterContext";
 
 const root = ReactDOM.createRoot(document.getElementById("root"));
 root.render(
@@ -19,19 +19,9 @@ root.render(
     <FilterProvider>
       <CartProvider>
         <ProductProvider>
-          <React.StrictMode>
-            <App />
-          </React.StrictMode>
+          <App />
         </ProductProvider>
       </CartProvider>
     </FilterProvider>
-
-    <CartProvider>
-      <ProductProvider>
-        <React.StrictMode>
-            <App />
-        </React.StrictMode>
-      </ProductProvider>
-    </CartProvider>
   </ShoppingBagProvider>
 );

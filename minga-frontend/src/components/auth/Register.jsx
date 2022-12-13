@@ -1,8 +1,10 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
+import { AuthContext } from "../../contexts/AuthContext";
+
 import cover_img from "../../assets/homePages/auth/signup_desk.jpg";
 
 const schema = yup.object().shape({
@@ -14,12 +16,13 @@ const schema = yup.object().shape({
     .required(),
   confirmPassword: yup
     .string()
-    .oneOf([yup.ref("password"), null, "Passwords must match !"])
+    .oneOf([yup.ref("password"), null], "Passwords must match")
     .required("Type your password again"),
   acceptTerms: yup.bool().oneOf([true], "Accept Terms is required"),
 });
 
 function Register() {
+  const { registration } = useContext(AuthContext);
   const {
     register,
     handleSubmit,
@@ -29,11 +32,11 @@ function Register() {
   });
 
   const onSubmit = (data) => {
-    console.log(data);
+    registration(data.email, data.password);
   };
 
   return (
-    <div class="w-full h-screen flex items-start">
+    <div className="w-full h-screen flex items-start">
       <div className="relative w-1/2 h-full flex flex-col">
         <div className="absolute top-[20%] left-[10%] flex flex-col">
           <h1 className="text-2xl text-white font-bold my-4">
@@ -53,7 +56,7 @@ function Register() {
             <h3 className="text-2xl font-semibold mb-4">Sign Up</h3>
           </div>
 
-          <form onSubmit={handleSubmit(onSubmit)}> 
+          <form onSubmit={handleSubmit(onSubmit)}>
             <div className="w-full flex flex-col mb-4">
               <input
                 type="email"
@@ -80,22 +83,19 @@ function Register() {
                 className="w-full text-black border-b border-black outline-none focus:outline-none py-2 mt-3 mb-4 bg-transparent"
                 {...register("confirmPassword")}
               />
-              <p className="text-red-700">
-                {" "}
-                {errors.confirmPassword?.message}{" "}
-              </p>
+              <p className="text-red-700">{errors.confirmPassword?.message} </p>
             </div>
 
-            <div className="w-full flex items-center justify-between">
+            <div className="w-full flex justify-between flex-col">
               <div className="w-full flex items-center">
-                <input type="checkbox" className="w-4 h-4 mr-2" 
-                {...register("acceptTerms")}
+                <input
+                  type="checkbox"
+                  className="w-4 h-4 mr-2"
+                  {...register("acceptTerms")}
                 />
-                <p className="text-sm">
-                  I accept the Terms of Service
-                </p>
-                <p>{errors.acceptTerms?.message}</p>
+                <p className="text-sm">I accept the Terms of Service</p>
               </div>
+              <p className="text-red-700">{errors.acceptTerms?.message}</p>
             </div>
 
             <div className="w-full h-full flex-col my-2">

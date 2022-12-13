@@ -2,7 +2,7 @@ import React, { useState, useEffect, createContext } from "react";
 import { Fragment } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { ChevronDownIcon } from "@heroicons/react/20/solid";
-import axios from "axios";
+// import axios from "axios";
 
 function Dropdown() {
   const [categories, setCategories] = useState([]);
@@ -12,16 +12,16 @@ function Dropdown() {
   }
 
   useEffect(() => {
-    axios
-      .get("http://localhost:8000/api/product_categories")
-      .then((res) => {
-        console.log(res.data["hydra:member"]);
-        setCategories(Object.values(res.data["hydra:member"]));
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    return;
+    // axios
+    //   .get("https://localhost:8000/api/product_categories")
+    //   .then((res) => {
+    //     console.log(res.data["hydra:member"]);
+    //     setCategories(Object.values(res.data["hydra:member"]));
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
+    // return;
   }, []);
 
   return (
@@ -48,8 +48,7 @@ function Dropdown() {
         >
           <Menu.Items className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
             <div className="py-1">
-              
-                <ul>
+              <ul>
                 {categories.map((categorie) => ({ active }) => (
                   <li
                     className={classNames(
@@ -60,8 +59,7 @@ function Dropdown() {
                     {categorie.name}
                   </li>
                 ))}
-                </ul>
-
+              </ul>
             </div>
           </Menu.Items>
         </Transition>

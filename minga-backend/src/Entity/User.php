@@ -11,6 +11,9 @@ use ApiPlatform\Metadata\Post;
 use ApiPlatform\Metadata\Put;
 use App\Controller\MeController;
 use App\Repository\UserRepository;
+use App\State\UserPasswordHasher;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Serializer\Annotation\Groups;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -28,17 +31,19 @@ use Lexik\Bundle\JWTAuthenticationBundle\Security\User\JWTUserInterface;
                 uriTemplate: '/me',
                 controller: MeController::class,
                 read: false,
+
                 openapiContext: [
                     'security' => [['bearerAuth' => []]]
                 ]
             ),
-            new Post(),
-            new Put(),
-            new Patch(),
+            new Post(security: 'is_granted("PUBLIC_ACCESS")', processor: UserPasswordHasher::class),
+            new Put(processor: UserPasswordHasher::class),
+            new Patch(processor: UserPasswordHasher::class),
             new Delete()
 
         ],
-        normalizationContext: ['groups' => 'user.read']
+        normalizationContext: ['groups' => ['user.read']],
+        denormalizationContext: ['groups' => ['user.write']],
     )
 ]
 class User implements UserInterface, PasswordAuthenticatedUserInterface, JWTUserInterface
@@ -50,10 +55,10 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, JWTUser
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
-    #[Groups(['user.read'])]
+    #[Groups(['user.read', 'user.write'])]
     private ?string $email = null;
 
-    #[ORM\Column]
+    #[ORM\Column(type: 'json')]
     #[Groups(['user.read'])]
     private array $roles = [];
 
@@ -62,6 +67,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, JWTUser
      */
     #[ORM\Column]
     private ?string $password = null;
+
+
+    #[Assert\NotBlank]
+    #[Groups(['user.write'])]
+    private ?string $plainPassword = null;
 
     public function getId(): ?int
     {
@@ -129,6 +139,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, JWTUser
 
         return $this;
     }
+    public function getPlainPassword(): ?string
+    {
+        return $this->plainPassword;
+    }
+
+    public function setPlainPassword(?string $painPassword): self
+    {
+        $this->plainPassword = $painPassword;
+
+        return $this;
+    }
 
     /**
      * @see UserInterface
@@ -136,7 +157,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, JWTUser
     public function eraseCredentials()
     {
         // If you store any temporary, sensitive data on the user, clear it here
-        // $this->plainPassword = null;
+        $this->plainPassword = null;
     }
 
     public static function createFromPayload($id, array $payload)
