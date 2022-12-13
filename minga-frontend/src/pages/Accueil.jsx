@@ -28,14 +28,14 @@ function Accueil() {
 
     useEffect(() => {
         axios
-        .get("https://localhost:8000/api/product_categories")
-        .then((res) => {
-            console.log(res.data["hydra:member"]);
-            setCategories(Object.values(res.data["hydra:member"]));
-        })
-        .catch((error) => {
-            console.log(error);
-        });
+            .get("http://localhost:8000/api/product_categories")
+            .then((res) => {
+                console.log(res.data["hydra:member"]);
+                setCategories(Object.values(res.data["hydra:member"]));
+            })
+            .catch((error) => {
+                console.log(error);
+            });
         return;
     }, []);
 
@@ -48,7 +48,7 @@ function Accueil() {
     //     return (
     //         item.category === "men's clothing");
     // });
-    
+
     return (
         <section className='h-screen'>
             {/* <Hero /> */}
@@ -68,8 +68,8 @@ function Accueil() {
                     <Link to={'/'} className='self-start uppercase font-semibold border-b-2 border-red-500'>
                         Start shopping
                     </Link>
-                    </div>
                 </div>
+            </div>
             <div className='flex '>
                 {/* <div className="flex flex-col items-center w-48 h-full mr-5 py-2 overflow-hidden text-gray-700 bg-[#C9C5BA] rounded">
                     <div className='flex items-center w-full px-3 mt-3'>
@@ -103,13 +103,13 @@ function Accueil() {
                     <ul>
                         {
                             categories.map((categorie) => (
-                            <li key={categorie.id} className="pl-10 p-2 text-sm font-semibold hover:bg-sky-200">{ categorie.name }</li>
+                                <li key={categorie.id} className="pl-10 p-2 text-sm font-semibold hover:bg-sky-200">{categorie.name}</li>
                             ))
                         }
                     </ul>
                 </div>
                 <div className='container mx-auto'>
-                    {isDeskframe ? 
+                    {isDeskframe ?
                         <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-[30px] max-w-sm mx-auto md:max-w-none md:mx-0'>
                             {filteredDeskframe.map((product) => {
                                 return <Product product={product} key={product.id} />;
