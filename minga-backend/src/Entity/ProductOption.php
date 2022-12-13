@@ -20,8 +20,10 @@ use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use Symfony\Component\Validator\Constraints as Assert;
 
 #[ORM\Entity(repositoryClass: ProductOptionRepository::class)]
-#[UniqueEntity('name')]
+
 #[ApiResource(
+    normalizationContext: ['groups' => ['product_option.read']],
+    denormalizationContext: ['groups' => ['product_option.write']],
     operations: [
         new GetCollection(),
         new Get(normalizationContext: ['groups' => ['product_option.read', 'product_option.item.read']]),
@@ -62,11 +64,17 @@ class ProductOption
     private ?Product $product = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['product_option.read', 'product_option.write', 'product.read', 'product.write', 'product.item.get'])]
+    #[Groups(['product_option.read', 'product_option.write', 'product.read', 'product.write'])]
     private ?string $name = null;
+
+    #[ORM\OneToMany(mappedBy: 'productOption', targetEntity: ProductOptionValue::class, cascade: ["persist"])]
+    #[Groups(['product_option.read', 'product_option.write', 'product.read'])]
+    #[Assert\Valid()]
+    private Collection $productOptionValues;
 
     public function __construct()
     {
+        $this->productOptionValues = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -98,4 +106,33 @@ class ProductOption
         return $this;
     }
 
+    /**
+     * @return Collection<int, ProductOptionValue>
+     */
+    public function getProductOptionValues(): Collection
+    {
+        return $this->productOptionValues;
+    }
+
+    public function addProductOptionValue(ProductOptionValue $productOptionValue): self
+    {
+        if (!$this->productOptionValues->contains($productOptionValue)) {
+            $this->productOptionValues->add($productOptionValue);
+            $productOptionValue->setProductOption($this);
+        }
+
+        return $this;
+    }
+
+    public function removeProductOptionValue(ProductOptionValue $productOptionValue): self
+    {
+        if ($this->productOptionValues->removeElement($productOptionValue)) {
+            // set the owning side to null (unless already changed)
+            if ($productOptionValue->getProductOption() === $this) {
+                $productOptionValue->setProductOption(null);
+            }
+        }
+
+        return $this;
+    }
 }

@@ -26,7 +26,6 @@ use Lexik\Bundle\JWTAuthenticationBundle\Security\User\JWTUserInterface;
         security: 'is_granted("ROLE_USER")',
         operations: [
             new GetCollection(),
-            new Get(),
             new Get(
                 uriTemplate: '/me',
                 controller: MeController::class,

@@ -70,11 +70,6 @@ export const ProductList = (props) => (
 export const ProductCategoryList = (props) => (
     <ListGuesser {...props} >
         <FieldGuesser source={"name"} />
-        <ReferenceArrayField source="products" reference="products">
-            <SingleFieldList>
-                <ChipField source="name" />
-            </SingleFieldList>
-        </ReferenceArrayField>
     </ListGuesser>
 );
 

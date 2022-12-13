@@ -51,7 +51,6 @@ use Symfony\Component\Validator\Constraints\Length;
     ],
     operations: [new GetCollection()]
 )]
-
 #[ApiFilter(SearchFilter::class, properties: ['name' => 'partial', 'productCategory.name' => 'exact', 'productOptions.name' => 'exact',  'productOptions.productOptionValues.value' => 'exact'])]
 class Product
 {
@@ -82,9 +81,13 @@ class Product
     #[Groups(['product.read', 'product.write'])]
     private ?ProductCategory $productCategory;
 
-    #[ORM\OneToMany(mappedBy: 'product', targetEntity: Sku::class, cascade: ["persist"])]
-    #[Groups(['product.read'])]
+    #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductOption::class, cascade: ["persist"])]
+    #[Groups(['product.read', 'product.write'])]
     #[Assert\Valid()]
+    private Collection $productOptions;
+
+    #[ORM\OneToMany(mappedBy: 'product', targetEntity: Sku::class)]
+    #[Groups(['product.read'])]
     private Collection $skus;
 
     #[ORM\Column(length: 255)]
@@ -94,6 +97,7 @@ class Product
     public function __construct()
     {
         $this->createdAt = new \DateTimeImmutable();
+        $this->productOptions = new ArrayCollection();
         $this->skus = new ArrayCollection();
     }
 
@@ -132,6 +136,15 @@ class Product
         return $this->description;
     }
 
+    #[SerializedName('description')]
+    #[Groups(['product.read'])]
+    public function getShortDescription(): string
+    {
+        if (strlen($this->description) < 20) {
+            return $this->description;
+        }
+        return substr($this->description, 0, 20) . '...';
+    }
 
     public function setDescription(string $description): self
     {
@@ -164,19 +177,38 @@ class Product
         return $this;
     } */
 
-    public function getSlug(): ?string
+    /**
+     * @return Collection<int, ProductOption>
+     */
+    public function getProductOptions(): Collection
     {
-        return $this->slug;
+        return $this->productOptions;
     }
 
-    public function setSlug(string $slug): self
+    public function addProductOption(ProductOption $productOption): self
     {
-        $this->slug = $slug;
+        if (!$this->productOptions->contains($productOption)) {
+            $this->productOptions->add($productOption);
+            $productOption->setProduct($this);
+        }
 
         return $this;
     }
 
-        /**
+    public function removeProductOption(ProductOption $productOption): self
+    {
+        if ($this->productOptions->removeElement($productOption)) {
+            // set the owning side to null (unless already changed)
+            if ($productOption->getProduct() === $this) {
+                $productOption->setProduct(null);
+            }
+        }
+
+        return $this;
+    }
+
+
+    /**
      * @return Collection<int, Sku>
      */
     public function getSkus(): Collection
@@ -188,7 +220,7 @@ class Product
     {
         if (!$this->skus->contains($sku)) {
             $this->skus->add($sku);
-            $sku->setSkuCategory($this);
+            $sku->setProduct($this);
         }
 
         return $this;
@@ -198,10 +230,22 @@ class Product
     {
         if ($this->skus->removeElement($sku)) {
             // set the owning side to null (unless already changed)
-            if ($sku->getSkuCategory() === $this) {
-                $sku->setSkuCategory(null);
+            if ($sku->getProduct() === $this) {
+                $sku->setProduct(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getSlug(): ?string
+    {
+        return $this->slug;
+    }
+
+    public function setSlug(string $slug): self
+    {
+        $this->slug = $slug;
 
         return $this;
     }

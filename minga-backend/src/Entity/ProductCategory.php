@@ -20,7 +20,6 @@ use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use Symfony\Component\Validator\Constraints\Length;
 
 #[ORM\Entity(repositoryClass: ProductCategoryRepository::class)]
-
 #[ApiResource(
     operations: [
         new GetCollection(),

@@ -45,34 +45,29 @@ class Sku
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['sku.read', 'product_option_value.read'])]
+    #[Groups(['sku.read', 'product.read'])]
     private ?int $id = null;
 
-    #[ORM\ManyToOne]
+    #[ORM\ManyToOne(inversedBy: 'skus')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['sku.read', 'sku.write'])]
+    #[Groups(['sku.read'])]
     private ?Product $product = null;
 
-    #[ORM\ManyToOne]
-    #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['sku.read', 'sku.write'])]
-    private ?ProductOption $productOption = null;
-
     #[ORM\Column]
-    #[Groups(['sku.read', 'sku.write'])]
-    private ?string $optionValue = null;
-
-    #[ORM\Column]
-    #[Groups(['sku.read', 'sku.write','product_option_value.read'])]
+    #[Groups(['sku.read', 'product.read'])]
     private ?int $price = null;
 
     #[ORM\Column]
-    #[Groups(['sku.read', 'sku.write', 'product_option_value.read'])]
+    #[Groups(['sku.read', 'product.read'])]
     private ?int $stock = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['sku.read', 'sku.write', 'product_option_value.read'])]
-    private ?string $referenceNumber = null;
+    #[Groups(['sku.read', 'product.read'])]
+    private ?string $reference_number = null;
+
+    #[ORM\OneToMany(mappedBy: 'Sku', targetEntity: SkuValue::class)]
+    #[Groups(['sku.read', 'product.read'])]
+    private Collection $skuValues;
 
     public function __construct()
     {
@@ -96,18 +91,6 @@ class Sku
         return $this;
     }
 
-    public function getProductOption(): ?ProductOption
-    {
-        return $this->productOption;
-    }
-
-    public function setProductOption(?ProductOption $productOption): self
-    {
-        $this->productOption = $productOption;
-
-        return $this;
-    }
-
     public function getPrice(): ?int
     {
         return $this->price;
@@ -116,18 +99,6 @@ class Sku
     public function setPrice(int $price): self
     {
         $this->price = $price;
-
-        return $this;
-    }
-
-    public function getOptionValue(): ?string
-    {
-        return $this->optionValue;
-    }
-
-    public function setOptionValue(string $optionValue): self
-    {
-        $this->optionValue = $optionValue;
 
         return $this;
     }
@@ -146,12 +117,42 @@ class Sku
 
     public function getReferenceNumber(): ?string
     {
-        return $this->referenceNumber;
+        return $this->reference_number;
     }
 
-    public function setReferenceNumber(string $referenceNumber): self
+    public function setReferenceNumber(string $reference_number): self
     {
-        $this->referenceNumber = $referenceNumber;
+        $this->reference_number = $reference_number;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, SkuValue>
+     */
+    public function getSkuValues(): Collection
+    {
+        return $this->skuValues;
+    }
+
+    public function addSkuValue(SkuValue $skuValue): self
+    {
+        if (!$this->skuValues->contains($skuValue)) {
+            $this->skuValues->add($skuValue);
+            $skuValue->setSku($this);
+        }
+
+        return $this;
+    }
+
+    public function removeSkuValue(SkuValue $skuValue): self
+    {
+        if ($this->skuValues->removeElement($skuValue)) {
+            // set the owning side to null (unless already changed)
+            if ($skuValue->getSku() === $this) {
+                $skuValue->setSku(null);
+            }
+        }
 
         return $this;
     }
