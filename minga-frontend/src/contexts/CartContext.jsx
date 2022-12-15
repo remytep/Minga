@@ -12,6 +12,7 @@ function CartProvidert({ children }) {
   // item amount state
   const [itemAmount, setItemAmount] = useState(0);
 
+
   useEffect(() => {
     const total = cart.reduce((accumulator, currentItem) => {
       return accumulator + currentItem.price * currentItem.amount;
@@ -46,7 +47,8 @@ function CartProvidert({ children }) {
         }
       });
       setCart(newCart);
-      localStorage.setItem(newCart, JSON.stringify(newCart));
+      localStorage.setItem("Mon panier", JSON.stringify(cart)); 
+      // localStorage.setItem("Mon panier", JSON.stringify(newCart));
     } else {
       setCart([...cart, newItem]);
     }
@@ -89,6 +91,7 @@ function CartProvidert({ children }) {
 
   const clearCart = () => {
     setCart([]);
+    localStorage.clear();
   };
 
   return (

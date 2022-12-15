@@ -25,13 +25,8 @@ function Header() {
     <header className="sticky top-0 z-20 bg-[#C9C5BA] py-5">
       <div className="container mx-auto flex justify-between ">
         <div className="flex justify-between w-40">
-          <a href="/">Minga</a>
-          <div
-            /*      onClick={() => setIsOpenFilter(!isOpenFilter)} */
-            className="cursor-pointer flex relative"
-          >
-            {/*            <IoOptionsOutline className="text-3xl" /> */}
-          </div>
+          <a href="/" className="text-2xl">Minga</a>
+          <Link to={"/search"}><FiSearch className="text-2xl mt-2"/></Link>
         </div>
 
         <div className="container flex justify-around w-56">
@@ -40,7 +35,7 @@ function Header() {
             className="cursor-pointer flex relative"
           >
             <BsBag className="text-3xl" />
-            <div className="bg-red-500 absolute -right-2 -bottom-2 text-[12px] w-[18px] h-[18px] text-white rounded-full flex justify-center items-center">
+            <div className="bg-red-500 absolute -right-2 -bottom-0 text-[12px] w-[18px] h-[18px] text-white rounded-full flex justify-center items-center">
               {itemAmount}
             </div>
           </div>

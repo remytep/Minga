@@ -7,6 +7,7 @@ import Product from "../components/homePage/Product";
 import Hero from "../components/homePage/Hero";
 import { IoMdClose } from "react-icons/io";
 import { Link } from "react-router-dom";
+import Header from "../components/homePage/Header";
 
 
 function Search() {
@@ -22,7 +23,7 @@ function Search() {
         const getResults = async () => {
             const response = await axios({
                 method: 'GET',
-                url: `https://localhost:8000/api/products?name=${search}`,
+                url: `http://localhost:8000/api/products?name=${search}`,
                 headers: { "content-type": "application/json" },
             });
             console.log(response.data);
@@ -32,6 +33,7 @@ function Search() {
     }, [])
     return (
         <section>
+            <Header />
             <div className='flex flex-col items-center'>
                 <div className="flex justify-center items-center bg-[#C9C5BA] w-full h-32">
                     <form action="">

@@ -12,7 +12,7 @@ function DetailedProduct() {
   useEffect(() => {
     const result = productId["pathname"].split("/");
     axios
-      .get(`https://localhost:8000/api/products/${result[2]}`)
+      .get(`http://localhost:8000/api/products/${result[2]}`)
       .then((res) => {
         console.log(res.data.skus);
         setStocks(Object.values(res.data.skus));
@@ -26,7 +26,7 @@ function DetailedProduct() {
   useEffect(() => {
     const result = productId["pathname"].split("/");
     axios
-      .get(`https://localhost:8000/api/products/${result[2]}`)
+      .get(`http://localhost:8000/api/products/${result[2]}`)
       .then((res) => {
         console.log(res.data);
         setProducts(Object.values(res.data));
@@ -94,7 +94,6 @@ function DetailedProduct() {
 
           <div className="w-full flex items-center justify-between">
             <div className="w-full flex items-center"></div>
-
             <p className="text-sm font-medium whitespace-nowrap cursor-pointer underline underline-offset-2"></p>
           </div>
         </div>
