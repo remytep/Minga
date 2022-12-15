@@ -16,6 +16,7 @@ import ShoppingBag from "./components/homePage/ShoppingBag";
 import Footer from "./components/homePage/Footer";
 import Filter from "./components/homePage/Filter";
 import { AuthProvider } from "./contexts/AuthContext";
+import DynamicSearch from "./components/homePage/searchBar/DynamicSearch";
 
 function App() {
   return (
@@ -24,7 +25,8 @@ function App() {
         <Header />
         <Routes>
           <Route path="/" element={<Accueil />} />
-          <Route path="/search" element={<Search />} />
+          {/* <Route path="/search" element={<Search />} /> */}
+          <Route path="/search" element={<DynamicSearch />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/admin/*" element={<Admin />}></Route>
