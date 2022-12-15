@@ -1,15 +1,18 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import ColorPicker from "./components/ColorPicker";
-import DimensionPicker from "./components/DimensionPicker";
+import ColorPicker from "./utils/ColorPicker";
+import DimensionPicker from "./utils/DimensionPicker";
 import { ToggleButtonGroup } from "@mui/material";
+import BreadcrumbsBar from "../utils/BreadcrumbsBar";
 import { ToggleButton } from "@mui/material";
 
 import desk_model1 from "../../assets/homePages/auth/desk_example1.jpg";
 
 function DetailedProduct() {
+  let { category } = useParams();
   let { slug } = useParams();
+
   const [product, setProduct] = useState(null);
   const [color, setColor] = useState([]);
   const [dimensions, setDimensions] = useState([]);
@@ -30,7 +33,9 @@ function DetailedProduct() {
       headers: { "content-type": "application/json" },
     }).then((response) => {
       //console.log(response.data["hydra:member"][0]);
-      setProduct(response.data["hydra:member"][0]);
+      if (response.data["hydra:member"][0].productCategory.name === category) {
+        setProduct(response.data["hydra:member"][0]);
+      }
     });
   }, []);
 
@@ -112,6 +117,7 @@ function DetailedProduct() {
         </div>
 
         <div className="w-1/2 h-full bg-[#f5f5f5] flex flex-col px-8 py-10 items-center">
+          <BreadcrumbsBar category={product.productCategory.name} slug={slug} />
           <h1 className="text-4xl pb-3">{product.name}</h1>
           <div className="w-full flex flex-col max-w-[500px]">
             <div className="w-full flex flex-row items-center justify-start relative mb-12">
