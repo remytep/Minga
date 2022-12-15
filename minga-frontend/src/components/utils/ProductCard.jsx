@@ -1,9 +1,8 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { BsPlus, BsEyeFill } from "react-icons/bs";
-import { ProductCreate } from "../AdminPanel/CreateComponents";
 
-function Product({ product, category }) {
+function ProductCard({ product, category }) {
   let cat;
   if (category) {
     cat = category;
@@ -50,4 +49,4 @@ function Product({ product, category }) {
   );
 }
 
-export default Product;
+export default ProductCard;

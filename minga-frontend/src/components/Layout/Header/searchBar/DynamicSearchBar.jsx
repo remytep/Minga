@@ -4,6 +4,7 @@ import Stack from "@mui/material/Stack";
 import Autocomplete from "@mui/material/Autocomplete";
 import TextField from "@mui/material/TextField";
 import { Avatar, ListItem } from "@mui/material";
+import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import axios from "axios";
 /* import { faker } from "@faker-js/faker";
@@ -16,12 +17,13 @@ const productInfo = Array.from(Array(25).keys()).map((product) => ({
 
 export default function DynamicSearchBar() {
   const [products, setProducts] = useState([]);
-
+  const [searchTerms, setSearchTerms] = useState("");
+  const navigate = useNavigate();
   useEffect(() => {
     axios
       .get("https://localhost:8000/api/products")
       .then((res) => {
-        console.log(res.data);
+        //console.log(res.data);
         setProducts(Object.values(res.data["hydra:member"]));
       })
       .catch((error) => {
@@ -42,11 +44,21 @@ export default function DynamicSearchBar() {
       <Autocomplete
         freeSolo
         id="desks_sample"
-        getOptionLabel={(results) => `${results.name} ${results.price}`}
+        onKeyDown={(event) => {
+          if (event.key === "Enter") {
+            event.defaultMuiPrevented = true;
+            navigate("/search/" + searchTerms);
+          }
+        }}
+        onInputChange={(event, newInputValue) => {
+          setSearchTerms(newInputValue);
+        }}
+        inputValue={searchTerms}
+        getOptionLabel={(results) => `${results.name}`}
         options={products}
         sx={{ width: 700 }}
         isOptionEqualToValue={(option, value) => option.name === value.name}
-        noOptionsText={"No available desks"}
+        noOptionsText={"No available products"}
         renderOption={(props, results) => (
           <ListItem
             component="li"
@@ -56,7 +68,7 @@ export default function DynamicSearchBar() {
           >
             <Link
               to={`${results.productCategory.name}/${results.slug}`}
-              className="justify-between"
+              className="flex justify-between items-center"
             >
               <Avatar
                 src={results.avatar}
@@ -69,7 +81,7 @@ export default function DynamicSearchBar() {
           </ListItem>
         )}
         renderInput={(params) => (
-          <TextField {...params} label="Search for our desks" />
+          <TextField {...params} label="Search for our products" />
         )}
       />
     </Stack>
