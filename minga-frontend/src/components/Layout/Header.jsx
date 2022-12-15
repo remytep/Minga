@@ -9,11 +9,7 @@ import { AiOutlineHeart } from "react-icons/ai";
 import { FiSearch } from "react-icons/fi";
 
 import { AuthContext } from "../../contexts/AuthContext";
-// shoppingBag contexts
 import { ShoppingBagContext } from "../../contexts/ShoppingBagContext";
-// filter contexts
-import { FilterContext } from "../../contexts/FilterContext";
-// cart contexts
 import { CartContext } from "../../contexts/CartContext";
 
 function Header() {
@@ -26,12 +22,7 @@ function Header() {
       <div className="container mx-auto flex justify-between ">
         <div className="flex justify-between w-40">
           <a href="/">Minga</a>
-          <div
-            /*      onClick={() => setIsOpenFilter(!isOpenFilter)} */
-            className="cursor-pointer flex relative"
-          >
-            {/*            <IoOptionsOutline className="text-3xl" /> */}
-          </div>
+          <div className="cursor-pointer flex relative"></div>
         </div>
 
         <div className="container flex justify-around w-56">

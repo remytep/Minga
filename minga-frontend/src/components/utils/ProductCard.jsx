@@ -1,14 +1,9 @@
 import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import { BsPlus, BsEyeFill } from "react-icons/bs";
-import { ProductCreate } from "../ApiPlatform/CreateComponents";
-
-// cart context
-/* import { CartContext } from "../../contexts/CartContext"; */
+import { ProductCreate } from "../AdminPanel/CreateComponents";
 
 function Product({ product, category }) {
-  /*   const { addToCart } = useContext(CartContext); */
-  // product value
   let cat;
   if (category) {
     cat = category;

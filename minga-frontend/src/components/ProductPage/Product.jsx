@@ -1,8 +1,8 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import ColorPicker from "./components/ColorPicker";
-import DimensionPicker from "./components/DimensionPicker";
+import ColorPicker from "./utils/ColorPicker";
+import DimensionPicker from "./utils/DimensionPicker";
 import { ToggleButtonGroup } from "@mui/material";
 import BreadcrumbsBar from "../utils/BreadcrumbsBar";
 import { ToggleButton } from "@mui/material";

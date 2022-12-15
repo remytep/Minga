@@ -1,8 +1,6 @@
 import React, { useContext, useEffect, useState } from "react";
 import axios from "axios";
-import { Link } from "react-router-dom";
-import { BsPlus, BsEyeFill } from "react-icons/bs";
-import Product from "./Product";
+import Product from "../utils/ProductCard";
 
 // cart context
 import { CartContext } from "../../contexts/CartContext";
@@ -23,7 +21,7 @@ function ProductList({ product }) {
 
   // product value
   return (
-    <>
+    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-[30px] max-w-sm mx-auto md:max-w-none md:mx-0">
       {products.map((product) => {
         return (
           <div key={product.slug}>
@@ -31,7 +29,7 @@ function ProductList({ product }) {
           </div>
         );
       })}
-    </>
+    </div>
   );
 }
 
