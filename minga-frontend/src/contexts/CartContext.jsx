@@ -1,10 +1,12 @@
 import React, { createContext, useState, useEffect } from 'react'
 
-export const CartContext = createContext()
+export const CartContext = createContext();
+
+const localStoragePanier = JSON.parse(localStorage.getItem('Mon panier') || "[]");
 
 function CartProvidert({ children }) {
   // cart state
-  const [cart, setCart] = useState([]);
+  const [cart, setCart] = useState(localStoragePanier);
 
   // total price state
   const [total, setTotal] = useState(0);
@@ -14,21 +16,23 @@ function CartProvidert({ children }) {
 
 
   useEffect(() => {
-    const total = cart.reduce((accumulator, currentItem) => {
-      return accumulator + currentItem.price * currentItem.amount;
-    }, 0);
-    setTotal(total);
-  }, [cart]);
-
-  // update item amount
-  useEffect(() => {
+    // update total amount
     if (cart) {
       const amount = cart.reduce((accumulator, currentItem) => {
         return accumulator + currentItem.amount;
       }, 0);
       setItemAmount(amount);
     }
-  }, [cart])
+
+    // total price
+    const total = cart.reduce((accumulator, currentItem) => {
+      return accumulator + currentItem.price * currentItem.amount;
+    }, 0);
+    setTotal(total);
+
+    localStorage.setItem("Mon panier", JSON.stringify(cart));
+  }, [cart]);
+
 
   // add to cart
   const addToCart = (product, id) => {
@@ -46,9 +50,7 @@ function CartProvidert({ children }) {
           return item;
         }
       });
-      setCart(newCart);
-      localStorage.setItem("Mon panier", JSON.stringify(cart)); 
-      // localStorage.setItem("Mon panier", JSON.stringify(newCart));
+      setCart(newCart); 
     } else {
       setCart([...cart, newItem]);
     }
