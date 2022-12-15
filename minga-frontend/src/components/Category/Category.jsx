@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import Product from "../homePage/Product";
+import BreadcrumbsBar from "../utils/BreadcrumbsBar";
 
 function Category() {
   let { category } = useParams();
@@ -18,6 +19,7 @@ function Category() {
   }, []);
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-[30px] max-w-sm mx-auto md:max-w-none md:mx-0">
+      <BreadcrumbsBar category={category} />
       {products.map((product) => {
         return (
           <div key={product.slug}>
