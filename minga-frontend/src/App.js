@@ -7,6 +7,7 @@ import Admin from "./components/ApiPlatform";
 import Accueil from "./pages/Accueil";
 import Search from "./pages/Search";
 import DetailedProduct from "./components/detailedProduct/DetailedProduct";
+import Category from "./components/Category/Category";
 import Login from "./components/auth/Login";
 import Register from "./components/auth/Register";
 
@@ -28,7 +29,8 @@ function App() {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/admin/*" element={<Admin />}></Route>
-          <Route path="/products/:slug" element={<DetailedProduct />} />
+          <Route path="/:category/:slug" element={<DetailedProduct />} />
+          <Route path="/:category" element={<Category />} />
         </Routes>
         <ShoppingBag />
         <Filter />

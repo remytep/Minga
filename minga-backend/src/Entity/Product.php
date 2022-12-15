@@ -60,7 +60,7 @@ class Product
     private ?string $name = null;
 
     #[ORM\Column(length: 255, unique: true)]
-    #[Groups(['product.read', 'product.write'])]
+    #[Groups(['product.read', 'product.write', 'product_category.item.get'])]
     private ?string $slug = null;
 
     #[ORM\Column(type: Types::TEXT)]
@@ -77,7 +77,7 @@ class Product
 
     #[ORM\ManyToOne(inversedBy: 'products')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['product.read', 'product.write'])]
+    #[Groups(['product.read', 'product.write', 'product_category.item.get'])]
     private ?ProductCategory $productCategory;
 
     #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductOption::class, cascade: ["persist"])]

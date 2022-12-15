@@ -9,6 +9,7 @@ import { ToggleButton } from "@mui/material";
 import desk_model1 from "../../assets/homePages/auth/desk_example1.jpg";
 
 function DetailedProduct() {
+  let { category } = useParams();
   let { slug } = useParams();
   const [product, setProduct] = useState(null);
   const [color, setColor] = useState([]);
@@ -30,7 +31,9 @@ function DetailedProduct() {
       headers: { "content-type": "application/json" },
     }).then((response) => {
       //console.log(response.data["hydra:member"][0]);
-      setProduct(response.data["hydra:member"][0]);
+      if (response.data["hydra:member"][0].productCategory.name === category) {
+        setProduct(response.data["hydra:member"][0]);
+      }
     });
   }, []);
 

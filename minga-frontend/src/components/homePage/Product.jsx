@@ -6,9 +6,15 @@ import { ProductCreate } from "../ApiPlatform/CreateComponents";
 // cart context
 /* import { CartContext } from "../../contexts/CartContext"; */
 
-function Product({ product }) {
+function Product({ product, category }) {
   /*   const { addToCart } = useContext(CartContext); */
   // product value
+  let cat;
+  if (category) {
+    cat = category;
+  } else {
+    cat = product.productCategory.name;
+  }
   return (
     <>
       <div className="border border-[#e4e4e4] h-[300px] mb-4 relative overflow-hidden group transion">
@@ -30,7 +36,7 @@ function Product({ product }) {
             </div>
           </button>
           <Link
-            to={`/products/${product.slug}`}
+            to={`/${cat}/${product.slug}`}
             className="w-8 h-8 flex justify-center items-center text-primary drop-shadow-xl"
           >
             <BsEyeFill />
@@ -41,7 +47,7 @@ function Product({ product }) {
         <div className="text-sm capitalize text-grey-500 font-semibold opacity-50 mb-1">
           {product.productCategory.name}
         </div>
-        <Link to={`/products/${product.slug}`}>
+        <Link to={`/${cat}/${product.slug}`}>
           <h3 className="font-semibold opacity-90 mb-1">{product.name}</h3>
         </Link>
       </div>

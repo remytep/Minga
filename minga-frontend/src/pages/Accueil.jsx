@@ -119,23 +119,15 @@ function Accueil() {
                 key={categorie.id}
                 className="pl-10 p-2 text-sm font-semibold hover:bg-sky-200"
               >
-                {categorie.name}
+                <Link to={categorie.name}>{categorie.name}</Link>
               </li>
             ))}
           </ul>
         </div>
         <div className="container mx-auto">
-          {isDeskframe ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-[30px] max-w-sm mx-auto md:max-w-none md:mx-0">
-              {filteredDeskframe.map((product) => {
-                return <Product product={product} key={product.id} />;
-              })}
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-[30px] max-w-sm mx-auto md:max-w-none md:mx-0">
-              <ProductList />
-            </div>
-          )}
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-[30px] max-w-sm mx-auto md:max-w-none md:mx-0">
+            <ProductList />
+          </div>
         </div>
       </div>
     </section>
