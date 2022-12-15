@@ -1,4 +1,4 @@
-import React, {  useContext } from 'react'
+import React, { useContext } from 'react'
 import { Link } from 'react-router-dom'
 import { BsPlus, BsEyeFill } from 'react-icons/bs'
 
@@ -16,7 +16,7 @@ function Product({ product }) {
         {/* product image */}
         <div className='w-full h-full flex justify-center items-center'>
           <div className='w-[200px] mx-auto flex justify-center items-center'>
-            <img className='max-h-[170px] group-hover:scale-110 transition duration-300' src={thumbnail} alt="" />
+            <img className='max-h-[170px] group-hover:scale-110 transition duration-300' src={"http://localhost:8000/uploads/" + thumbnail} alt="" />
           </div>
         </div>
         {/* product icon */}

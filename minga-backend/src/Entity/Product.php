@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Link;
+use App\Controller\UploadFileController;
 use App\Repository\ProductRepository;
 use App\Entity\ProductCategory;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -31,7 +32,8 @@ use Symfony\Component\Validator\Constraints\Length;
         new Put(security: 'is_granted("ROLE_ADMIN")', openapiContext: [
             'security' => [['bearerAuth' => []]]
         ]),
-        new Post(security: 'is_granted("ROLE_ADMIN")', openapiContext: [
+        new Post(controller: UploadFileController::class, deserialize: false,
+            security: 'is_granted("ROLE_ADMIN")', openapiContext: [
             'security' => [['bearerAuth' => []]]
         ]),
         new Patch(security: 'is_granted("ROLE_ADMIN")', openapiContext: [
@@ -43,6 +45,7 @@ use Symfony\Component\Validator\Constraints\Length;
     ],
     normalizationContext: ['groups' => ['product.read', 'product_category.item.get']],
     denormalizationContext: ['groups' => ['product.write', 'product_category.item.get']],
+
 )]
 #[ApiResource(
     uriTemplate: '/product_category/{productCategoryId}/products',
