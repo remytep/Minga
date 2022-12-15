@@ -31,18 +31,10 @@ use Symfony\Component\Validator\Constraints\Length;
     operations: [
         new GetCollection(),
         new Get(),
-        new Put(security: 'is_granted("ROLE_ADMIN")', openapiContext: [
-            'security' => [['bearerAuth' => []]]
-        ]),
-        new Post(security: 'is_granted("ROLE_ADMIN")', openapiContext: [
-            'security' => [['bearerAuth' => []]]
-        ]),
-        new Patch(security: 'is_granted("ROLE_ADMIN")', openapiContext: [
-            'security' => [['bearerAuth' => []]]
-        ]),
-        new Delete(security: 'is_granted("ROLE_ADMIN")', openapiContext: [
-            'security' => [['bearerAuth' => []]]
-        ])
+        new Put(),
+        new Post(),
+        new Patch(),
+        new Delete()
     ],
     normalizationContext: ['groups' => ['product.read', 'product_category.item.get']],
     denormalizationContext: ['groups' => ['product.write', 'product_category.item.get']],
@@ -66,6 +58,10 @@ class Product
     #[ORM\Column(length: 255)]
     #[Groups(['product.read', 'product.write', 'product_category.item.get', 'product_option.read']), Length(min: 3)]
     private ?string $name = null;
+
+    #[ORM\Column(length: 255, unique: true)]
+    #[Groups(['product.read', 'product.write'])]
+    private ?string $slug = null;
 
     #[ORM\Column(type: Types::TEXT)]
     #[Groups(['product.write', 'product_category.item.get']), Length(min: 10)]
@@ -93,9 +89,6 @@ class Product
     #[Groups(['product.read'])]
     private Collection $skus;
 
-    #[ORM\Column(length: 255, unique: true)]
-    #[Groups(['product.read', 'product.write'])]
-    private ?string $slug = null;
 
     public function __construct()
     {

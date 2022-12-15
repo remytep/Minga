@@ -31,7 +31,7 @@ use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
         new Delete()
     ]
 )]
-#[ApiFilter(SearchFilter::class, properties: ['skuValues' => 'exact'])]
+#[ApiFilter(SearchFilter::class, properties: ['skuValues' => 'exact', 'product' => 'exact'])]
 class Sku
 {
     #[ORM\Id]
@@ -57,7 +57,7 @@ class Sku
     #[Groups(['sku.read', 'product.read'])]
     private ?string $reference_number = null;
 
-    #[ORM\OneToMany(mappedBy: 'Sku', targetEntity: SkuValue::class)]
+    #[ORM\OneToMany(mappedBy: 'Sku', targetEntity: SkuValue::class, cascade: ['persist'])]
     #[Groups(['sku.read', 'product.read'])]
     private Collection $skuValues;
 

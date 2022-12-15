@@ -11,32 +11,17 @@ import desk_model1 from "../../assets/homePages/auth/desk_example1.jpg";
 function DetailedProduct() {
   let { slug } = useParams();
   const [product, setProduct] = useState(null);
-  const [color, setColor] = React.useState("");
-  const [dimensions, setDimensions] = React.useState("");
-  const [sku, setSku] = useState([]);
+  const [color, setColor] = useState([]);
+  const [dimensions, setDimensions] = useState([]);
+  const [colorId, setColorId] = useState("");
+  const [dimensionsId, setDimensionsId] = useState("");
+  const [variant, setVariant] = useState(null);
   const handleColor = (e, newColor) => {
-    setColor(newColor);
+    setColorId(newColor);
   };
   const handleDimensions = (e, newDimensions) => {
-    setDimensions(newDimensions);
+    setDimensionsId(newDimensions);
   };
-
-  useEffect(() => {
-    axios({
-      method: "GET",
-      url:
-        "https://localhost:8000/api/skus?skuValues%5B%5D=api%2Fsku_values%2F" +
-        color +
-        "&skuValues%5B%5D=api%2Fsku_values%2F" +
-        dimensions,
-      headers: { "content-type": "application/json" },
-    }).then((response) => {
-      console.log(response.data);
-      if (response.data["hydra:member"].length === 1) {
-        setSku(response.data["hydra:member"][0]);
-      }
-    });
-  }, [color, dimensions]);
 
   useEffect(() => {
     axios({
@@ -44,10 +29,77 @@ function DetailedProduct() {
       url: "https://localhost:8000/api/products?slug=" + slug,
       headers: { "content-type": "application/json" },
     }).then((response) => {
-      console.log(response.data["hydra:member"][0]);
+      //console.log(response.data["hydra:member"][0]);
       setProduct(response.data["hydra:member"][0]);
     });
   }, []);
+
+  useEffect(() => {
+    axios({
+      method: "GET",
+      url:
+        "https://localhost:8000/api/sku_values?product_option_value=/api/product_option_values/" +
+        colorId,
+      headers: { "content-type": "application/json" },
+    })
+      .then((response) => {
+        //console.log(response.data["hydra:member"]);
+        setColor(response.data["hydra:member"]);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+    axios({
+      method: "GET",
+      url:
+        "https://localhost:8000/api/sku_values?product_option_value=/api/product_option_values/" +
+        dimensionsId,
+      headers: { "content-type": "application/json" },
+    })
+      .then((response) => {
+        //console.log(response.data["hydra:member"]);
+        setDimensions(response.data["hydra:member"]);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [colorId, dimensionsId]);
+
+  useEffect(() => {
+    let skuValues1 = {};
+    color.forEach((obj) => {
+      let sku = obj.Sku;
+      skuValues1[sku] = obj;
+    });
+    let skuValues2 = {};
+    dimensions.forEach((obj) => {
+      let sku = obj.Sku;
+      skuValues2[sku] = obj;
+    });
+
+    let commonSkuValues = [];
+    Object.keys(skuValues1).forEach((sku) => {
+      if (skuValues2[sku]) {
+        commonSkuValues.push(skuValues1[sku]);
+        commonSkuValues.push(skuValues2[sku]);
+      }
+    });
+    if (commonSkuValues.length == 2) {
+      axios({
+        method: "GET",
+        url: "https://localhost:8000" + commonSkuValues[0].Sku,
+        headers: { "content-type": "application/json" },
+      })
+        .then((response) => {
+          //console.log(response.data);
+          setVariant(response.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  }, [color, dimensions]);
+
   if (product) {
     return (
       <div className="w-full h-screen flex items-start">
@@ -76,7 +128,7 @@ function DetailedProduct() {
                   {option.name === "Color" ? (
                     <ToggleButtonGroup
                       color="primary"
-                      value={color}
+                      value={colorId}
                       exclusive
                       aria-label="Platform"
                       className="flex flex-row"
@@ -92,7 +144,23 @@ function DetailedProduct() {
                   {option.name === "Dimensions" ? (
                     <ToggleButtonGroup
                       color="primary"
-                      value={dimensions}
+                      value={dimensionsId}
+                      exclusive
+                      aria-label="Platform"
+                      className="flex flex-row items-center"
+                      onChange={handleDimensions}
+                    >
+                      {option.productOptionValues.map((value) => (
+                        <ToggleButton value={value.id} key={value.id}>
+                          <DimensionPicker dimensions={value.value} />
+                        </ToggleButton>
+                      ))}
+                    </ToggleButtonGroup>
+                  ) : null}
+                  {option.name === "Size" ? (
+                    <ToggleButtonGroup
+                      color="primary"
+                      value={dimensionsId}
                       exclusive
                       aria-label="Platform"
                       className="flex flex-row items-center"
@@ -108,16 +176,23 @@ function DetailedProduct() {
                 </div>
               ))}
             </div>
-            {sku ? (
+            <p>{product.description}</p>
+            {variant ? (
               <>
-                <div>Price : {sku.price}€</div>
-                <div>Stock : {sku.stock}</div>
-                <div>Reference : {sku.reference_number}</div>
+                <div className="font-bold text-xl">
+                  Price : {variant.price}€
+                </div>
+                <div>Stock : {variant.stock}</div>
+                <div>Reference : {variant.reference_number}</div>
               </>
             ) : null}
 
             <div className="w-full flex items-center justify-between">
-              <div className="w-full flex items-center"></div>
+              <div className="w-full flex items-center">
+                <button className="px-6 py-2 transition ease-in duration-200 uppercase rounded-full hover:bg-gray-800 hover:text-white border-2 border-gray-900 focus:outline-none">
+                  Add to cart
+                </button>
+              </div>
 
               <p className="text-sm font-medium whitespace-nowrap cursor-pointer underline underline-offset-2"></p>
             </div>

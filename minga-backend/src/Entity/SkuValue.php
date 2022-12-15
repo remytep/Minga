@@ -17,6 +17,7 @@ use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 
 #[ORM\Entity(repositoryClass: SkuValueRepository::class)]
 #[ApiResource(
+    paginationEnabled: false,
     normalizationContext: ['groups' => ['sku_value.read']],
     denormalizationContext: ['groups' => ['sku_value.write']],
     operations: [
@@ -36,6 +37,7 @@ use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
         ])
     ]
 )]
+#[ApiFilter(SearchFilter::class, properties: ['product_option_value' => 'exact'])]
 class SkuValue
 {
     #[ORM\Id]
