@@ -69,6 +69,10 @@ class Product
     private ?string $description = null;
 
     #[ORM\Column(type: Types::TEXT)]
+    #[ApiProperty(types: ['https://schema.org/image'], openapi_context: [
+            "type" => "string",
+        ]
+    )]
     #[Groups(['product.read', 'product.write', 'product_category.item.get'])]
     private ?string $thumbnail = null;
 

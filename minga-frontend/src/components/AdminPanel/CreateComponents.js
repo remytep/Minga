@@ -15,7 +15,9 @@ import {
     TextInput,
     useCreate,
     useCreateSuggestionContext,
-    useRecordContext
+    useRecordContext,
+    ImageInput,
+    ImageField
 } from "react-admin";
 import {
     Box,
@@ -75,7 +77,9 @@ export const ProductCreate = (props) => (
     <CreateGuesser {...props}>
         <InputGuesser source="name" fullWidth />
         <InputGuesser source="description" fullWidth multiline />
-        <InputGuesser source="thumbnail" fullWidth multiline />
+        <ImageInput source="thumbnail" fullWidth >
+            <ImageField source="src" title="title" />
+        </ImageInput>
         <ReferenceInput source="productCategory" reference="product_categories">
             <AutocompleteInput
                 optionText="name"

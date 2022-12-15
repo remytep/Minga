@@ -35,9 +35,7 @@ export const ProductList = (props) => (
         <FieldGuesser source={"thumbnail"} />
         <FieldGuesser source={"createdAt"} />
         {/* Use react-admin components directly when you want complex fields. */}
-        <ReferenceField source="productCategory.@id" reference="product_categories" >
-            <FieldGuesser source="name" />
-        </ReferenceField>
+        <ReferenceField source="productCategory.@id" reference="product_categories" />
 
         {/* <ReferenceField source="skuValues" reference="sku_values">
             <FieldGuesser source="id" />
@@ -70,6 +68,7 @@ export const ProductList = (props) => (
 export const ProductCategoryList = (props) => (
     <ListGuesser {...props} >
         <FieldGuesser source={"name"} />
+        <ReferenceArrayField source="products" reference="products" />
     </ListGuesser>
 );
 
