@@ -1,11 +1,22 @@
-import React from "react";
-
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import Hero from "../components/HomePage/Hero";
 import Sidebar from "../components/Layout/Sidebar";
 
-import ProductList from "../components/HomePage/ProductGrid";
+import ProductGrid from "../components/utils/ProductGrid";
 
 function Accueil() {
+  const [products, setProducts] = useState([]);
+
+  useEffect(() => {
+    axios({
+      method: "GET",
+      url: "https://localhost:8000/api/products",
+      headers: { "content-type": "application/json" },
+    }).then((response) => {
+      setProducts(response.data["hydra:member"]);
+    });
+  }, []);
   return (
     <>
       <section>
@@ -14,7 +25,7 @@ function Accueil() {
       <div className="flex">
         <Sidebar />
         <div className="flex flex-col">
-          <ProductList />
+          <ProductGrid products={products} />
         </div>
       </div>
     </>

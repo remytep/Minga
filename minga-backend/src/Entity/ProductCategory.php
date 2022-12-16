@@ -51,7 +51,7 @@ class ProductCategory
     private ?string $name = null;
 
     #[ORM\OneToMany(mappedBy: 'productCategory', targetEntity: Product::class)]
-    #[Groups(['product_category.read', 'product_category.write', 'product_category.item.get'])]
+    #[Groups(['product_category.read', 'product_category.write'])]
     private Collection $products;
 
     public function __construct()

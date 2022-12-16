@@ -23,7 +23,7 @@ export default function DynamicSearchBar() {
     axios
       .get("https://localhost:8000/api/products")
       .then((res) => {
-        console.log(Object.values(res.data["hydra:member"]));
+        //console.log(Object.values(res.data["hydra:member"]));
         setProducts(Object.values(res.data["hydra:member"]));
       })
       .catch((error) => {

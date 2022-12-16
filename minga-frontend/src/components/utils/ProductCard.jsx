@@ -44,6 +44,7 @@ function ProductCard({ product, category }) {
         <Link to={`/${cat}/${product.slug}`}>
           <h3 className="font-semibold opacity-90 mb-1">{product.name}</h3>
         </Link>
+        {product.featured ? <p>Featured</p> : null}
       </div>
     </>
   );

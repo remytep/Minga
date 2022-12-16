@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import Sidebar from "../components/Layout/Sidebar";
 import axios from "axios";
 import BreadcrumbsBar from "../components/utils/BreadcrumbsBar";
-import CategoryGrid from "../components/Category/CategoryGrid";
+import ProductGrid from "../components/utils/ProductGrid";
 
 function Category() {
   let { category } = useParams();
@@ -24,7 +24,7 @@ function Category() {
         <Sidebar />
         <div className="flex flex-col">
           <BreadcrumbsBar category={category} />
-          <CategoryGrid products={products} category={category} />
+          <ProductGrid products={products} category={category} />
         </div>
       </div>
     </>

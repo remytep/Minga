@@ -6,13 +6,13 @@ import Admin from "./components/AdminPanel";
 // Pages
 import Accueil from "./pages/Accueil";
 import Search from "./pages/Search";
-import DetailedProduct from "./components/ProductPage/Product";
+import Product from "./pages/Product";
 import Category from "./pages/Category";
 import Login from "./components/Auth/Login";
 import Register from "./components/Auth/Register";
 
 // Components
-import Header from "./components/Layout/Header";
+import Header from "./components/Layout/Header/Header";
 import ShoppingBag from "./components/Layout/ShoppingBag";
 import { AuthProvider } from "./contexts/AuthContext";
 import ShoppingBagProvider from "./contexts/ShoppingBagContext";
@@ -27,12 +27,12 @@ function App() {
             <Header />
             <Routes>
               <Route path="/" element={<Accueil />} />
-              <Route path="/search" element={<Search />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/admin/*" element={<Admin />}></Route>
-              <Route path="/:category/:slug" element={<DetailedProduct />} />
+              <Route path="/:category/:slug" element={<Product />} />
               <Route path="/:category" element={<Category />} />
+              <Route path="/search/:searchTerms" element={<Search />} />
             </Routes>
             <ShoppingBag />
           </AuthProvider>
