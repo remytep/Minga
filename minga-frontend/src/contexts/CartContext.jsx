@@ -1,14 +1,10 @@
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext, useState, useEffect } from 'react'
 
-export const CartContext = createContext();
+export const CartContext = createContext()
 
-const localStoragePanier = JSON.parse(
-  localStorage.getItem("Mon panier") || "[]"
-);
-
-function CartProvider({ children }) {
+function CartProvidert({ children }) {
   // cart state
-  const [cart, setCart] = useState(localStoragePanier);
+  const [cart, setCart] = useState([]);
 
   // total price state
   const [total, setTotal] = useState(0);
@@ -17,22 +13,21 @@ function CartProvider({ children }) {
   const [itemAmount, setItemAmount] = useState(0);
 
   useEffect(() => {
-    // update total amount
+    const total = cart.reduce((accumulator, currentItem) => {
+      return accumulator + currentItem.price * currentItem.amount;
+    }, 0);
+    setTotal(total);
+  }, [cart]);
+
+  // update item amount
+  useEffect(() => {
     if (cart) {
       const amount = cart.reduce((accumulator, currentItem) => {
         return accumulator + currentItem.amount;
       }, 0);
       setItemAmount(amount);
     }
-
-    // total price
-    const total = cart.reduce((accumulator, currentItem) => {
-      return accumulator + currentItem.price * currentItem.amount;
-    }, 0);
-    setTotal(total);
-
-    localStorage.setItem("Mon panier", JSON.stringify(cart));
-  }, [cart]);
+  }, [cart])
 
   // add to cart
   const addToCart = (product, id) => {
@@ -51,10 +46,11 @@ function CartProvider({ children }) {
         }
       });
       setCart(newCart);
+      localStorage.setItem(newCart, JSON.stringify(newCart));
     } else {
       setCart([...cart, newItem]);
     }
-  };
+  }
 
   // delete item from cart
   const deleteItem = (id) => {
@@ -93,25 +89,13 @@ function CartProvider({ children }) {
 
   const clearCart = () => {
     setCart([]);
-    localStorage.clear();
   };
 
   return (
-    <CartContext.Provider
-      value={{
-        cart,
-        addToCart,
-        deleteItem,
-        increaseAmount,
-        decreaseAmount,
-        clearCart,
-        itemAmount,
-        total,
-      }}
-    >
+    <CartContext.Provider value={{ cart, addToCart, deleteItem, increaseAmount, decreaseAmount, clearCart, itemAmount, total }}>
       {children}
     </CartContext.Provider>
-  );
+  )
 }
 
-export default CartProvider;
+export default CartProvidert

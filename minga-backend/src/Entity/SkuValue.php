@@ -54,12 +54,12 @@ class SkuValue
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['sku_value.read'])]
-    private ?ProductOption $product_option = null;
+    private ?ProductOption $productOption = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['sku_value.read'])]
-    private ?ProductOptionValue $product_option_value = null;
+    private ?ProductOptionValue $productOptionValue = null;
 
     #[ORM\ManyToOne(inversedBy: 'skuValues')]
     #[ORM\JoinColumn(nullable: false)]
@@ -85,24 +85,24 @@ class SkuValue
 
     public function getProductOption(): ?ProductOption
     {
-        return $this->product_option;
+        return $this->productOption;
     }
 
-    public function setProductOption(?ProductOption $product_option): self
+    public function setProductOption(?ProductOption $productOption): self
     {
-        $this->product_option = $product_option;
+        $this->productOption = $productOption;
 
         return $this;
     }
 
     public function getProductOptionValue(): ?ProductOptionValue
     {
-        return $this->product_option_value;
+        return $this->productOptionValue;
     }
 
-    public function setProductOptionValue(?ProductOptionValue $product_option_value): self
+    public function setProductOptionValue(?ProductOptionValue $productOptionValue): self
     {
-        $this->product_option_value = $product_option_value;
+        $this->productOptionValue = $productOptionValue;
 
         return $this;
     }

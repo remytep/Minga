@@ -73,7 +73,7 @@ class Product
 
     #[ORM\ManyToOne(inversedBy: 'products')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['product.read', 'product.write', 'product_category.item.get'])]
+    #[Groups(['product.read', 'product.write'])]
     private ?ProductCategory $productCategory;
 
     #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductOption::class, cascade: ["persist"])]
@@ -84,10 +84,6 @@ class Product
     #[ORM\OneToMany(mappedBy: 'product', targetEntity: Sku::class)]
     #[Groups(['product.read'])]
     private Collection $skus;
-
-    #[ORM\Column(nullable: true)]
-    #[Groups(['product.read', 'product.write', 'product_category.item.get'])]
-    private ?bool $featured = null;
 
 
     public function __construct()
@@ -145,18 +141,6 @@ class Product
     public function setDescription(string $description): self
     {
         $this->description = $description;
-
-        return $this;
-    }
-
-    public function getThumbnail(): ?string
-    {
-        return $this->thumbnail;
-    }
-
-    public function setThumbnail(string $thumbnail): self
-    {
-        $this->thumbnail = $thumbnail;
 
         return $this;
     }
@@ -242,18 +226,6 @@ class Product
     public function setSlug(string $slug): self
     {
         $this->slug = $slug;
-
-        return $this;
-    }
-
-    public function isFeatured(): ?bool
-    {
-        return $this->featured;
-    }
-
-    public function setFeatured(?bool $featured): self
-    {
-        $this->featured = $featured;
 
         return $this;
     }

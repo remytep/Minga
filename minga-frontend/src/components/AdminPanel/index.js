@@ -1,45 +1,66 @@
-import React, { useContext } from "react";
-import { HydraAdmin, ResourceGuesser } from "@api-platform/admin";
-import { AuthContext } from "../../contexts/AuthContext";
+import React, { useContext, useEffect, useState } from "react";
 import {
-  ProductCategoryList,
-  ProductList,
-  ProductOptionList,
+    fetchHydra as baseFetchHydra,
+    HydraAdmin,
+    hydraDataProvider as baseHydraDataProvider,
+} from "@api-platform/admin";
+import {
+    ProductCategoryList,
+    ProductList,
+    ProductOptionList,
+    SkuList,
 } from "./ListComponents";
 import {
-  ProductCategoryCreate,
-  ProductCreate,
-  ProductOptionCreate,
-  ProductOptionValueCreate,
-  UserCreate,
+    ProductCategoryCreate,
+    ProductCreate,
+    ProductOptionCreate,
+    ProductOptionValueCreate,
+    SkuCreate,
+    UserCreate,
 } from "./CreateComponents";
 import { ProductCategoryEdit, ProductEdit } from "./EditComponents";
 import { ProductCategoryShow, ProductShow } from "./ShowComponents";
+import { CustomRoutes, Resource } from "react-admin";
+import { ENTRYPOINT } from "../../config";
+import { dataProvider } from "./config";
+import { MyLayout } from "./config";
 
-const Admin = () => {
-  <HydraAdmin basename="/admin" entrypoint="https://localhost:8000/api">
-    <ResourceGuesser
-      name="products"
-      create={ProductCreate}
-      list={ProductList}
-      edit={ProductEdit}
-      show={ProductShow}
-    />
-    <ResourceGuesser
-      name="product_categories"
-      create={ProductCategoryCreate}
-      list={ProductCategoryList}
-      edit={ProductCategoryEdit}
-      show={ProductCategoryShow}
-    />
-    <ResourceGuesser name="users" create={UserCreate} />
-    <ResourceGuesser name="product_options" list={ProductOptionList} />
-    <ResourceGuesser
-      name="product_option_values"
-      create={ProductOptionValueCreate}
-    />
-    <ResourceGuesser name="skus" />
-  </HydraAdmin>;
-};
+const AdminPanel = () => (
+    <HydraAdmin
+        layout={MyLayout}
+        dataProvider={dataProvider()}
+        basename="/admin"
+        entrypoint={ENTRYPOINT}>
+        <Resource
+            name={"products"}
+            create={ProductCreate}
+            list={ProductList}
+            edit={ProductEdit}
+            show={ProductShow}
+            recordRepresentation="name"
+        />
+        <Resource
+            name={"product_categories"}
+            create={ProductCategoryCreate}
+            list={ProductCategoryList}
+            edit={ProductCategoryEdit}
+            show={ProductCategoryShow}
+            recordRepresentation="name"
+        />
+        <Resource
+            name={"product_options"}
+            create={ProductOptionCreate}
+            list={ProductOptionList}
+        />
+        <Resource
+            name={"product_option_values"}
+            create={ProductOptionValueCreate}
+        />
+        <Resource name={"skus"} />
+        <Resource name={"sku_values"} />
+        <Resource name={"users"} create={UserCreate} />
+    </HydraAdmin>
+);
 
-export default Admin;
+
+export default AdminPanel;

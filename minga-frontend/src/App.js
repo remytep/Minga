@@ -1,43 +1,38 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-import Admin from "./components/AdminPanel";
 
 // Pages
 import Accueil from "./pages/Accueil";
 import Search from "./pages/Search";
-import Product from "./pages/Product";
-import Category from "./pages/Category";
-import Login from "./components/Auth/Login";
-import Register from "./components/Auth/Register";
+import DetailedProduct from "./components/detailedProduct/DetailedProduct";
+import Login from "./components/auth/Login";
+import Register from "./components/auth/Register";
 
 // Components
-import Header from "./components/Layout/Header/Header";
-import ShoppingBag from "./components/Layout/ShoppingBag";
+import Header from "./components/homePage/Header";
+import ShoppingBag from "./components/homePage/ShoppingBag";
+import Footer from "./components/homePage/Footer";
+import Filter from "./components/homePage/Filter";
 import { AuthProvider } from "./contexts/AuthContext";
-import ShoppingBagProvider from "./contexts/ShoppingBagContext";
-import CartProvider from "./contexts/CartContext";
+import AdminPanel from "./components/AdminPanel";
 
 function App() {
   return (
     <Router>
-      <ShoppingBagProvider>
-        <CartProvider>
-          <AuthProvider>
-            <Header />
-            <Routes>
-              <Route path="/" element={<Accueil />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/admin/*" element={<Admin />}></Route>
-              <Route path="/:category/:slug" element={<Product />} />
-              <Route path="/:category" element={<Category />} />
-              <Route path="/search/:searchTerms" element={<Search />} />
-            </Routes>
-            <ShoppingBag />
-          </AuthProvider>
-        </CartProvider>
-      </ShoppingBagProvider>
+      <AuthProvider>
+        <Header />
+        <Routes>
+          <Route path="/" element={<Accueil />} />
+          <Route path="/search" element={<Search />} />
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/admin/*" element={<AdminPanel />}></Route>
+          <Route path="/products/:slug" element={<DetailedProduct />} />
+        </Routes>
+        <ShoppingBag />
+        <Filter />
+      </AuthProvider>
     </Router>
   );
 }
