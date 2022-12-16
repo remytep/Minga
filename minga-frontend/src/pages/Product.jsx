@@ -1,17 +1,19 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
 import ColorPicker from "../components/ProductPage/ColorPicker";
 import DimensionPicker from "../components/ProductPage/DimensionPicker";
 import { ToggleButtonGroup } from "@mui/material";
 import BreadcrumbsBar from "../components/utils/BreadcrumbsBar";
 import { ToggleButton } from "@mui/material";
+import { CartContext } from "../contexts/CartContext";
 
 import desk_model1 from "../assets/homePages/auth/desk_example1.jpg";
 
 function Product() {
   let { category } = useParams();
   let { slug } = useParams();
+  const { addToCart } = useContext(CartContext);
 
   const [product, setProduct] = useState(null);
   const [color, setColor] = useState([]);
@@ -195,7 +197,10 @@ function Product() {
 
             <div className="w-full flex items-center justify-between">
               <div className="w-full flex items-center">
-                <button className="px-6 py-2 transition ease-in duration-200 uppercase rounded-full hover:bg-gray-800 hover:text-white border-2 border-gray-900 focus:outline-none">
+                <button
+                  className="px-6 py-2 transition ease-in duration-200 uppercase rounded-full hover:bg-gray-800 hover:text-white border-2 border-gray-900 focus:outline-none"
+                  onClick={() => addToCart(variant, variant.id)}
+                >
                   Add to cart
                 </button>
               </div>

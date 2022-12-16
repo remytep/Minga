@@ -2,9 +2,13 @@ import React, { createContext, useState, useEffect } from "react";
 
 export const CartContext = createContext();
 
+const localStoragePanier = JSON.parse(
+  localStorage.getItem("Mon panier") || "[]"
+);
+
 function CartProvider({ children }) {
   // cart state
-  const [cart, setCart] = useState([]);
+  const [cart, setCart] = useState(localStoragePanier);
 
   // total price state
   const [total, setTotal] = useState(0);
@@ -13,20 +17,21 @@ function CartProvider({ children }) {
   const [itemAmount, setItemAmount] = useState(0);
 
   useEffect(() => {
-    const total = cart.reduce((accumulator, currentItem) => {
-      return accumulator + currentItem.price * currentItem.amount;
-    }, 0);
-    setTotal(total);
-  }, [cart]);
-
-  // update item amount
-  useEffect(() => {
+    // update total amount
     if (cart) {
       const amount = cart.reduce((accumulator, currentItem) => {
         return accumulator + currentItem.amount;
       }, 0);
       setItemAmount(amount);
     }
+
+    // total price
+    const total = cart.reduce((accumulator, currentItem) => {
+      return accumulator + currentItem.price * currentItem.amount;
+    }, 0);
+    setTotal(total);
+
+    localStorage.setItem("Mon panier", JSON.stringify(cart));
   }, [cart]);
 
   // add to cart
@@ -46,7 +51,6 @@ function CartProvider({ children }) {
         }
       });
       setCart(newCart);
-      localStorage.setItem(newCart, JSON.stringify(newCart));
     } else {
       setCart([...cart, newItem]);
     }
@@ -89,6 +93,7 @@ function CartProvider({ children }) {
 
   const clearCart = () => {
     setCart([]);
+    localStorage.clear();
   };
 
   return (

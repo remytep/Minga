@@ -1,7 +1,6 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import { BsPlus, BsEyeFill } from "react-icons/bs";
-
 function ProductCard({ product, category }) {
   let cat;
   if (category) {
@@ -24,7 +23,7 @@ function ProductCard({ product, category }) {
         </div>
         {/* product icon */}
         <div className="absolute top-2 -right-11 group-hover:right-2 p-1 gap-y-1 flex flex-col items-center opacity-0 group-hover:opacity-100 transition-all duration-300">
-          <button /* onClick={() => addToCart(product, id)} */>
+          <button>
             <div className="flex justify-center items-center bg-red-500 text-white w-8 h-8">
               <BsPlus className="text-2xl" />
             </div>
