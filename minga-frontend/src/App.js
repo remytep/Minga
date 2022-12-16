@@ -1,5 +1,7 @@
-import React, { useContext } from "react";
+import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+
+import Admin from "./components/ApiPlatform";
 
 // Pages
 import Accueil from "./pages/Accueil";
@@ -13,8 +15,7 @@ import Header from "./components/homePage/Header";
 import ShoppingBag from "./components/homePage/ShoppingBag";
 import Footer from "./components/homePage/Footer";
 import Filter from "./components/homePage/Filter";
-import { AuthContext, AuthProvider } from "./contexts/AuthContext";
-import AdminPanel from "./components/AdminPanel";
+import { AuthProvider } from "./contexts/AuthContext";
 
 function App() {
   return (
@@ -26,13 +27,13 @@ function App() {
           <Route path="/search" element={<Search />} />
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
-          <Route path="/admin/*" element={<AdminPanel />} />
-          <Route path="/products/:id" element={<DetailedProduct />} />
+          <Route path="/admin/*" element={<Admin />}></Route>
+          <Route path="/products/:slug" element={<DetailedProduct />} />
         </Routes>
         <ShoppingBag />
         <Filter />
       </AuthProvider>
-    </Router >
+    </Router>
   );
 }
 

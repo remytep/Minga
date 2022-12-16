@@ -17,12 +17,12 @@ function Search() {
     const handleSearch = (e) => {
         e.preventDefault();
     };
-
+    
     useEffect(() => {
         const getResults = async () => {
             const response = await axios({
                 method: 'GET',
-                url: `http://localhost:8000/api/products?name=${search}`,
+                url: `https://localhost:8000/api/products?name=${search}`,
                 headers: { "content-type": "application/json" },
             });
             console.log(response.data);
@@ -51,8 +51,8 @@ function Search() {
                     <div className='w-full flex flex-col'>
                         {searchResults.filter((product) => {
                             return search.toLowerCase === ""
-                                ? product
-                                : product.name.toLowerCase().includes(search.toLowerCase());
+                            ? product
+                            : product.name.toLowerCase().includes(search.toLowerCase());
                         }).map((product) => {
                             return (
                                 <div className='w-full min-h-[150px] flex items-center gap-x-4 font-light text-gray-500 border-b border-gray-200'>
@@ -71,7 +71,7 @@ function Search() {
                             )
                         })}
                     </div>
-                </div>
+                 </div>
             </div>
         </section>
     );

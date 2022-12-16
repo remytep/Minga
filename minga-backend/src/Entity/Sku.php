@@ -4,11 +4,9 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\SkuRepository;
-use App\Controller\UploadFileController;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
-use Doctrine\DBAL\Types\Types;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
@@ -21,29 +19,19 @@ use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 
 #[ORM\Entity(repositoryClass: SkuRepository::class)]
 #[ApiResource(
+    paginationEnabled: false,
     normalizationContext: ['groups' => ['sku.read']],
     denormalizationContext: ['groups' => ['sku.write']],
     operations: [
-        new GetCollection(security: 'is_granted("ROLE_ADMIN")', openapiContext: [
-            'security' => [['bearerAuth' => []]]
-        ]),
+        new GetCollection(),
         new Get(),
-        new Put(controller: UploadFileController::class, deserialize: false,
-        security: 'is_granted("ROLE_ADMIN")', openapiContext: [
-            'security' => [['bearerAuth' => []]]
-        ]),
-        new Post(controller: UploadFileController::class,
-            security: 'is_granted("ROLE_ADMIN")', openapiContext: [
-            'security' => [['bearerAuth' => []]]
-        ]),
-        new Patch(security: 'is_granted("ROLE_ADMIN")', openapiContext: [
-            'security' => [['bearerAuth' => []]]
-        ]),
-        new Delete(security: 'is_granted("ROLE_ADMIN")', openapiContext: [
-            'security' => [['bearerAuth' => []]]
-        ])
+        new Put(),
+        new Post(),
+        new Patch(),
+        new Delete()
     ]
 )]
+#[ApiFilter(SearchFilter::class, properties: ['skuValues' => 'exact', 'product' => 'exact'])]
 class Sku
 {
     #[ORM\Id]
@@ -57,14 +45,6 @@ class Sku
     #[Groups(['sku.read'])]
     private ?Product $product = null;
 
-    #[ORM\Column(type: Types::TEXT)]
-    #[ApiProperty(types: ['https://schema.org/image'], openapi_context: [
-            "type" => "string",
-        ]
-    )]
-    #[Groups(['sku.read'])]
-    private ?string $thumbnail = null;
-
     #[ORM\Column]
     #[Groups(['sku.read', 'product.read'])]
     private ?int $price = null;
@@ -77,7 +57,7 @@ class Sku
     #[Groups(['sku.read', 'product.read'])]
     private ?string $reference_number = null;
 
-    #[ORM\OneToMany(mappedBy: 'Sku', targetEntity: SkuValue::class)]
+    #[ORM\OneToMany(mappedBy: 'Sku', targetEntity: SkuValue::class, cascade: ['persist'])]
     #[Groups(['sku.read', 'product.read'])]
     private Collection $skuValues;
 
@@ -99,18 +79,6 @@ class Sku
     public function setProduct(?Product $product): self
     {
         $this->product = $product;
-
-        return $this;
-    }
-
-    public function getThumbnail(): ?string
-    {
-        return $this->thumbnail;
-    }
-
-    public function setThumbnail(string $thumbnail): self
-    {
-        $this->thumbnail = $thumbnail;
 
         return $this;
     }

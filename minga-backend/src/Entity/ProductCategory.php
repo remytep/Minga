@@ -20,6 +20,7 @@ use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 use Symfony\Component\Validator\Constraints\Length;
 
 #[ORM\Entity(repositoryClass: ProductCategoryRepository::class)]
+
 #[ApiResource(
     operations: [
         new GetCollection(),
@@ -49,13 +50,12 @@ class ProductCategory
     #[Groups(['product_category.read'])]
     private ?int $id = null;
 
-    #[Assert\Unique]
     #[ORM\Column(length: 255)]
     #[Groups(['product_category.read', 'product_category.write', 'product.read']), Length(min: 3)]
     private ?string $name = null;
 
     #[ORM\OneToMany(mappedBy: 'productCategory', targetEntity: Product::class)]
-    #[Groups(['product_category.read', 'product_category.item.get'])]
+    #[Groups(['product_category.read', 'product_category.write', 'product_category.item.get'])]
     private Collection $products;
 
     public function __construct()

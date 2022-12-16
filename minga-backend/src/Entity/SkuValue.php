@@ -17,6 +17,7 @@ use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
 
 #[ORM\Entity(repositoryClass: SkuValueRepository::class)]
 #[ApiResource(
+    paginationEnabled: false,
     normalizationContext: ['groups' => ['sku_value.read']],
     denormalizationContext: ['groups' => ['sku_value.write']],
     operations: [
@@ -36,6 +37,7 @@ use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
         ])
     ]
 )]
+#[ApiFilter(SearchFilter::class, properties: ['product_option_value' => 'exact'])]
 class SkuValue
 {
     #[ORM\Id]
@@ -46,17 +48,22 @@ class SkuValue
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['sku_value.read', 'sku_value.write'])]
+    #[Groups(['sku_value.read'])]
     private ?Product $product = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['sku_value.read', 'sku_value.write'])]
-    private ?ProductOptionValue $productOptionValue = null;
+    #[Groups(['sku_value.read'])]
+    private ?ProductOption $product_option = null;
+
+    #[ORM\ManyToOne]
+    #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['sku_value.read'])]
+    private ?ProductOptionValue $product_option_value = null;
 
     #[ORM\ManyToOne(inversedBy: 'skuValues')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['sku_value.read', 'sku_value.write'])]
+    #[Groups(['sku_value.read'])]
     private ?Sku $Sku = null;
 
     public function getId(): ?int
@@ -76,14 +83,26 @@ class SkuValue
         return $this;
     }
 
-    public function getProductOptionValue(): ?ProductOptionValue
+    public function getProductOption(): ?ProductOption
     {
-        return $this->productOptionValue;
+        return $this->product_option;
     }
 
-    public function setProductOptionValue(?ProductOptionValue $productOptionValue): self
+    public function setProductOption(?ProductOption $product_option): self
     {
-        $this->productOptionValue = $productOptionValue;
+        $this->product_option = $product_option;
+
+        return $this;
+    }
+
+    public function getProductOptionValue(): ?ProductOptionValue
+    {
+        return $this->product_option_value;
+    }
+
+    public function setProductOptionValue(?ProductOptionValue $product_option_value): self
+    {
+        $this->product_option_value = $product_option_value;
 
         return $this;
     }

@@ -1,115 +1,206 @@
 import axios from "axios";
 import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import ColorPicker from "./components/ColorPicker";
+import DimensionPicker from "./components/DimensionPicker";
+import { ToggleButtonGroup } from "@mui/material";
+import { ToggleButton } from "@mui/material";
+
 import desk_model1 from "../../assets/homePages/auth/desk_example1.jpg";
 
 function DetailedProduct() {
-  const [stocks, setStocks] = useState([]);
-  const [products, setProducts] = useState([]);
-  const productId = useLocation();
-  console.log("display id product : ", productId);
+  let { slug } = useParams();
+  const [product, setProduct] = useState(null);
+  const [color, setColor] = useState([]);
+  const [dimensions, setDimensions] = useState([]);
+  const [colorId, setColorId] = useState("");
+  const [dimensionsId, setDimensionsId] = useState("");
+  const [variant, setVariant] = useState(null);
+  const handleColor = (e, newColor) => {
+    setColorId(newColor);
+  };
+  const handleDimensions = (e, newDimensions) => {
+    setDimensionsId(newDimensions);
+  };
 
   useEffect(() => {
-    const result = productId["pathname"].split("/");
-    axios
-      .get(`http://localhost:8000/api/products/${result[2]}`)
-      .then((res) => {
-        console.log(res.data.skus);
-        setStocks(Object.values(res.data.skus));
+    axios({
+      method: "GET",
+      url: "https://localhost:8000/api/products?slug=" + slug,
+      headers: { "content-type": "application/json" },
+    }).then((response) => {
+      //console.log(response.data["hydra:member"][0]);
+      setProduct(response.data["hydra:member"][0]);
+    });
+  }, []);
+
+  useEffect(() => {
+    axios({
+      method: "GET",
+      url:
+        "https://localhost:8000/api/sku_values?product_option_value=/api/product_option_values/" +
+        colorId,
+      headers: { "content-type": "application/json" },
+    })
+      .then((response) => {
+        //console.log(response.data["hydra:member"]);
+        setColor(response.data["hydra:member"]);
       })
       .catch((error) => {
         console.log(error);
       });
-    return;
-  }, [productId]);
-
-  useEffect(() => {
-    const result = productId["pathname"].split("/");
-    axios
-      .get(`http://localhost:8000/api/products/${result[2]}`)
-      .then((res) => {
-        console.log(res.data);
-        setProducts(Object.values(res.data));
+    axios({
+      method: "GET",
+      url:
+        "https://localhost:8000/api/sku_values?product_option_value=/api/product_option_values/" +
+        dimensionsId,
+      headers: { "content-type": "application/json" },
+    })
+      .then((response) => {
+        //console.log(response.data["hydra:member"]);
+        setDimensions(response.data["hydra:member"]);
       })
       .catch((error) => {
         console.log(error);
       });
-    return;
-  }, [productId]);
+  }, [colorId, dimensionsId]);
 
-  return (
-    <div className="w-full h-screen flex items-start">
-      <div className="relative w-1/2 h-full flex flex-col">
-        <img src={desk_model1} alt="" className="w-full h-full object-cover" />
-      </div>
+  useEffect(() => {
+    let skuValues1 = {};
+    color.forEach((obj) => {
+      let sku = obj.Sku;
+      skuValues1[sku] = obj;
+    });
+    let skuValues2 = {};
+    dimensions.forEach((obj) => {
+      let sku = obj.Sku;
+      skuValues2[sku] = obj;
+    });
 
-      <div className="w-1/2 h-full bg-[#f5f5f5] flex flex-col px-8 py-10 justify-between items-center">
-        <div className="w-full flex flex-col max-w-[500px]">
-          <div className="flex flex-row justify-between">
-            {products.map((product) => (
-              <div
-                key={product.id}
-                className="text-2xl text-[#060606] font-Inder mb-8"
-              >
-                <h1>{product.name}</h1>
-              </div>
-            ))}
+    let commonSkuValues = [];
+    Object.keys(skuValues1).forEach((sku) => {
+      if (skuValues2[sku]) {
+        commonSkuValues.push(skuValues1[sku]);
+        commonSkuValues.push(skuValues2[sku]);
+      }
+    });
+    if (commonSkuValues.length == 2) {
+      axios({
+        method: "GET",
+        url: "https://localhost:8000" + commonSkuValues[0].Sku,
+        headers: { "content-type": "application/json" },
+      })
+        .then((response) => {
+          //console.log(response.data);
+          setVariant(response.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
+  }, [color, dimensions]);
 
-            {stocks.map((stock) => (
-              <p key={stock.id} className="p-2 text-sm">
-                Stock : {stock.stock}
-              </p>
-            ))}
-          </div>
-
-          <div className="w-full flex flex-row items-center justify-start relative mb-12">
-            <h3 className="text-md absolute text-black/80 bg-[#f5f5f5] pr-2">
-              Customize your desk
-            </h3>
-            <div className="w-full h-[1px] bg-black/40"></div>
-          </div>
-
-          <div className="w-full flex flex-col">
-            <h4 className="font-Inder text-2xl pb-2">Colors</h4>
-            <div className="flex flex-row ">
-              <div className="rounded-full border bg-white w-10 h-10 m-4"></div>
-              <div className="rounded-full border bg-black w-10 h-10 m-4"></div>
-              <div className="rounded-full border bg-gray-400 w-10 h-10 m-4 mb-8"></div>
-            </div>
-
-            <h4 className="font-Inder text-2xl pb-2">Size</h4>
-            <div className="flex flex-row items-center">
-              {/* replace with radio */}
-              <div className="bg-gray-200 w-28 h-14 rounded-lg p-3 m-4">
-                <p className="font-Inder">140x80</p>
-              </div>
-              <div className="bg-gray-200 w-28 h-14 rounded-lg p-3 m-4">
-                <p className="font-Inder">160x80</p>
-              </div>
-              <div className="bg-gray-200 w-28 h-14 rounded-lg p-3 m-4">
-                <p className="font-Inder">180x80</p>
-              </div>
-            </div>
-          </div>
-
-          <div className="w-full flex items-center justify-between">
-            <div className="w-full flex items-center"></div>
-
-            <p className="text-sm font-medium whitespace-nowrap cursor-pointer underline underline-offset-2"></p>
-          </div>
+  if (product) {
+    return (
+      <div className="w-full h-screen flex items-start">
+        <div className="relative w-1/2 h-full flex flex-col">
+          <img
+            src={desk_model1}
+            alt=""
+            className="w-full h-full object-cover"
+          />
         </div>
 
-        <div className="w-full h-full flex-col mt-28">
-          <button
-            type="submit"
-            className="w-full text-white bg-[#060606] rounded-md p-3 text-center flex items-center justify-center cursor-pointer"
-          >
-            Total : 557 €
-          </button>
+        <div className="w-1/2 h-full bg-[#f5f5f5] flex flex-col px-8 py-10 items-center">
+          <h1 className="text-4xl pb-3">{product.name}</h1>
+          <div className="w-full flex flex-col max-w-[500px]">
+            <div className="w-full flex flex-row items-center justify-start relative mb-12">
+              <h3 className="text-md absolute text-black/80 bg-[#f5f5f5] pr-2">
+                Customize your {product.productCategory.name}
+              </h3>
+              <div className="w-full h-[1px] bg-black/40"></div>
+            </div>
+
+            <div className="w-full flex flex-col">
+              {product.productOptions.map((option) => (
+                <div key={option.name}>
+                  <h4 className="font-Inder text-2xl pb-2">{option.name}</h4>
+                  {option.name === "Color" ? (
+                    <ToggleButtonGroup
+                      color="primary"
+                      value={colorId}
+                      exclusive
+                      aria-label="Platform"
+                      className="flex flex-row"
+                      onChange={handleColor}
+                    >
+                      {option.productOptionValues.map((value) => (
+                        <ToggleButton value={value.id} key={value.id}>
+                          <ColorPicker color={value.value} />
+                        </ToggleButton>
+                      ))}
+                    </ToggleButtonGroup>
+                  ) : null}
+                  {option.name === "Dimensions" ? (
+                    <ToggleButtonGroup
+                      color="primary"
+                      value={dimensionsId}
+                      exclusive
+                      aria-label="Platform"
+                      className="flex flex-row items-center"
+                      onChange={handleDimensions}
+                    >
+                      {option.productOptionValues.map((value) => (
+                        <ToggleButton value={value.id} key={value.id}>
+                          <DimensionPicker dimensions={value.value} />
+                        </ToggleButton>
+                      ))}
+                    </ToggleButtonGroup>
+                  ) : null}
+                  {option.name === "Size" ? (
+                    <ToggleButtonGroup
+                      color="primary"
+                      value={dimensionsId}
+                      exclusive
+                      aria-label="Platform"
+                      className="flex flex-row items-center"
+                      onChange={handleDimensions}
+                    >
+                      {option.productOptionValues.map((value) => (
+                        <ToggleButton value={value.id} key={value.id}>
+                          <DimensionPicker dimensions={value.value} />
+                        </ToggleButton>
+                      ))}
+                    </ToggleButtonGroup>
+                  ) : null}
+                </div>
+              ))}
+            </div>
+            <p>{product.description}</p>
+            {variant ? (
+              <>
+                <div className="font-bold text-xl">
+                  Price : {variant.price}€
+                </div>
+                <div>Stock : {variant.stock}</div>
+                <div>Reference : {variant.reference_number}</div>
+              </>
+            ) : null}
+
+            <div className="w-full flex items-center justify-between">
+              <div className="w-full flex items-center">
+                <button className="px-6 py-2 transition ease-in duration-200 uppercase rounded-full hover:bg-gray-800 hover:text-white border-2 border-gray-900 focus:outline-none">
+                  Add to cart
+                </button>
+              </div>
+
+              <p className="text-sm font-medium whitespace-nowrap cursor-pointer underline underline-offset-2"></p>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
-  );
+    );
+  }
 }
 
 export default DetailedProduct;
