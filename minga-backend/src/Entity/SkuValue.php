@@ -23,18 +23,10 @@ use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
     operations: [
         new GetCollection(),
         new Get(),
-        new Put(security: 'is_granted("ROLE_ADMIN")', openapiContext: [
-            'security' => [['bearerAuth' => []]]
-        ]),
-        new Post(security: 'is_granted("ROLE_ADMIN")', openapiContext: [
-            'security' => [['bearerAuth' => []]]
-        ]),
-        new Patch(security: 'is_granted("ROLE_ADMIN")', openapiContext: [
-            'security' => [['bearerAuth' => []]]
-        ]),
-        new Delete(security: 'is_granted("ROLE_ADMIN")', openapiContext: [
-            'security' => [['bearerAuth' => []]]
-        ])
+        new Put(),
+        new Post(),
+        new Patch(),
+        new Delete()
     ]
 )]
 #[ApiFilter(SearchFilter::class, properties: ['product_option_value' => 'exact'])]
@@ -53,12 +45,12 @@ class SkuValue
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['sku_value.read'])]
+    #[Groups(['sku_value.read', 'sku.read'])]
     private ?ProductOption $product_option = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['sku_value.read'])]
+    #[Groups(['sku_value.read', 'sku.read'])]
     private ?ProductOptionValue $product_option_value = null;
 
     #[ORM\ManyToOne(inversedBy: 'skuValues')]

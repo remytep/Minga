@@ -27,18 +27,10 @@ use Symfony\Component\Validator\Constraints as Assert;
     operations: [
         new GetCollection(),
         new Get(normalizationContext: ['groups' => ['product_option.read', 'product_option.item.read']]),
-        new Put(security: 'is_granted("ROLE_ADMIN")', openapiContext: [
-            'security' => [['bearerAuth' => []]]
-        ]),
-        new Post(security: 'is_granted("ROLE_ADMIN")', openapiContext: [
-            'security' => [['bearerAuth' => []]]
-        ]),
-        new Patch(security: 'is_granted("ROLE_ADMIN")', openapiContext: [
-            'security' => [['bearerAuth' => []]]
-        ]),
-        new Delete(security: 'is_granted("ROLE_ADMIN")', openapiContext: [
-            'security' => [['bearerAuth' => []]]
-        ])
+        new Put(),
+        new Post(),
+        new Patch(),
+        new Delete()
     ]
 )]
 #[ApiResource(
@@ -64,7 +56,7 @@ class ProductOption
     private ?Product $product = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['product_option.read', 'product_option.write', 'product.read', 'product.write'])]
+    #[Groups(['product_option.read', 'product_option.write', 'product.read', 'product.write', 'sku.read'])]
     private ?string $name = null;
 
     #[ORM\OneToMany(mappedBy: 'product_option', targetEntity: ProductOptionValue::class, cascade: ["persist"])]

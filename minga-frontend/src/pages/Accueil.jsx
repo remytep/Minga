@@ -24,7 +24,7 @@ function Accueil() {
       </section>
       <div className="flex">
         <Sidebar />
-        <div className="flex flex-col">
+        <div className="flex-1 flex flex-col">
           <ProductGrid products={products} />
         </div>
       </div>
