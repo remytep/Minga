@@ -8,13 +8,10 @@ import { CgProfile } from "react-icons/cg";
 import { AiOutlineHeart } from "react-icons/ai";
 import { FiSearch } from "react-icons/fi";
 
-import { AuthContext } from "../../contexts/AuthContext";
-// shoppingBag contexts
-import { ShoppingBagContext } from "../../contexts/ShoppingBagContext";
-// filter contexts
-import { FilterContext } from "../../contexts/FilterContext";
-// cart contexts
-import { CartContext } from "../../contexts/CartContext";
+import { AuthContext } from "../../../contexts/AuthContext";
+import { ShoppingBagContext } from "../../../contexts/ShoppingBagContext";
+import { CartContext } from "../../../contexts/CartContext";
+import DynamicSearchBar from "./searchBar/DynamicSearchBar";
 
 function Header() {
   const { user, logout } = useContext(AuthContext);
@@ -22,13 +19,12 @@ function Header() {
   const { itemAmount } = useContext(CartContext);
 
   return (
-    <header className="sticky top-0 z-20 bg-[#C9C5BA] py-5">
-      <div className="container mx-auto flex justify-between ">
-        <div className="flex justify-between w-40">
-          <a href="/" className="text-2xl">Minga</a>
-          <Link to={"/search"}><FiSearch className="text-2xl mt-2"/></Link>
+    <header className="sticky top-0 z-20 bg-[#C9C5BA] py-5 flex">
+      <div className="container mx-auto flex justify-between items-center">
+        <div className="">
+          <a href="/">Minga</a>
         </div>
-
+        <DynamicSearchBar />
         <div className="container flex justify-around w-56">
           <div
             onClick={() => setIsOpenBag(!isOpenBag)}

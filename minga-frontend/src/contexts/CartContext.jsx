@@ -1,10 +1,12 @@
-import React, { createContext, useState, useEffect } from 'react'
+import React, { createContext, useState, useEffect } from "react";
 
 export const CartContext = createContext();
 
-const localStoragePanier = JSON.parse(localStorage.getItem('Mon panier') || "[]");
+const localStoragePanier = JSON.parse(
+  localStorage.getItem("Mon panier") || "[]"
+);
 
-function CartProvidert({ children }) {
+function CartProvider({ children }) {
   // cart state
   const [cart, setCart] = useState(localStoragePanier);
 
@@ -13,7 +15,6 @@ function CartProvidert({ children }) {
 
   // item amount state
   const [itemAmount, setItemAmount] = useState(0);
-
 
   useEffect(() => {
     // update total amount
@@ -33,7 +34,6 @@ function CartProvidert({ children }) {
     localStorage.setItem("Mon panier", JSON.stringify(cart));
   }, [cart]);
 
-
   // add to cart
   const addToCart = (product, id) => {
     const newItem = { ...product, amount: 1 };
@@ -50,11 +50,11 @@ function CartProvidert({ children }) {
           return item;
         }
       });
-      setCart(newCart); 
+      setCart(newCart);
     } else {
       setCart([...cart, newItem]);
     }
-  }
+  };
 
   // delete item from cart
   const deleteItem = (id) => {
@@ -97,10 +97,21 @@ function CartProvidert({ children }) {
   };
 
   return (
-    <CartContext.Provider value={{ cart, addToCart, deleteItem, increaseAmount, decreaseAmount, clearCart, itemAmount, total }}>
+    <CartContext.Provider
+      value={{
+        cart,
+        addToCart,
+        deleteItem,
+        increaseAmount,
+        decreaseAmount,
+        clearCart,
+        itemAmount,
+        total,
+      }}
+    >
       {children}
     </CartContext.Provider>
-  )
+  );
 }
 
-export default CartProvidert
+export default CartProvider;
