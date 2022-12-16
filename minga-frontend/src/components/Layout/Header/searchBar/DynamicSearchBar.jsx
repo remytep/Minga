@@ -23,7 +23,7 @@ export default function DynamicSearchBar() {
     axios
       .get("https://localhost:8000/api/products")
       .then((res) => {
-        //console.log(res.data);
+        console.log(Object.values(res.data["hydra:member"]));
         setProducts(Object.values(res.data["hydra:member"]));
       })
       .catch((error) => {
@@ -68,18 +68,23 @@ export default function DynamicSearchBar() {
           >
             <Link
               to={`${results.productCategory.name}/${results.slug}`}
-              className="flex justify-between items-center"
+              className="flex items-center w-full"
             >
-              <Avatar
-                src={results.avatar}
-                alt="cats"
-                sx={{ width: 90, height: 90 }}
-              ></Avatar>
-              <Box sx={{ marginLeft: 5, marginRight: 10 }}>{results.name}</Box>
-              {/*            <Box>{results.price}</Box> */}
+              <Avatar src={results.avatar} alt="cats"></Avatar>
+              <div className="flex justify-between w-full">
+                <Box sx={{ marginLeft: 5, marginRight: 10 }}>
+                  {results.name}
+                </Box>
+                {results.skus[0] ? (
+                  <Box>Starting from {results.skus[0].price}€</Box>
+                ) : null}
+              </div>
             </Link>
           </ListItem>
         )}
+        includeInputInList
+        selectOnFocus
+        clearOnBlur
         renderInput={(params) => (
           <TextField {...params} label="Search for our products" />
         )}
