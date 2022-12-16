@@ -4,9 +4,11 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\SkuRepository;
+use App\Controller\UploadFileController;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Doctrine\DBAL\Types\Types;
 use ApiPlatform\Metadata\Get;
 use ApiPlatform\Metadata\GetCollection;
 use ApiPlatform\Metadata\Post;
@@ -26,10 +28,12 @@ use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
             'security' => [['bearerAuth' => []]]
         ]),
         new Get(),
-        new Put(security: 'is_granted("ROLE_ADMIN")', openapiContext: [
+        new Put(controller: UploadFileController::class, deserialize: false,
+        security: 'is_granted("ROLE_ADMIN")', openapiContext: [
             'security' => [['bearerAuth' => []]]
         ]),
-        new Post(security: 'is_granted("ROLE_ADMIN")', openapiContext: [
+        new Post(controller: UploadFileController::class,
+            security: 'is_granted("ROLE_ADMIN")', openapiContext: [
             'security' => [['bearerAuth' => []]]
         ]),
         new Patch(security: 'is_granted("ROLE_ADMIN")', openapiContext: [
@@ -52,6 +56,14 @@ class Sku
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['sku.read'])]
     private ?Product $product = null;
+
+    #[ORM\Column(type: Types::TEXT)]
+    #[ApiProperty(types: ['https://schema.org/image'], openapi_context: [
+            "type" => "string",
+        ]
+    )]
+    #[Groups(['sku.read'])]
+    private ?string $thumbnail = null;
 
     #[ORM\Column]
     #[Groups(['sku.read', 'product.read'])]
@@ -87,6 +99,18 @@ class Sku
     public function setProduct(?Product $product): self
     {
         $this->product = $product;
+
+        return $this;
+    }
+
+    public function getThumbnail(): ?string
+    {
+        return $this->thumbnail;
+    }
+
+    public function setThumbnail(string $thumbnail): self
+    {
+        $this->thumbnail = $thumbnail;
 
         return $this;
     }

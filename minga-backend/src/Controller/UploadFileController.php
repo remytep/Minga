@@ -18,6 +18,7 @@ final class UploadFileController extends AbstractController
     {        
         $entityManager = $doctrine->getManager();
 
+        dd($request->getContent());
         $uploadedFile = $request->files->get('thumbnail');
         if (!$uploadedFile) {
             throw new BadRequestHttpException('"thumbnail" is required');

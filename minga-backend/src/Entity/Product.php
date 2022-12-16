@@ -4,7 +4,6 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\Link;
-use App\Controller\UploadFileController;
 use App\Repository\ProductRepository;
 use App\Entity\ProductCategory;
 use Doctrine\Common\Collections\ArrayCollection;
@@ -32,8 +31,7 @@ use Symfony\Component\Validator\Constraints\Length;
         new Put(security: 'is_granted("ROLE_ADMIN")', openapiContext: [
             'security' => [['bearerAuth' => []]]
         ]),
-        new Post(controller: UploadFileController::class, deserialize: false,
-            security: 'is_granted("ROLE_ADMIN")', openapiContext: [
+        new Post(security: 'is_granted("ROLE_ADMIN")', openapiContext: [
             'security' => [['bearerAuth' => []]]
         ]),
         new Patch(security: 'is_granted("ROLE_ADMIN")', openapiContext: [
@@ -70,14 +68,6 @@ class Product
     #[ORM\Column(type: Types::TEXT)]
     #[Groups(['product.write', 'product_category.item.get']), Length(min: 10)]
     private ?string $description = null;
-
-    #[ORM\Column(type: Types::TEXT)]
-    #[ApiProperty(types: ['https://schema.org/image'], openapi_context: [
-            "type" => "string",
-        ]
-    )]
-    #[Groups(['product.read', 'product.write', 'product_category.item.get'])]
-    private ?string $thumbnail = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     #[Groups(['product.read', 'product_category.item.get'])]

@@ -13,7 +13,7 @@ import {
     SingleFieldList,
     TextField,
     useRecordContext,
-    Show, TabbedShowLayout, Tab
+    Show, TabbedShowLayout, Tab, WithRecord
 } from "react-admin";
 import { ProductCategoryTitle, ProductTitle } from "./TitleComponents";
 
@@ -33,13 +33,28 @@ const AddSkuValue = () => {
     );
 }
 
+const AddOptionValue = () => {
+    const record = useRecordContext();
+    return (
+        <Button
+            component={Link}
+            to={{
+                pathname: "/admin/product_options/create",
+                // Here we specify the initial record for the create view
+                state: { record: { product: record["@id"] } },
+            }}
+            label="Add option value"
+        >
+        </Button>
+    );
+}
+
 export const ProductShow = (props) => (
     <ShowGuesser title={<ProductTitle />} {...props} >
         <TabbedShowLayout>
             <Tab label="product info">
                 <FieldGuesser source={"name"} />
                 <FieldGuesser source={"description"} />
-                <FieldGuesser source={"thumbnail"} />
                 <FieldGuesser source={"createdAt"} />
                 <ReferenceField source="productCategory.@id" reference="product_categories" >
                     <FieldGuesser source="name" />
@@ -47,7 +62,7 @@ export const ProductShow = (props) => (
                 <FieldGuesser source={"slug"} />
             </Tab>
 
-            <Tab label="SKU">
+            <Tab label="option value">
                 <ArrayField source="productOptionValues" reference="product_option_values">
                     <Datagrid rowClick={"edit"}>
                         <ReferenceField source="productOption.@id" reference="product_options">
@@ -56,6 +71,11 @@ export const ProductShow = (props) => (
                         <TextField source="value" />
                     </Datagrid>
                 </ArrayField>
+                <AddOptionValue {...props} />
+            </Tab>
+
+            <Tab label="SKU">
+
                 <AddSkuValue {...props} />
             </Tab>
         </TabbedShowLayout>
@@ -65,7 +85,8 @@ export const ProductShow = (props) => (
 export const ProductCategoryShow = (props) => (
     <ShowGuesser title={<ProductCategoryTitle />}  {...props}>
         <FieldGuesser source={"name"} />
-        <ReferenceArrayField source="products.id" reference="products">
+
+        <ReferenceArrayField source="products" reference="products">
             <SingleFieldList>
                 <ChipField source="name" />
             </SingleFieldList>
