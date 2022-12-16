@@ -67,7 +67,7 @@ class ProductOption
     #[Groups(['product_option.read', 'product_option.write', 'product.read', 'product.write'])]
     private ?string $name = null;
 
-    #[ORM\OneToMany(mappedBy: 'product_option', targetEntity: ProductOptionValue::class, cascade: ["persist"])]
+    #[ORM\OneToMany(mappedBy: 'productOption', targetEntity: ProductOptionValue::class, cascade: ["persist"])]
     #[Groups(['product_option.read', 'product_option.write', 'product.read'])]
     #[Assert\Valid()]
     private Collection $productOptionValues;

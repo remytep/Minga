@@ -67,10 +67,6 @@ class Product
     #[Groups(['product.write', 'product_category.item.get']), Length(min: 10)]
     private ?string $description = null;
 
-    #[ORM\Column(type: Types::TEXT)]
-    #[Groups(['product.read', 'product.write', 'product_category.item.get'])]
-    private ?string $thumbnail = null;
-
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     #[Groups(['product.read', 'product_category.item.get'])]
     private ?\DateTimeInterface $createdAt = null;
@@ -145,18 +141,6 @@ class Product
     public function setDescription(string $description): self
     {
         $this->description = $description;
-
-        return $this;
-    }
-
-    public function getThumbnail(): ?string
-    {
-        return $this->thumbnail;
-    }
-
-    public function setThumbnail(string $thumbnail): self
-    {
-        $this->thumbnail = $thumbnail;
 
         return $this;
     }

@@ -15,9 +15,10 @@ import {
 } from "./CreateComponents";
 import { ProductCategoryEdit, ProductEdit } from "./EditComponents";
 import { ProductCategoryShow, ProductShow } from "./ShowComponents";
+import { ENTRYPOINT } from "../../config";
 
 const Admin = () => {
-  <HydraAdmin basename="/admin" entrypoint="https://localhost:8000/api">
+  <HydraAdmin basename="/admin" entrypoint={ENTRYPOINT}>
     <ResourceGuesser
       name="products"
       create={ProductCreate}
