@@ -3,7 +3,8 @@ import React, { createContext, useState, useEffect } from "react";
 import axios from "axios";
 import jwtDecode from "jwt-decode";
 import { useNavigate } from "react-router-dom";
-import { ENTRYPOINT } from "../config";
+
+const API_URL = "https://localhost:8000/api";
 
 const initialState = {
   user: null,
@@ -28,7 +29,7 @@ const AuthProvider = ({ children }) => {
 
   const registration = (email, password) => {
     return axios
-      .post(`${ENTRYPOINT}/users`, {
+      .post(`${API_URL}/users`, {
         email,
         plainPassword: password,
       })
@@ -42,7 +43,7 @@ const AuthProvider = ({ children }) => {
 
   const login = (email, password) => {
     return axios
-      .post(`${ENTRYPOINT}/login`, {
+      .post(`${API_URL}/login`, {
         email,
         password,
       })
@@ -73,7 +74,7 @@ const AuthProvider = ({ children }) => {
     let refreshToken = localStorage.getItem("refresh_token");
     if (refreshToken) {
       return axios
-        .post(`${ENTRYPOINT}/refresh/token`, {
+        .post(`${API_URL}/refresh/token`, {
           refresh_token: refreshToken,
         })
         .then((response) => {

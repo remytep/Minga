@@ -52,7 +52,7 @@ class ProductOptionValue
     #[ORM\ManyToOne(inversedBy: 'productOptionValues')]
     #[ORM\JoinColumn()]
     #[Groups(['product_option_value.read', 'product.write', 'product_option.write'])]
-    private ?ProductOption $productOption = null;
+    private ?ProductOption $product_option = null;
 
     #[ORM\Column(length: 255)]
     #[Groups(['product_option_value.read', 'product_option.item.read', 'product.read', 'product.write', 'product_option.read', 'product_option.write', 'sku_value.read', 'sku.read'])]
@@ -77,12 +77,12 @@ class ProductOptionValue
 
     public function getProductOption(): ?ProductOption
     {
-        return $this->productOption;
+        return $this->product_option;
     }
 
-    public function setProductOption(?ProductOption $productOption): self
+    public function setProductOption(?ProductOption $product_option): self
     {
-        $this->productOption = $productOption;
+        $this->product_option = $product_option;
 
         return $this;
     }

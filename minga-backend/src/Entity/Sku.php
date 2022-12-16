@@ -55,7 +55,7 @@ class Sku
 
     #[ORM\Column(length: 255)]
     #[Groups(['sku.read', 'product.read'])]
-    private ?string $referenceNumber = null;
+    private ?string $reference_number = null;
 
     #[ORM\OneToMany(mappedBy: 'Sku', targetEntity: SkuValue::class, cascade: ['persist'])]
     #[Groups(['sku.read', 'product.read'])]
@@ -109,12 +109,12 @@ class Sku
 
     public function getReferenceNumber(): ?string
     {
-        return $this->referenceNumber;
+        return $this->reference_number;
     }
 
-    public function setReferenceNumber(string $referenceNumber): self
+    public function setReferenceNumber(string $reference_number): self
     {
-        $this->referenceNumber = $referenceNumber;
+        $this->reference_number = $reference_number;
 
         return $this;
     }
