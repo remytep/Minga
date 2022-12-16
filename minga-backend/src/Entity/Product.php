@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\Link;
 use App\Repository\ProductRepository;
 use App\Entity\ProductCategory;
@@ -27,6 +28,7 @@ use Symfony\Component\Validator\Constraints\Length;
 #[ORM\Entity(repositoryClass: ProductRepository::class)]
 #[UniqueEntity('slug')]
 #[ApiResource(
+    order: ["featured" => "DESC"],
     paginationEnabled: false,
     operations: [
         new GetCollection(),
@@ -46,26 +48,32 @@ use Symfony\Component\Validator\Constraints\Length;
     ],
     operations: [new GetCollection()]
 )]
-#[ApiFilter(SearchFilter::class, properties: ['name' => 'partial', 'productCategory.name' => 'exact', 'productOptions.name' => 'exact',  'productOptions.productOptionValues.value' => 'exact', 'slug' => 'exact'])]
+#[ApiFilter(SearchFilter::class, properties: ['name' => 'partial', 'productCategory.name' => 'partial', 'productOptions.name' => 'exact',  'productOptions.productOptionValues.value' => 'exact', 'slug' => 'exact'])]
 class Product
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     #[Groups(['product.read'])]
+    #[ApiProperty(identifier: false)]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['product.read', 'product.write', 'product_category.item.get', 'product_option.read']), Length(min: 3)]
+    #[Groups(['product.read', 'product.write', 'product_category.item.get', 'product_option.read', 'sku.read']), Length(min: 3)]
     private ?string $name = null;
 
     #[ORM\Column(length: 255, unique: true)]
-    #[Groups(['product.read', 'product.write'])]
+    #[ApiProperty(identifier: true)]
+    #[Groups(['product.read', 'product.write', 'product_category.item.get'])]
     private ?string $slug = null;
 
     #[ORM\Column(type: Types::TEXT)]
     #[Groups(['product.write', 'product_category.item.get']), Length(min: 10)]
     private ?string $description = null;
+
+    #[ORM\Column(type: Types::TEXT)]
+    #[Groups(['product.read', 'product.write', 'product_category.item.get'])]
+    private ?string $thumbnail = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     #[Groups(['product.read', 'product_category.item.get'])]
@@ -73,7 +81,7 @@ class Product
 
     #[ORM\ManyToOne(inversedBy: 'products')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['product.read', 'product.write'])]
+    #[Groups(['product.read', 'product.write', 'product_category.item.get'])]
     private ?ProductCategory $productCategory;
 
     #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductOption::class, cascade: ["persist"])]
@@ -84,6 +92,10 @@ class Product
     #[ORM\OneToMany(mappedBy: 'product', targetEntity: Sku::class)]
     #[Groups(['product.read'])]
     private Collection $skus;
+
+    #[ORM\Column(nullable: true)]
+    #[Groups(['product.read', 'product.write', 'product_category.item.get'])]
+    private ?bool $featured = null;
 
 
     public function __construct()
@@ -226,6 +238,18 @@ class Product
     public function setSlug(string $slug): self
     {
         $this->slug = $slug;
+
+        return $this;
+    }
+
+    public function isFeatured(): ?bool
+    {
+        return $this->featured;
+    }
+
+    public function setFeatured(?bool $featured): self
+    {
+        $this->featured = $featured;
 
         return $this;
     }

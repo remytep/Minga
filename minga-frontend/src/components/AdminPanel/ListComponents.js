@@ -27,7 +27,6 @@ import {
 import { ProductCategoryTitle, ProductTitle } from "./TitleComponents";
 import "./style.css";
 import classNames from "classnames";
-import { makeStyles } from "@mui/styles";
 import { useEffect, useRef, useState } from "react";
 import { Chip } from "@mui/material";
 import { Field } from "@api-platform/api-doc-parser";

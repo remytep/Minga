@@ -109,7 +109,7 @@ class Sku
 
     public function getReferenceNumber(): ?string
     {
-        return $this->referenceNumber;
+        return $this->reference_number;
     }
 
     public function setReferenceNumber(string $referenceNumber): self

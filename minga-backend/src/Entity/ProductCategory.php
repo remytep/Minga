@@ -17,45 +17,41 @@ use ApiPlatform\Metadata\Delete;
 use Symfony\Component\Serializer\Annotation\Groups;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Metadata\ApiProperty;
 use Symfony\Component\Validator\Constraints\Length;
 
 #[ORM\Entity(repositoryClass: ProductCategoryRepository::class)]
 
 #[ApiResource(
+    paginationEnabled: false,
     operations: [
         new GetCollection(),
         new Get(normalizationContext: ['groups' => ['product_category.read', 'product_category.item.get']]),
-        new Put(security: 'is_granted("ROLE_ADMIN")', openapiContext: [
-            'security' => [['bearerAuth' => []]]
-        ]),
-        new Post(security: 'is_granted("ROLE_ADMIN")', openapiContext: [
-            'security' => [['bearerAuth' => []]]
-        ]),
-        new Patch(security: 'is_granted("ROLE_ADMIN")', openapiContext: [
-            'security' => [['bearerAuth' => []]]
-        ]),
-        new Delete(security: 'is_granted("ROLE_ADMIN")', openapiContext: [
-            'security' => [['bearerAuth' => []]]
-        ])
+        new Put(),
+        new Post(),
+        new Patch(),
+        new Delete()
     ],
     normalizationContext: ['groups' => ['product_category.read']],
     denormalizationContext: ['groups' => ['product_category.write']],
 )]
-
+#[ApiFilter(SearchFilter::class, properties: ['name' => 'exact'])]
 class ProductCategory
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[ApiProperty(identifier: false)]
     #[Groups(['product_category.read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['product_category.read', 'product_category.write', 'product.read']), Length(min: 3)]
+    #[ApiProperty(identifier: true)]
+    #[Groups(['product_category.read', 'product_category.write', 'product.read', 'product_category.item.get']), Length(min: 3)]
     private ?string $name = null;
 
     #[ORM\OneToMany(mappedBy: 'productCategory', targetEntity: Product::class)]
-    #[Groups(['product_category.read', 'product_category.write', 'product_category.item.get'])]
+    #[Groups(['product_category.read', 'product_category.write'])]
     private Collection $products;
 
     public function __construct()
