@@ -35,8 +35,8 @@ function CartProvider({ children }) {
   }, [cart]);
 
   // add to cart
-  const addToCart = (product, id) => {
-    const newItem = { ...product, amount: 1 };
+  const addToCart = (product, id, amount) => {
+    const newItem = { ...product, amount };
     // check if item is already in cart
     const cartItem = cart.find((item) => {
       return item.id === id;
@@ -45,7 +45,7 @@ function CartProvider({ children }) {
     if (cartItem) {
       const newCart = [...cart].map((item) => {
         if (item.id === id) {
-          return { ...item, amount: cartItem.amount + 1 };
+          return { ...item, amount: cartItem.amount + amount };
         } else {
           return item;
         }

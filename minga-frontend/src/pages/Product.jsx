@@ -1,7 +1,7 @@
 import axios from "axios";
 import React, { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
-import Box from "@mui/material/Box";
+import { Button, ButtonGroup } from "@mui/material";
 import Rating from "@mui/material/Rating";
 import Typography from "@mui/material/Typography";
 import ColorPicker from "../components/ProductPage/ColorPicker";
@@ -13,6 +13,7 @@ import { CartContext } from "../contexts/CartContext";
 function Product() {
   let { category, slug } = useParams();
   const { addToCart } = useContext(CartContext);
+  const [quantity, setQuantity] = useState(1);
   const [product, setProduct] = useState(null);
   const [colorId, setColorId] = useState("");
   const [dimensionsId, setDimensionsId] = useState("");
@@ -113,6 +114,14 @@ function Product() {
   } else {
     stock = <p className="text-red-600 font-semibold">Out of stock</p>;
   }
+  const handleLess = () => {
+    if (quantity > 1) {
+      setQuantity(quantity - 1);
+    }
+  };
+  const handleMore = () => {
+    if (quantity < variant.stock) setQuantity(quantity + 1);
+  };
   if (product) {
     return (
       <main className="flex flex-col lg:flex-row gap-6 py-2 px-5 md:px-6 lg:px-10 xl:px-16 w-screen md:h-full">
@@ -179,14 +188,49 @@ function Product() {
                 </div>
               ))}
             </div>
-            <div className="flex-1 flex flex-col justify-center items-center">
+            <div className="flex-1 flex flex-col gap-2 justify-center items-center">
               {variant ? (
-                <button
-                  className="px-6 py-2 text-xl transition ease-in duration-200 uppercase rounded-full hover:bg-gray-800 hover:text-white border-2 border-gray-900 focus:outline-none"
-                  onClick={() => addToCart(variant, variant.id)}
-                >
-                  Add to cart
-                </button>
+                <>
+                  <ButtonGroup color="inherit" sx={{ boxShadow: "none" }}>
+                    <Button
+                      onClick={handleLess}
+                      variant="contained"
+                      disableElevation
+                    >
+                      <p className="text-black text-xl">-</p>
+                    </Button>
+                    <Button disabled variant="text">
+                      <p className="text-black text-xl">{quantity}</p>
+                    </Button>
+                    <Button
+                      onClick={handleMore}
+                      variant="contained"
+                      disableElevation
+                    >
+                      <p className="text-black text-xl">+</p>
+                    </Button>
+                  </ButtonGroup>
+                  {variant.stock > 0 ? (
+                    <Button
+                      variant="contained"
+                      color="inherit"
+                      className="transition ease-in duration-200 uppercase rounded-full bg-black text-white hover:bg-gray-800 hover:text-white border-2 border-gray-900 focus:outline-none"
+                      onClick={() => addToCart(variant, variant.id, quantity)}
+                      disableElevation
+                    >
+                      <p className="px-6 py-4 text-xl">Add to cart</p>
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="contained"
+                      className="px-6 py-2 text-xl transition ease-in duration-200 uppercase focus:outline-none"
+                      disabled
+                      disableElevation
+                    >
+                      <p className="px-6 py-4 text-xl">Out of stock</p>
+                    </Button>
+                  )}
+                </>
               ) : null}
             </div>
           </div>
