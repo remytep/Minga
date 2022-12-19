@@ -34,6 +34,7 @@ function App() {
               <Route path="/:category/:slug" element={<Product />} />
               <Route path="/:category" element={<Category />} />
               <Route path="/search/:searchTerms" element={<Search />} />
+              <Route path="/panier" element={<MonPanier />} />
             </Routes>
             <ShoppingBag />
           </AuthProvider>

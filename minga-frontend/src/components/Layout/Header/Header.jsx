@@ -12,6 +12,7 @@ import { AuthContext } from "../../../contexts/AuthContext";
 import { ShoppingBagContext } from "../../../contexts/ShoppingBagContext";
 import { CartContext } from "../../../contexts/CartContext";
 import DynamicSearchBar from "./searchBar/DynamicSearchBar";
+import Dropdown from "../../utils/Dropdown";
 
 function Header() {
   const { user, logout } = useContext(AuthContext);
@@ -27,10 +28,11 @@ function Header() {
         <DynamicSearchBar />
         <div className="container flex justify-around w-56">
           <div
-            onClick={() => setIsOpenBag(!isOpenBag)}
+            // onClick={() => setIsOpenBag(!isOpenBag)}
             className="cursor-pointer flex relative"
           >
-            <BsBag className="text-3xl" />
+            {/* <BsBag className="text-3xl" /> */}
+            <Dropdown />
             <div className="bg-red-500 absolute -right-2 -bottom-0 text-[12px] w-[18px] h-[18px] text-white rounded-full flex justify-center items-center">
               {itemAmount}
             </div>

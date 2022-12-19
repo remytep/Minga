@@ -1,8 +1,7 @@
 import React, { useContext } from "react";
 import { FiTrash2 } from "react-icons/fi";
-import CartItem from "../components/homePage/CartItem";
 import { CartContext } from "../contexts/CartContext";
-
+import CartItem from "../components/Layout/CartItem";
 
 function MonPanier() {
   const { cart, clearCart, total, itemAmount } = useContext(CartContext);
