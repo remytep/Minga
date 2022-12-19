@@ -70,7 +70,7 @@ export default function DynamicSearchBar() {
               to={`${results.productCategory.name}/${results.slug}`}
               className="flex items-center w-full"
             >
-              <Avatar src={results.avatar} alt="cats"></Avatar>
+              <Avatar src={results.thumbnail} alt="cats"></Avatar>
               <div className="flex justify-between w-full">
                 <Box sx={{ marginLeft: 5, marginRight: 10 }}>
                   {results.name}

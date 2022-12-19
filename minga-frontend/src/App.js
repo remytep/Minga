@@ -14,7 +14,6 @@ import Register from "./components/Auth/Register";
 
 // Components
 import Header from "./components/Layout/Header/Header";
-import ShoppingBag from "./components/Layout/ShoppingBag";
 import { AuthProvider } from "./contexts/AuthContext";
 import ShoppingBagProvider from "./contexts/ShoppingBagContext";
 import CartProvider from "./contexts/CartContext";
@@ -36,7 +35,6 @@ function App() {
               <Route path="/search/:searchTerms" element={<Search />} />
               <Route path="/panier" element={<MonPanier />} />
             </Routes>
-            <ShoppingBag />
           </AuthProvider>
         </CartProvider>
       </ShoppingBagProvider>

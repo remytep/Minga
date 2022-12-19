@@ -16,10 +16,10 @@ function Product() {
   const { addToCart } = useContext(CartContext);
 
   const [product, setProduct] = useState(null);
-  const [color, setColor] = useState([]);
-  const [dimensions, setDimensions] = useState([]);
   const [colorId, setColorId] = useState("");
   const [dimensionsId, setDimensionsId] = useState("");
+  const [color, setColor] = useState([]);
+  const [dimensions, setDimensions] = useState([]);
   const [variant, setVariant] = useState(null);
   const handleColor = (e, newColor) => {
     setColorId(newColor);
@@ -42,6 +42,7 @@ function Product() {
   }, [slug]);
 
   useEffect(() => {
+    setVariant(null);
     axios({
       method: "GET",
       url:
@@ -197,12 +198,14 @@ function Product() {
 
             <div className="w-full flex items-center justify-between">
               <div className="w-full flex items-center">
-                <button
-                  className="px-6 py-2 transition ease-in duration-200 uppercase rounded-full hover:bg-gray-800 hover:text-white border-2 border-gray-900 focus:outline-none"
-                  onClick={() => addToCart(variant, variant.id)}
-                >
-                  Add to cart
-                </button>
+                {variant ? (
+                  <button
+                    className="px-6 py-2 transition ease-in duration-200 uppercase rounded-full hover:bg-gray-800 hover:text-white border-2 border-gray-900 focus:outline-none"
+                    onClick={() => addToCart(variant, variant.id)}
+                  >
+                    Add to cart
+                  </button>
+                ) : null}
               </div>
 
               <p className="text-sm font-medium whitespace-nowrap cursor-pointer underline underline-offset-2"></p>
