@@ -12,7 +12,7 @@ import Login from "./components/Auth/Login";
 import Register from "./components/Auth/Register";
 
 // Components
-import Header from "./components/Layout/Header/Header";
+import Layout from "./components/Layout/Layout";
 import { AuthProvider } from "./contexts/AuthContext";
 import ShoppingBagProvider from "./contexts/ShoppingBagContext";
 import CartProvider from "./contexts/CartContext";
@@ -23,15 +23,16 @@ function App() {
       <ShoppingBagProvider>
         <CartProvider>
           <AuthProvider>
-            <Header />
             <Routes>
-              <Route path="/" element={<Accueil />} />
-              <Route path="/login" element={<Login />} />
-              <Route path="/register" element={<Register />} />
-              <Route path="/admin/*" element={<Admin />}></Route>
-              <Route path="/:category/:slug" element={<Product />} />
-              <Route path="/:category" element={<Category />} />
-              <Route path="/search/:searchTerms" element={<Search />} />
+              <Route path="/" element={<Layout />}>
+                <Route path="/" element={<Accueil />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/register" element={<Register />} />
+                <Route path="/admin/*" element={<Admin />}></Route>
+                <Route path="/:category/:slug" element={<Product />} />
+                <Route path="/:category" element={<Category />} />
+                <Route path="/search/:searchTerms" element={<Search />} />
+              </Route>
             </Routes>
           </AuthProvider>
         </CartProvider>

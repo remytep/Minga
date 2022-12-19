@@ -1,6 +1,5 @@
 import React, { useState } from "react";
-import { GrNext, GrPrevious } from "react-icons/gr";
-import { Link } from "react-router-dom";
+
 import desk3 from "../../assets/homePages/desks_sample/desk_example3.jpg";
 import desk4 from "../../assets/homePages/desks_sample/desk_example4.jpg";
 import desk5 from "../../assets/homePages/desks_sample/desk_example5.jpg";
@@ -25,12 +24,38 @@ const Slider = () => {
         <img src={desk4} alt="" className="w-[100vw] h-full object-cover" />
         <img src={desk5} alt="" className="w-[100vw] h-full object-cover" />
       </div>
-      <div className="flex gap-10 absolute left-0 right-0 m-auto bottom-[100px] w-fit">
+      <div className="flex justify-between w-full gap-10 absolute left-0 right-0 top-1/2 -translate-y-1/2">
         <div className="cursor-pointer items-center" onClick={prevSlide}>
-          <GrPrevious className="text-4xl justify-center text-white" />
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="white"
+            className="w-6 h-6 lg:w-12 lg:h-12"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M15.75 19.5L8.25 12l7.5-7.5"
+            />
+          </svg>
         </div>
         <div className="cursor-pointer items-center" onClick={nextSlide}>
-          <GrNext className="text-4xl text-white" />
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            strokeWidth={1.5}
+            stroke="white"
+            className="w-6 h-6 lg:w-12 lg:h-12"
+          >
+            <path
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              d="M8.25 4.5l7.5 7.5-7.5 7.5"
+            />
+          </svg>
         </div>
       </div>
     </div>

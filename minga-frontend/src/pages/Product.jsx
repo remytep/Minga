@@ -1,20 +1,18 @@
 import axios from "axios";
 import React, { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
+import Box from "@mui/material/Box";
+import Rating from "@mui/material/Rating";
+import Typography from "@mui/material/Typography";
 import ColorPicker from "../components/ProductPage/ColorPicker";
 import DimensionPicker from "../components/ProductPage/DimensionPicker";
 import { ToggleButtonGroup } from "@mui/material";
-import BreadcrumbsBar from "../components/utils/BreadcrumbsBar";
 import { ToggleButton } from "@mui/material";
 import { CartContext } from "../contexts/CartContext";
 
-import desk_model1 from "../assets/homePages/auth/desk_example1.jpg";
-
 function Product() {
-  let { category } = useParams();
-  let { slug } = useParams();
+  let { category, slug } = useParams();
   const { addToCart } = useContext(CartContext);
-
   const [product, setProduct] = useState(null);
   const [colorId, setColorId] = useState("");
   const [dimensionsId, setDimensionsId] = useState("");
@@ -107,39 +105,53 @@ function Product() {
         });
     }
   }, [color, dimensions]);
-
+  let stock;
+  if (variant && variant.stock >= 10) {
+    stock = <p className="text-green-600 font-semibold">In stock</p>;
+  } else if (variant && variant.stock > 0) {
+    stock = <p className="text-orange-500 font-semibold">Few left</p>;
+  } else {
+    stock = <p className="text-red-600 font-semibold">Out of stock</p>;
+  }
   if (product) {
     return (
-      <div className="w-full h-screen flex items-start">
-        <div className="relative w-1/2 h-full flex flex-col">
-          <img
-            src={desk_model1}
-            alt=""
-            className="w-full h-full object-cover"
-          />
-        </div>
-
-        <div className="w-1/2 h-full bg-[#f5f5f5] flex flex-col px-8 py-10 items-center">
-          <BreadcrumbsBar category={product.productCategory.name} slug={slug} />
-          <h1 className="text-4xl pb-3">{product.name}</h1>
-          <div className="w-full flex flex-col max-w-[500px]">
-            <div className="w-full flex flex-row items-center justify-start relative mb-12">
-              <h3 className="text-md absolute text-black/80 bg-[#f5f5f5] pr-2">
-                Customize your {product.productCategory.name}
-              </h3>
-              <div className="w-full h-[1px] bg-black/40"></div>
+      <main className="flex flex-col lg:flex-row gap-6 py-2 px-5 md:px-6 lg:px-10 xl:px-16 w-screen md:h-full">
+        <img src="/product.webp" alt="" className="lg:w-1/2 object-cover" />
+        <div className="flex flex-col gap-2 justify-between lg:w-1/2">
+          <div id="name" className="flex justify-between h-24">
+            <div className="flex flex-col">
+              <h1 className="text-3xl font-semibold">{product.name}</h1>
+              <div className="flex gap-2">
+                <Rating name="read-only" value={4.5} precision={0.5} readOnly />
+                <Typography component="legend" className="text-gray-500">
+                  (23)
+                </Typography>
+              </div>
             </div>
-
-            <div className="w-full flex flex-col">
+            <div className="flex flex-col">
+              {variant ? (
+                <>
+                  <h1 className="text-3xl md:text-4xl text-right font-semibold">
+                    {variant.price}€
+                  </h1>
+                  <p className="text-gray-500">{variant.reference_number}</p>
+                  <div className="text-right">{stock}</div>
+                </>
+              ) : null}
+            </div>
+          </div>
+          <div id="description" className="flex-1 text-gray-500">
+            {product.description}
+          </div>
+          <div className="flex">
+            <div id="options" className="flex flex-col gap-2">
               {product.productOptions.map((option) => (
                 <div key={option.name}>
-                  <h4 className="font-Inder text-2xl pb-2">{option.name}</h4>
+                  <h4 className="font-Inder text-2xl pb-2">{option.name} :</h4>
                   {option.name === "Color" ? (
                     <ToggleButtonGroup
-                      color="primary"
                       value={colorId}
                       exclusive
-                      aria-label="Platform"
                       className="flex flex-row"
                       onChange={handleColor}
                     >
@@ -150,28 +162,10 @@ function Product() {
                       ))}
                     </ToggleButtonGroup>
                   ) : null}
-                  {option.name === "Dimensions" ? (
+                  {option.name === "Dimensions" || option.name === "Size" ? (
                     <ToggleButtonGroup
-                      color="primary"
                       value={dimensionsId}
                       exclusive
-                      aria-label="Platform"
-                      className="flex flex-row items-center"
-                      onChange={handleDimensions}
-                    >
-                      {option.productOptionValues.map((value) => (
-                        <ToggleButton value={value.id} key={value.id}>
-                          <DimensionPicker dimensions={value.value} />
-                        </ToggleButton>
-                      ))}
-                    </ToggleButtonGroup>
-                  ) : null}
-                  {option.name === "Size" ? (
-                    <ToggleButtonGroup
-                      color="primary"
-                      value={dimensionsId}
-                      exclusive
-                      aria-label="Platform"
                       className="flex flex-row items-center"
                       onChange={handleDimensions}
                     >
@@ -185,6 +179,23 @@ function Product() {
                 </div>
               ))}
             </div>
+            <div className="flex-1 flex flex-col justify-center items-center">
+              {variant ? (
+                <button
+                  className="px-6 py-2 text-xl transition ease-in duration-200 uppercase rounded-full hover:bg-gray-800 hover:text-white border-2 border-gray-900 focus:outline-none"
+                  onClick={() => addToCart(variant, variant.id)}
+                >
+                  Add to cart
+                </button>
+              ) : null}
+            </div>
+          </div>
+        </div>
+      </main>
+    );
+
+    /* 
+           
             <p>{product.description}</p>
             {variant ? (
               <>
@@ -213,7 +224,7 @@ function Product() {
           </div>
         </div>
       </div>
-    );
+ */
   }
 }
 

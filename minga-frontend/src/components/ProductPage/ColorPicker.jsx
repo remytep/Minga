@@ -4,7 +4,7 @@ function ColorPicker({ color }) {
   let classcolor = color.toLowerCase();
   return (
     <div
-      className="rounded-full border w-10 h-10 m-4"
+      className="rounded-full border w-16 h-16"
       style={{ backgroundColor: classcolor }}
     ></div>
   );
