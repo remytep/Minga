@@ -4,72 +4,61 @@ import {
   HydraAdmin,
   hydraDataProvider as baseHydraDataProvider,
 } from "@api-platform/admin";
-import {
-  ProductCategoryList,
-  ProductList,
-  ProductOptionList,
-  ProductOptionValueList,
-  SkuList,
-} from "./ListComponents";
-import {
-  ProductCategoryCreate,
-  ProductCreate,
-  ProductOptionCreate,
-  ProductOptionValueCreate,
-  SkuCreate,
-  UserCreate,
-} from "./CreateComponents";
-import { ProductCategoryEdit, ProductEdit, ProductOptionValueEdit } from "./EditComponents";
+
+import * as create from "./create";
+import * as edit from "./edit";
+import * as list from "./list";
+import * as show from "./show";
 import { ProductCategoryShow, ProductOptionValueShow, ProductShow } from "./ShowComponents";
 import { CustomRoutes, Resource } from "react-admin";
-import { ENTRYPOINT } from "../../config";
 import { dataProvider } from "./config";
 import { MyLayout } from "./config";
+
 
 const AdminPanel = () => (
   <HydraAdmin
     layout={MyLayout}
     dataProvider={dataProvider()}
     basename="/admin"
-    entrypoint={ENTRYPOINT}>
+    entrypoint={process.env.REACT_APP_ENTRYPOINT}>
     <Resource
       name={"products"}
-      create={ProductCreate}
-      list={ProductList}
-      edit={ProductEdit}
-      show={ProductShow}
+      create={create.ProductCreate}
+      list={list.ProductList}
+      edit={edit.ProductEdit}
+      show={show.ProductShow}
       recordRepresentation="name"
     />
     <Resource
       name={"product_categories"}
-      create={ProductCategoryCreate}
-      list={ProductCategoryList}
-      edit={ProductCategoryEdit}
-      show={ProductCategoryShow}
+      create={create.ProductCategoryCreate}
+      list={list.ProductCategoryList}
+      edit={edit.ProductCategoryEdit}
+      show={show.ProductCategoryShow}
       recordRepresentation="name"
     />
     <Resource
       name={"product_options"}
-      create={ProductOptionCreate}
-      list={ProductOptionList}
+      create={create.ProductOptionCreate}
+      list={list.ProductOptionList}
       recordRepresentation="name"
 
     />
     <Resource
       name={"product_option_values"}
-      list={ProductOptionValueList}
-      create={ProductOptionValueCreate}
-      show={ProductOptionValueShow}
-      edit={ProductOptionValueEdit}
+      list={list.ProductOptionValueList}
+      create={create.ProductOptionValueCreate}
+      show={show.ProductOptionValueShow}
+      edit={edit.ProductOptionValueEdit}
       recordRepresentation="value"
     />
     <Resource
       name={"skus"}
-      list={SkuList}
-      create={SkuCreate}
+      list={list.SkuList}
+      create={create.SkuCreate}
     />
     <Resource name={"sku_values"} />
-    <Resource name={"users"} create={UserCreate} />
+    <Resource name={"users"} create={create.UserCreate} />
   </HydraAdmin>
 );
 

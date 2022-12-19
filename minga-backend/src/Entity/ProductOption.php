@@ -60,7 +60,7 @@ class ProductOption
 
     #[ORM\ManyToOne(inversedBy: 'productOptions')]
     #[ORM\JoinColumn()]
-    #[Groups(['product_option.read'])]
+    #[Groups(['product_option.read','product_option.write'])]
     private ?Product $product = null;
 
     #[ORM\Column(length: 255)]

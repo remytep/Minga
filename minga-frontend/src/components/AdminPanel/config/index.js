@@ -9,7 +9,6 @@ import {
 import { parseHydraDocumentation } from "@api-platform/api-doc-parser";
 import { AuthContext } from "../../../contexts/AuthContext";
 import { Navigate, useNavigate, Route, useLocation } from "react-router-dom";
-import { ENTRYPOINT } from "../../../config";
 import { Layout } from 'react-admin';
 import { ReactQueryDevtools } from 'react-query/devtools';
 
@@ -27,7 +26,7 @@ const fetchHydra = (url, options = {}) =>
 const apiDocumentationParser = () => async () => {
     try {
 
-        return await parseHydraDocumentation(ENTRYPOINT, { headers: getHeaders });
+        return await parseHydraDocumentation(process.env.REACT_APP_ENTRYPOINT, { headers: getHeaders });
     } catch (result) {
         const { api, response, status } = result;
         if (status !== 401 || !response) {
@@ -47,7 +46,7 @@ const apiDocumentationParser = () => async () => {
 
 
 export const dataProvider = (setRedirectToLogin) => baseHydraDataProvider({
-    entrypoint: ENTRYPOINT,
+    entrypoint: process.env.REACT_APP_ENTRYPOINT,
     httpClient: fetchHydra,
     apiDocumentationParser: apiDocumentationParser(setRedirectToLogin),
 });
