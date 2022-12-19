@@ -28,7 +28,7 @@ import { ProductCategoryTitle, ProductTitle } from "./TitleComponents";
 import "./style.css";
 import classNames from "classnames";
 import { useEffect, useRef, useState } from "react";
-import { Chip } from "@mui/material";
+import Chip from '@mui/material/Chip';
 import { Field } from "@api-platform/api-doc-parser";
 import {
     Button,
@@ -41,6 +41,8 @@ import Autocomplete from '@mui/material/Autocomplete';
 import { TextField as TextFieldMui } from '@mui/material';
 import axios from "axios";
 import { ENTRYPOINT } from "../../config";
+import { useRedirect } from 'react-admin';
+import { useNavigate } from "react-router-dom";
 
 const top100Films = [
     { label: 'The Shawshank Redemption', year: 1994 },
@@ -173,6 +175,10 @@ export const ProductList = (props) => (
             </Datagrid>
         </ReferenceArrayField>
         <FieldGuesser source={"slug"} />
+        <FunctionField
+            label="featured"
+            render={record => record["featured"] ? "true" : "false"}
+        />
     </ListGuesser>
 );
 
@@ -183,14 +189,36 @@ export const ProductCategoryList = (props) => (
     </ListGuesser>
 );
 
-export const ProductOptionList = (props) => (
-    <ListGuesser {...props} actions={<ListActions />}>
-        <FieldGuesser source="name" />
-    </ListGuesser>
-);
+export const ProductOptionList = (props) => {
 
+    const redirect = useRedirect();
+
+    return (
+        <ListGuesser {...props} actions={<ListActions />}>
+            <FieldGuesser source="name" />
+            {/* <FieldGuesser source="productOptionValues" /> */}
+            {/* <ReferenceArrayField source="productOptionValues" reference="product_option_values" /> */}
+            <ArrayField source="productOptionValues">
+                <SingleFieldList linkType={false}>
+                    <WithRecord
+                        label="Stock"
+                        render={record => record &&
+                            <Chip
+                                label={record.product.name + " : " + record.value}
+                                onClick={() => window.location.href = `/admin/product_option_values/%2Fapi%2Fproduct_option_values%2F${record.id}/edit`}
+                            />
+                        }
+                    />
+                </SingleFieldList>
+
+            </ArrayField>
+        </ListGuesser>
+    )
+}
 export const ProductOptionValueList = (props) => (
     <ListGuesser {...props} >
+        <ReferenceField source="product" reference="products" />
+        <ReferenceField source="productOption.@id" reference="product_options" />
         <FieldGuesser source="value" />
     </ListGuesser>
 );

@@ -71,10 +71,6 @@ class Product
     #[Groups(['product.write', 'product_category.item.get']), Length(min: 10)]
     private ?string $description = null;
 
-    #[ORM\Column(type: Types::TEXT)]
-    #[Groups(['product.read', 'product.write', 'product_category.item.get'])]
-    private ?string $thumbnail = null;
-
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     #[Groups(['product.read', 'product_category.item.get'])]
     private ?\DateTimeInterface $createdAt = null;
@@ -138,16 +134,6 @@ class Product
     public function getDescription(): ?string
     {
         return $this->description;
-    }
-
-    #[SerializedName('description')]
-    #[Groups(['product.read'])]
-    public function getShortDescription(): string
-    {
-        if (strlen($this->description) < 20) {
-            return $this->description;
-        }
-        return substr($this->description, 0, 20) . '...';
     }
 
     public function setDescription(string $description): self

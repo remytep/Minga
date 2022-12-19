@@ -93,3 +93,11 @@ export const ProductCategoryShow = (props) => (
         </ReferenceArrayField>
     </ShowGuesser>
 );
+
+export const ProductOptionValueShow = (props) => (
+    <ShowGuesser {...props}>
+        <FieldGuesser source={"value"} />
+
+        <ReferenceField source="product" reference="products" />
+    </ShowGuesser>
+);

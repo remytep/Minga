@@ -42,24 +42,27 @@ class Sku
 
     #[ORM\ManyToOne(inversedBy: 'skus')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['sku.read'])]
+    #[Groups(['sku.read', 'sku.write'])]
     private ?Product $product = null;
 
     #[ORM\Column]
-    #[Groups(['sku.read', 'product.read'])]
+    #[Groups(['sku.read', 'sku.write','product.read'])]
     private ?int $price = null;
 
     #[ORM\Column]
-    #[Groups(['sku.read', 'product.read'])]
+    #[Groups(['sku.read', 'sku.write', 'product.read'])]
     private ?int $stock = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['sku.read', 'product.read'])]
+    #[Groups(['sku.read', 'sku.write', 'product.read'])]
     private ?string $referenceNumber = null;
 
     #[ORM\OneToMany(mappedBy: 'Sku', targetEntity: SkuValue::class, cascade: ['persist'])]
-    #[Groups(['sku.read', 'product.read'])]
+    #[Groups(['sku.read', 'sku.write', 'product.read'])]
     private Collection $skuValues;
+
+    #[ORM\Column(length: 255)]
+    private ?string $thumbnail = null;
 
     public function __construct()
     {
@@ -145,6 +148,18 @@ class Sku
                 $skuValue->setSku(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getThumbnail(): ?string
+    {
+        return $this->thumbnail;
+    }
+
+    public function setThumbnail(string $thumbnail): self
+    {
+        $this->thumbnail = $thumbnail;
 
         return $this;
     }
