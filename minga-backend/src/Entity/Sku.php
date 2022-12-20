@@ -46,11 +46,11 @@ class Sku
     private ?Product $product = null;
 
     #[ORM\Column]
-    #[Groups(['sku.read', 'product.read'])]
+    #[Groups(['sku.read', 'product.read', 'product_category.read'])]
     private ?int $price = null;
 
     #[ORM\Column]
-    #[Groups(['sku.read', 'product.read'])]
+    #[Groups(['sku.read', 'product.read', 'product_category.read'])]
     private ?int $stock = null;
 
     #[ORM\Column(length: 255)]
