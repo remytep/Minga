@@ -12,18 +12,14 @@ function Category() {
       url: "https://localhost:8000/api/product_categories/" + category,
       headers: { "content-type": "application/json" },
     }).then((response) => {
-      console.log(response.data.products);
+      //console.log(response.data.products);
       setProducts(response.data.products);
     });
   }, [category]);
   return (
-    <>
-      <div className="flex">
-        <div className="flex flex-col">
-          <ProductGrid products={products} category={category} />
-        </div>
-      </div>
-    </>
+    <main className="flex flex-col px-5 md:px-6 lg:px-10 xl:px-16">
+      <ProductGrid products={products} />
+    </main>
   );
 }
 

@@ -1,49 +1,42 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { BsPlus, BsEyeFill } from "react-icons/bs";
-function ProductCard({ product, category }) {
-  let cat;
-  if (category) {
-    cat = category;
+function ProductCard({ product }) {
+  let min = 0;
+  let stock = 0;
+  product.skus.forEach((sku) => {
+    stock += sku.stock;
+    if (min < sku.stock) {
+      min = sku.stock;
+    }
+  });
+  if (stock >= 10) {
+    stock = <p className="text-green-600 font-semibold">In stock</p>;
+  } else if (stock > 0) {
+    stock = <p className="text-orange-500 font-semibold">Few left</p>;
   } else {
-    cat = product.productCategory.name;
+    stock = <p className="text-red-600 font-semibold">Out of stock</p>;
   }
   return (
     <>
-      <div className="border border-[#e4e4e4] h-[300px] mb-4 relative overflow-hidden group transion">
-        {/* product image */}
-        <div className="w-full h-full flex justify-center items-center">
-          <div className="w-[200px] mx-auto flex justify-center items-center">
-            <img
-              className="max-h-[170px] group-hover:scale-110 transition duration-300"
-              src={product.thumbnail}
-              alt=""
-            />
+      <img className="object-contain" src="/product.webp" alt="" />
+      <div className="flex-1 flex flex-col gap-3 py-3 justify-between">
+        <div className="flex flex-col gap-3">
+          <div className="flex justify-between items-center">
+            <h3 className="font-semibold text-xl">{product.name}</h3>
+            {product.featured ? (
+              <p className="text-gray-700 text-sm">Featured</p>
+            ) : null}
+          </div>
+          <p className="text-gray-500 text-sm">{product.shortDescription}</p>
+        </div>
+        <div className="flex justify-between items-center">
+          <div className="text-sm">
+            Starting from <span className="font-semibold">{min} €</span>
+          </div>
+          <div className="text-xs bg-gray-100 px-3 py-1 rounded-full">
+            {stock}
           </div>
         </div>
-        {/* product icon */}
-        <div className="absolute top-2 -right-11 group-hover:right-2 p-1 gap-y-1 flex flex-col items-center opacity-0 group-hover:opacity-100 transition-all duration-300">
-          <button>
-            <div className="flex justify-center items-center bg-red-500 text-white w-8 h-8">
-              <BsPlus className="text-2xl" />
-            </div>
-          </button>
-          <Link
-            to={`/${cat}/${product.slug}`}
-            className="w-8 h-8 flex justify-center items-center text-primary drop-shadow-xl"
-          >
-            <BsEyeFill />
-          </Link>
-        </div>
-      </div>
-      <div className="text-left">
-        <div className="text-sm capitalize text-grey-500 font-semibold opacity-50 mb-1">
-          {product.productCategory.name}
-        </div>
-        <Link to={`/${cat}/${product.slug}`}>
-          <h3 className="font-semibold opacity-90 mb-1">{product.name}</h3>
-        </Link>
-        {product.featured ? <p>Featured</p> : null}
       </div>
     </>
   );

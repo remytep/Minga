@@ -1,14 +1,19 @@
 import React, { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import ProductCard from "./ProductCard";
 
 function ProductGrid({ products, category }) {
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-[30px] max-w-sm mx-auto md:max-w-none md:mx-0">
+    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[30px]">
       {products.map((product) => {
         return (
-          <div key={product.slug}>
+          <Link
+            to={`/${product.productCategory.name}/${product.slug}`}
+            className="flex flex-col justify-between"
+            key={product.slug}
+          >
             <ProductCard product={product} category={category} />
-          </div>
+          </Link>
         );
       })}
     </div>

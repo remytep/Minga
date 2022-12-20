@@ -1,5 +1,5 @@
 import React from "react";
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 import ProfileDropdown from "./profile/ProfileDropdown";
 import DynamicSearchBar from "./searchBar/DynamicSearchBar";
 import CartDropdown from "./cart/CartDropdown";
@@ -8,6 +8,10 @@ import BreadcrumbsBar from "./breadcrumbs/BreadcrumbsBar";
 
 function Header() {
   let { category, slug } = useParams();
+  const location = useLocation();
+  if (location.pathname.includes("/search/")) {
+    category = "search";
+  }
   return (
     <>
       <header className="sticky top-0 z-20 bg-[#C9C5BA] py-3 md:py-5 px-5 md:px-6 lg:px-10 xl:px-16 flex justify-between md:flex-col">

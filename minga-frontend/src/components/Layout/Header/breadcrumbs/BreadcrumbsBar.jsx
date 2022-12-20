@@ -1,10 +1,12 @@
 import React from "react";
+
 import { Typography, Breadcrumbs, Stack } from "@mui/material";
 import NavigateNextIcon from "@mui/icons-material/NavigateNext";
 import { Link } from "react-router-dom";
 
 function BreadcrumbsBar({ category, slug }) {
   const breadcrumbs = [];
+
   console.log(category, slug);
   if (category && !slug) {
     breadcrumbs.push(

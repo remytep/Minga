@@ -26,10 +26,12 @@ function App() {
               <Route path="/" element={<Accueil />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
-              <Route path="/admin/*" element={<Admin />}></Route>
+              <Route path="/admin/*" element={<Admin />} />
               <Route path="/:category/:slug" element={<Product />} />
               <Route path="/:category" element={<Category />} />
-              <Route path="/search/:searchTerms" element={<Search />} />
+              <Route path="/search/" element={<Search />}>
+                <Route path=":searchTerms" element={<Search />} />
+              </Route>
             </Route>
           </Routes>
         </AuthProvider>
