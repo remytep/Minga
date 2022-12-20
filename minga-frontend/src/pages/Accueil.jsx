@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import Hero from "../components/HomePage/Hero";
-import Sidebar from "../components/Layout/Sidebar";
 
 import ProductGrid from "../components/utils/ProductGrid";
 
@@ -19,15 +18,17 @@ function Accueil() {
   }, []);
   return (
     <>
-      <section>
-        <Hero />
-      </section>
-      <div className="flex">
-        <Sidebar />
-        <div className="flex-1 flex flex-col">
+      <Hero />
+      <main className="flex flex-col px-5 md:px-6 lg:px-10 xl:px-16">
+        <div className="">
+          <h2 className="text-2xl font-bold py-3">Most Popular</h2>
           <ProductGrid products={products} />
         </div>
-      </div>
+        <div className="">
+          <h2 className="text-2xl font-bold py-3">Featured</h2>
+          <ProductGrid products={products} />
+        </div>
+      </main>
     </>
   );
 }

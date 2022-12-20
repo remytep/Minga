@@ -1,32 +1,23 @@
 import axios from "axios";
 import React, { useEffect, useState, useContext } from "react";
 import { useParams } from "react-router-dom";
-import ColorPicker from "../components/ProductPage/ColorPicker";
+import { Button, ButtonGroup } from "@mui/material";
+import Rating from "@mui/material/Rating";
+import Typography from "@mui/material/Typography";
 import DimensionPicker from "../components/ProductPage/DimensionPicker";
-import { ToggleButtonGroup } from "@mui/material";
-import BreadcrumbsBar from "../components/utils/BreadcrumbsBar";
-import { ToggleButton } from "@mui/material";
 import { CartContext } from "../contexts/CartContext";
-
-import desk_model1 from "../assets/homePages/auth/desk_example1.jpg";
+import ColorRadio from "../components/ProductPage/ColorRadio";
 
 function Product() {
-  let { category } = useParams();
-  let { slug } = useParams();
+  let { category, slug } = useParams();
   const { addToCart } = useContext(CartContext);
-
+  const [quantity, setQuantity] = useState(1);
   const [product, setProduct] = useState(null);
   const [colorId, setColorId] = useState("");
-  const [dimensionsId, setDimensionsId] = useState("");
+  const [sizeId, setSizeId] = useState("");
   const [color, setColor] = useState([]);
-  const [dimensions, setDimensions] = useState([]);
+  const [size, setSize] = useState([]);
   const [variant, setVariant] = useState(null);
-  const handleColor = (e, newColor) => {
-    setColorId(newColor);
-  };
-  const handleDimensions = (e, newDimensions) => {
-    setDimensionsId(newDimensions);
-  };
 
   useEffect(() => {
     axios({
@@ -34,7 +25,7 @@ function Product() {
       url: "https://localhost:8000/api/products/" + slug,
       headers: { "content-type": "application/json" },
     }).then((response) => {
-      console.log(response.data);
+      //console.log(response.data);
       if (response.data.productCategory.name === category) {
         setProduct(response.data);
       }
@@ -51,7 +42,7 @@ function Product() {
       headers: { "content-type": "application/json" },
     })
       .then((response) => {
-        //console.log(response.data["hydra:member"]);
+        //console.log("color", response.data["hydra:member"]);
         setColor(response.data["hydra:member"]);
       })
       .catch((error) => {
@@ -61,17 +52,17 @@ function Product() {
       method: "GET",
       url:
         "https://localhost:8000/api/sku_values?product_option_value=/api/product_option_values/" +
-        dimensionsId,
+        sizeId,
       headers: { "content-type": "application/json" },
     })
       .then((response) => {
-        //console.log(response.data["hydra:member"]);
-        setDimensions(response.data["hydra:member"]);
+        //console.log("size", response.data["hydra:member"]);
+        setSize(response.data["hydra:member"]);
       })
       .catch((error) => {
         console.log(error);
       });
-  }, [colorId, dimensionsId]);
+  }, [colorId, sizeId]);
 
   useEffect(() => {
     let skuValues1 = {};
@@ -80,7 +71,7 @@ function Product() {
       skuValues1[sku] = obj;
     });
     let skuValues2 = {};
-    dimensions.forEach((obj) => {
+    size.forEach((obj) => {
       let sku = obj.Sku;
       skuValues2[sku] = obj;
     });
@@ -92,7 +83,7 @@ function Product() {
         commonSkuValues.push(skuValues2[sku]);
       }
     });
-    if (commonSkuValues.length == 2) {
+    if (commonSkuValues.length === 2) {
       axios({
         method: "GET",
         url: "https://localhost:8000" + commonSkuValues[0].Sku,
@@ -106,85 +97,135 @@ function Product() {
           console.log(error);
         });
     }
-  }, [color, dimensions]);
+  }, [color, size]);
+  let stock;
+  if (variant && variant.stock >= 10) {
+    stock = <p className="text-green-600 font-semibold">In stock</p>;
+  } else if (variant && variant.stock > 0) {
+    stock = <p className="text-orange-500 font-semibold">Only a few left</p>;
+  } else {
+    stock = <p className="text-red-600 font-semibold">Out of stock</p>;
+  }
 
+  const handleLess = () => {
+    if (quantity > 1) {
+      setQuantity(quantity - 1);
+    }
+  };
+  const handleMore = () => {
+    if (quantity < variant.stock) setQuantity(quantity + 1);
+  };
   if (product) {
     return (
-      <div className="w-full h-screen flex items-start">
-        <div className="relative w-1/2 h-full flex flex-col">
-          <img
-            src={desk_model1}
-            alt=""
-            className="w-full h-full object-cover"
-          />
-        </div>
-
-        <div className="w-1/2 h-full bg-[#f5f5f5] flex flex-col px-8 py-10 items-center">
-          <BreadcrumbsBar category={product.productCategory.name} slug={slug} />
-          <h1 className="text-4xl pb-3">{product.name}</h1>
-          <div className="w-full flex flex-col max-w-[500px]">
-            <div className="w-full flex flex-row items-center justify-start relative mb-12">
-              <h3 className="text-md absolute text-black/80 bg-[#f5f5f5] pr-2">
-                Customize your {product.productCategory.name}
-              </h3>
-              <div className="w-full h-[1px] bg-black/40"></div>
+      <main className="flex flex-col lg:flex-row gap-6 py-2 px-5 md:px-6 lg:px-10 xl:px-16 w-screen md:h-full">
+        <img src="/product.webp" alt="" className="lg:w-1/2 object-cover" />
+        <div className="flex flex-col gap-2 justify-between lg:w-1/2">
+          <div id="name" className="flex justify-between h-18 md:h-24">
+            <div className="flex flex-col">
+              <h1 className="text-3xl font-semibold">{product.name}</h1>
+              <div className="flex gap-2">
+                <Rating name="read-only" value={4.5} precision={0.5} readOnly />
+                <Typography component="legend" className="text-gray-500">
+                  23 reviews
+                </Typography>
+              </div>
             </div>
-
-            <div className="w-full flex flex-col">
+            <div className="flex flex-col">
+              {variant ? (
+                <>
+                  <h1 className="text-3xl md:text-4xl text-right font-semibold">
+                    {variant.price}€
+                  </h1>
+                  <p className="text-gray-500">{variant.reference_number}</p>
+                  <div className="text-right">{stock}</div>
+                </>
+              ) : null}
+            </div>
+          </div>
+          <div id="description" className="flex-1 text-gray-500">
+            {product.description}
+          </div>
+          <div className="flex flex-col gap-6 md:gap-2 md:flex-row">
+            <div id="options" className="flex flex-col gap-4">
               {product.productOptions.map((option) => (
                 <div key={option.name}>
-                  <h4 className="font-Inder text-2xl pb-2">{option.name}</h4>
+                  <h4 className="text-2xl mb-2">{option.name}</h4>
                   {option.name === "Color" ? (
-                    <ToggleButtonGroup
-                      color="primary"
-                      value={colorId}
-                      exclusive
-                      aria-label="Platform"
-                      className="flex flex-row"
-                      onChange={handleColor}
-                    >
-                      {option.productOptionValues.map((value) => (
-                        <ToggleButton value={value.id} key={value.id}>
-                          <ColorPicker color={value.value} />
-                        </ToggleButton>
-                      ))}
-                    </ToggleButtonGroup>
+                    <ColorRadio
+                      option={option}
+                      colorId={colorId}
+                      setColorId={setColorId}
+                    />
                   ) : null}
-                  {option.name === "Dimensions" ? (
-                    <ToggleButtonGroup
-                      color="primary"
-                      value={dimensionsId}
-                      exclusive
-                      aria-label="Platform"
-                      className="flex flex-row items-center"
-                      onChange={handleDimensions}
-                    >
-                      {option.productOptionValues.map((value) => (
-                        <ToggleButton value={value.id} key={value.id}>
-                          <DimensionPicker dimensions={value.value} />
-                        </ToggleButton>
-                      ))}
-                    </ToggleButtonGroup>
-                  ) : null}
-                  {option.name === "Size" ? (
-                    <ToggleButtonGroup
-                      color="primary"
-                      value={dimensionsId}
-                      exclusive
-                      aria-label="Platform"
-                      className="flex flex-row items-center"
-                      onChange={handleDimensions}
-                    >
-                      {option.productOptionValues.map((value) => (
-                        <ToggleButton value={value.id} key={value.id}>
-                          <DimensionPicker dimensions={value.value} />
-                        </ToggleButton>
-                      ))}
-                    </ToggleButtonGroup>
+                  {option.name === "Dimensions" || option.name === "Size" ? (
+                    <DimensionPicker
+                      option={option}
+                      sizeId={sizeId}
+                      setSizeId={setSizeId}
+                    />
                   ) : null}
                 </div>
               ))}
             </div>
+            <div className="flex-1 flex flex-col gap-2 justify-center md:justify-end md:items-end">
+              {variant ? (
+                <>
+                  <ButtonGroup color="inherit" disableElevation>
+                    <Button
+                      onClick={handleLess}
+                      variant="contained"
+                      disableElevation
+                    >
+                      <p className="text-black text-xl">-</p>
+                    </Button>
+                    <Button
+                      disabled
+                      variant="outlined"
+                      disableElevation
+                      sx={{
+                        borderColor: "#E0E0E0",
+                      }}
+                    >
+                      <p className="text-black text-xl">{quantity}</p>
+                    </Button>
+                    <Button
+                      onClick={handleMore}
+                      variant="contained"
+                      disableElevation
+                    >
+                      <p className="text-black text-xl">+</p>
+                    </Button>
+                  </ButtonGroup>
+                  {variant.stock > 0 ? (
+                    <Button
+                      variant="contained"
+                      color="inherit"
+                      className="transition ease-in duration-200 uppercase rounded-full hover:bg-gray-800 border-2 border-gray-900 focus:outline-none"
+                      onClick={() => addToCart(variant, variant.id, quantity)}
+                      disableElevation
+                    >
+                      <p className="px-6 py-4 text-xl">Add to cart</p>
+                    </Button>
+                  ) : (
+                    <Button
+                      variant="contained"
+                      className="px-6 py-2 text-xl transition ease-in duration-200 uppercase focus:outline-none"
+                      disabled
+                      disableElevation
+                    >
+                      <p className="px-6 py-4 text-xl">Out of stock</p>
+                    </Button>
+                  )}
+                </>
+              ) : null}
+            </div>
+          </div>
+        </div>
+      </main>
+    );
+
+    /* 
+           
             <p>{product.description}</p>
             {variant ? (
               <>
@@ -213,7 +254,7 @@ function Product() {
           </div>
         </div>
       </div>
-    );
+ */
   }
 }
 

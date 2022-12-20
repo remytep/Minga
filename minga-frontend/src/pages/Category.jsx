@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
-import Sidebar from "../components/Layout/Sidebar";
 import axios from "axios";
-import BreadcrumbsBar from "../components/utils/BreadcrumbsBar";
 import ProductGrid from "../components/utils/ProductGrid";
+import Filter from "../components/utils/Filter";
 
 function Category() {
   let { category } = useParams();
@@ -14,20 +13,23 @@ function Category() {
       url: "https://localhost:8000/api/product_categories/" + category,
       headers: { "content-type": "application/json" },
     }).then((response) => {
-      console.log(response.data.products);
+      //console.log(response.data.products);
       setProducts(response.data.products);
     });
-  }, []);
+  }, [category]);
   return (
-    <>
-      <div className="flex">
-        <Sidebar />
-        <div className="flex flex-col">
-          <BreadcrumbsBar category={category} />
-          <ProductGrid products={products} category={category} />
-        </div>
-      </div>
-    </>
+    <main className="flex flex-col px-5 md:px-6 lg:px-10 xl:px-16">
+      <Filter
+        pageName={category
+          .split(" ")
+          .map(
+            (element) =>
+              element.charAt(0).toUpperCase() + element.slice(1).toLowerCase()
+          )}
+      >
+        <ProductGrid products={products} category={category} />
+      </Filter>
+    </main>
   );
 }
 

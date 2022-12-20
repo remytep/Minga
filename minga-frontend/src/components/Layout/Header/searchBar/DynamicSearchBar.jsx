@@ -7,14 +7,36 @@ import { Avatar, ListItem } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { Link } from "react-router-dom";
 import axios from "axios";
-/* import { faker } from "@faker-js/faker";
+import { styled } from "@mui/material/styles";
 
-const productInfo = Array.from(Array(25).keys()).map((product) => ({
-  name: faker.commerce.product(),
-  avatar: faker.image.cats(),
-  price: faker.commerce.price(200, 500, 0, "€"),
-})); */
-
+const StyledAutocomplete = styled(Autocomplete)({
+  "& .MuiAutocomplete-root": { borderRadius: "50%" },
+  "& .MuiInputLabel-outlined:not(.MuiInputLabel-shrink)": {
+    // Default transform is "translate(14px, 20px) scale(1)""
+    // This lines up the label with the initial cursor position in the input
+    // after changing its padding-left.
+  },
+  "&.Mui-focused .MuiInputLabel-outlined": {
+    color: "black",
+  },
+  "& .MuiAutocomplete-inputRoot": {
+    color: "black",
+    backgroundColor: "white",
+    // This matches the specificity of the default styles at https://github.com/mui-org/material-ui/blob/v4.11.3/packages/material-ui-lab/src/Autocomplete/Autocomplete.js#L90
+    '&[class*="MuiOutlinedInput-root"] .MuiAutocomplete-input:first-of-type': {
+      // Default left padding is 6px
+    },
+    "& .MuiOutlinedInput-notchedOutline": {
+      border: "none",
+    },
+    "&:hover .MuiOutlinedInput-notchedOutline": {
+      border: "none",
+    },
+    "&.Mui-focused .MuiOutlinedInput-notchedOutline": {
+      border: "none",
+    },
+  },
+});
 export default function DynamicSearchBar() {
   const [products, setProducts] = useState([]);
   const [searchTerms, setSearchTerms] = useState("");
@@ -33,15 +55,8 @@ export default function DynamicSearchBar() {
   }, []);
 
   return (
-    <Stack
-      sx={{
-        width: 700,
-        display: "flex",
-        justifyContent: "center",
-        alignItems: "center",
-      }}
-    >
-      <Autocomplete
+    <Stack className="rounded-lg border-2">
+      <StyledAutocomplete
         freeSolo
         id="desks_sample"
         onKeyDown={(event) => {
@@ -56,7 +71,6 @@ export default function DynamicSearchBar() {
         inputValue={searchTerms}
         getOptionLabel={(results) => `${results.name}`}
         options={products}
-        sx={{ width: 700 }}
         isOptionEqualToValue={(option, value) => option.name === value.name}
         noOptionsText={"No available products"}
         renderOption={(props, results) => (
@@ -86,7 +100,11 @@ export default function DynamicSearchBar() {
         selectOnFocus
         clearOnBlur
         renderInput={(params) => (
-          <TextField {...params} label="Search for our products" />
+          <TextField
+            {...params}
+            label="Search for our products"
+            className="rounded-full"
+          />
         )}
       />
     </Stack>
