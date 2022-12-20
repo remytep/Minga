@@ -48,22 +48,22 @@ class SkuValue
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['sku_value.read'])]
+    #[Groups(['sku_value.read', 'sku_value.write'])]
     private ?Product $product = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['sku_value.read'])]
+    #[Groups(['sku_value.read', 'sku_value.write'])]
     private ?ProductOption $productOption = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['sku_value.read'])]
+    #[Groups(['sku_value.read', 'sku_value.write'])]
     private ?ProductOptionValue $productOptionValue = null;
 
     #[ORM\ManyToOne(inversedBy: 'skuValues')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['sku_value.read'])]
+    #[Groups(['sku_value.read', 'sku_value.write'])]
     private ?Sku $Sku = null;
 
     public function getId(): ?int

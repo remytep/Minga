@@ -2,8 +2,9 @@ import ProductCreate from "./ProductCreate";
 import ProductCategoryCreate from "./ProductCategoryCreate";
 import ProductOptionCreate from "./ProductOptionCreate";
 import ProductOptionValueCreate from "./ProductOptionValueCreate";
-import UserCreate from "./UserCreate";
 import SkuCreate from "./SkuCreate";
+import SkuValueCreate from "./SkuValueCreate";
+import UserCreate from "./UserCreate";
 
 export {
     ProductCreate,
@@ -11,5 +12,6 @@ export {
     ProductOptionCreate,
     ProductOptionValueCreate,
     SkuCreate,
+    SkuValueCreate,
     UserCreate,
 }

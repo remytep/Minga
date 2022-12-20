@@ -1,8 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { CreateGuesser, InputGuesser } from "@api-platform/admin";
-import { AutocompleteInput, FormDataConsumer, ImageField, ImageInput, ReferenceInput } from "react-admin";
+import { AutocompleteInput, ImageField, ImageInput, ReferenceInput } from "react-admin";
 import { required } from 'react-admin';
-import axios from "axios";
 
 const SkuCreate = (props) => (
     <CreateGuesser {...props}>

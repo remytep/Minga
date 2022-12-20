@@ -59,7 +59,7 @@ class Product
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['product.read', 'product.write', 'product_category.item.get', 'product_option.read', 'sku.read']), Length(min: 3)]
+    #[Groups(['product.read', 'product.write', 'product_category.item.get', 'product_option.read', 'sku.read', 'sku_value.read']), Length(min: 3)]
     private ?string $name = null;
 
     #[ORM\Column(length: 255, unique: true)]
@@ -81,7 +81,7 @@ class Product
     private ?ProductCategory $productCategory;
 
     #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductOption::class, cascade: ["persist"])]
-    #[Groups(['product.read', 'product.write'])]
+    #[Groups(['product.read', 'sku_value.read', 'product.write'])]
     #[Assert\Valid()]
     private Collection $productOptions;
 

@@ -1,7 +1,7 @@
 import { FieldGuesser, ListGuesser } from "@api-platform/admin";
 
-const UserList = () => (
-    <ListGuesser>
+const UserList = (props) => (
+    <ListGuesser {...props}>
         <FieldGuesser source="email" />
         <FieldGuesser source="roles" />
     </ListGuesser>
