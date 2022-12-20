@@ -127,7 +127,7 @@ function Product() {
       <main className="flex flex-col lg:flex-row gap-6 py-2 px-5 md:px-6 lg:px-10 xl:px-16 w-screen md:h-full">
         <img src="/product.webp" alt="" className="lg:w-1/2 object-cover" />
         <div className="flex flex-col gap-2 justify-between lg:w-1/2">
-          <div id="name" className="flex justify-between h-24">
+          <div id="name" className="flex justify-between h-18 md:h-24">
             <div className="flex flex-col">
               <h1 className="text-3xl font-semibold">{product.name}</h1>
               <div className="flex gap-2">
@@ -152,7 +152,7 @@ function Product() {
           <div id="description" className="flex-1 text-gray-500">
             {product.description}
           </div>
-          <div className="flex">
+          <div className="flex flex-col gap-6 md:gap-2 md:flex-row">
             <div id="options" className="flex flex-col gap-2">
               {product.productOptions.map((option) => (
                 <div key={option.name}>
@@ -188,10 +188,10 @@ function Product() {
                 </div>
               ))}
             </div>
-            <div className="flex-1 flex flex-col gap-2 justify-center items-center">
+            <div className="flex-1 flex flex-col gap-2 justify-center md:justify-end md:items-end">
               {variant ? (
                 <>
-                  <ButtonGroup color="inherit" sx={{ boxShadow: "none" }}>
+                  <ButtonGroup color="inherit" disableElevation>
                     <Button
                       onClick={handleLess}
                       variant="contained"
@@ -199,7 +199,14 @@ function Product() {
                     >
                       <p className="text-black text-xl">-</p>
                     </Button>
-                    <Button disabled variant="text">
+                    <Button
+                      disabled
+                      variant="outlined"
+                      disableElevation
+                      sx={{
+                        borderColor: "#E0E0E0",
+                      }}
+                    >
                       <p className="text-black text-xl">{quantity}</p>
                     </Button>
                     <Button
@@ -214,7 +221,7 @@ function Product() {
                     <Button
                       variant="contained"
                       color="inherit"
-                      className="transition ease-in duration-200 uppercase rounded-full bg-black text-white hover:bg-gray-800 hover:text-white border-2 border-gray-900 focus:outline-none"
+                      className="transition ease-in duration-200 uppercase rounded-full hover:bg-gray-800 border-2 border-gray-900 focus:outline-none"
                       onClick={() => addToCart(variant, variant.id, quantity)}
                       disableElevation
                     >

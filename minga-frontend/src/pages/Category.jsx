@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
-import BreadcrumbsBar from "../components/Layout/Header/breadcrumbs/BreadcrumbsBar";
 import ProductGrid from "../components/utils/ProductGrid";
 
 function Category() {
@@ -16,7 +15,7 @@ function Category() {
       console.log(response.data.products);
       setProducts(response.data.products);
     });
-  }, []);
+  }, [category]);
   return (
     <>
       <div className="flex">

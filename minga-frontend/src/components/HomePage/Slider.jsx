@@ -32,7 +32,7 @@ const Slider = () => {
             viewBox="0 0 24 24"
             strokeWidth={1.5}
             stroke="white"
-            className="w-6 h-6 lg:w-12 lg:h-12"
+            className="w-8 h-8 md:w-10 md:h-10 lg:w-12 lg:h-12"
           >
             <path
               strokeLinecap="round"
@@ -48,7 +48,7 @@ const Slider = () => {
             viewBox="0 0 24 24"
             strokeWidth={1.5}
             stroke="white"
-            className="w-6 h-6 lg:w-12 lg:h-12"
+            className="w-8 h-8 md:w-10 md:h-10 lg:w-12 lg:h-12"
           >
             <path
               strokeLinecap="round"
