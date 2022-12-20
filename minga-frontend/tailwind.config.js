@@ -25,9 +25,10 @@ module.exports = {
       backgroundImage: {
         hero: "url('./assets/homePages/hero/hero.jpg')",
       },
+      width: {
+        half: "50vw",
+      },
     },
   },
-  plugins: [
-    require('tailwind-scrollbar-hide')
-  ],
+  plugins: [require("@tailwindcss/forms")],
 };

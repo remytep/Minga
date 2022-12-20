@@ -1,50 +1,36 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useParams } from "react-router-dom";
-import ProductCard from "../components/utils/ProductCard";
+import ProductGrid from "../components/utils/ProductGrid";
+import Filter from "../components/utils/Filter";
 
 function Search() {
   const { searchTerms } = useParams();
-  const [productSearch, setProductSearch] = useState([]);
-  const [productCategorySearch, setProductCategorySearch] = useState([]);
-  const [products, setProducts] = useState([]);
+  const [products, setProducts] = useState(null);
   useEffect(() => {
-    setProducts([]);
-    axios({
-      method: "GET",
-      url: "https://localhost:8000/api/products?name=" + searchTerms,
-      headers: { "content-type": "application/json" },
-    }).then((response) => {
-      setProductSearch(response.data["hydra:member"]);
-    });
-    axios({
-      method: "GET",
-      url:
-        "https://localhost:8000/api/products?productCategory.name=" +
-        searchTerms,
-      headers: { "content-type": "application/json" },
-    }).then((response) => {
-      setProductCategorySearch(response.data["hydra:member"]);
-    });
+    if (searchTerms) {
+      setProducts([]);
+      axios({
+        method: "GET",
+        url: "https://localhost:8000/api/products?name=" + searchTerms,
+        headers: { "content-type": "application/json" },
+      }).then((response) => {
+        setProducts(response.data["hydra:member"]);
+      });
+    }
   }, [searchTerms]);
-  useEffect(() => {
-    setProducts([
-      ...new Map(
-        [...productSearch, ...productCategorySearch].map((item) => [
-          item.id,
-          item,
-        ])
-      ).values(),
-    ]);
-  }, [productSearch, productCategorySearch]);
   return (
-    <div>
-      {products.map((product) => (
-        <div key={product.slug}>
-          <ProductCard product={product} />
+    <main className="flex gap-3 px-5 md:px-6 lg:px-10 xl:px-16">
+      {products ? (
+        <Filter pageName="Search">
+          <ProductGrid products={products} />
+        </Filter>
+      ) : (
+        <div className="flex justify-center items-center h-[90vh]">
+          Search terms are empty
         </div>
-      ))}
-    </div>
+      )}
+    </main>
   );
 }
 

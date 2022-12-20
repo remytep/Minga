@@ -68,7 +68,7 @@ class Product
     private ?string $slug = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    #[Groups(['product.write', 'product_category.item.get']), Length(min: 10)]
+    #[Groups(['product.read', 'product.write', 'product_category.item.get']), Length(min: 10)]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::TEXT)]
@@ -90,7 +90,7 @@ class Product
     private Collection $productOptions;
 
     #[ORM\OneToMany(mappedBy: 'product', targetEntity: Sku::class)]
-    #[Groups(['product.read'])]
+    #[Groups(['product.read', "product_category.item.get"])]
     private Collection $skus;
 
     #[ORM\Column(nullable: true)]
@@ -140,14 +140,14 @@ class Product
         return $this->description;
     }
 
-    #[SerializedName('description')]
-    #[Groups(['product.read'])]
+    #[SerializedName('shortDescription')]
+    #[Groups(['product_category.item.get'])]
     public function getShortDescription(): string
     {
-        if (strlen($this->description) < 20) {
+        if (strlen($this->description) < 100) {
             return $this->description;
         }
-        return substr($this->description, 0, 20) . '...';
+        return substr($this->description, 0, 100) . '...';
     }
 
     public function setDescription(string $description): self

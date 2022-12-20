@@ -13,31 +13,30 @@ import Login from "./components/Auth/Login";
 import Register from "./components/Auth/Register";
 
 // Components
-import Header from "./components/Layout/Header/Header";
+import Layout from "./components/Layout/Layout";
 import { AuthProvider } from "./contexts/AuthContext";
-import ShoppingBagProvider from "./contexts/ShoppingBagContext";
 import CartProvider from "./contexts/CartContext";
 
 function App() {
   return (
     <Router>
-      <ShoppingBagProvider>
-        <CartProvider>
-          <AuthProvider>
-            <Header />
-            <Routes>
+      <CartProvider>
+        <AuthProvider>
+          <Routes>
+            <Route path="/" element={<Layout />}>
               <Route path="/" element={<Accueil />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
-              <Route path="/admin/*" element={<Admin />}></Route>
+              <Route path="/admin/*" element={<Admin />} />
               <Route path="/:category/:slug" element={<Product />} />
               <Route path="/:category" element={<Category />} />
-              <Route path="/search/:searchTerms" element={<Search />} />
-              <Route path="/panier" element={<MonPanier />} />
-            </Routes>
-          </AuthProvider>
-        </CartProvider>
-      </ShoppingBagProvider>
+              <Route path="/search/" element={<Search />}>
+                <Route path=":searchTerms" element={<Search />} />
+              </Route>
+            </Route>
+          </Routes>
+        </AuthProvider>
+      </CartProvider>
     </Router>
   );
 }
