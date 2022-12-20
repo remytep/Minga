@@ -1,6 +1,5 @@
 import React from "react";
 import Slider from "./Slider";
-import { Link } from "react-router-dom";
 function Hero() {
   return (
     <div>

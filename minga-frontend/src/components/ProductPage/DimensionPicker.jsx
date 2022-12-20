@@ -1,5 +1,4 @@
 import React from "react";
-import { ToggleButton } from "@mui/material";
 
 function DimensionPicker({ dimensions }) {
   return (

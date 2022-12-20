@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import ProductCard from "./ProductCard";
 
@@ -9,7 +9,7 @@ function ProductGrid({ products, category }) {
         return (
           <Link
             to={`/${product.productCategory.name}/${product.slug}`}
-            className="flex flex-col justify-between"
+            className="flex flex-col justify-between group-hover:opacity-75"
             key={product.slug}
           >
             <ProductCard product={product} category={category} />

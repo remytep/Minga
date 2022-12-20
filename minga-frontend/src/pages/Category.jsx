@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 import ProductGrid from "../components/utils/ProductGrid";
+import Filter from "../components/utils/Filter";
 
 function Category() {
   let { category } = useParams();
@@ -18,7 +19,16 @@ function Category() {
   }, [category]);
   return (
     <main className="flex flex-col px-5 md:px-6 lg:px-10 xl:px-16">
-      <ProductGrid products={products} />
+      <Filter
+        pageName={category
+          .split(" ")
+          .map(
+            (element) =>
+              element.charAt(0).toUpperCase() + element.slice(1).toLowerCase()
+          )}
+      >
+        <ProductGrid products={products} />
+      </Filter>
     </main>
   );
 }

@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { useParams, useLocation, matchRoutes } from "react-router-dom";
-import ProductCard from "../components/utils/ProductCard";
+import { useParams } from "react-router-dom";
 import ProductGrid from "../components/utils/ProductGrid";
+import Filter from "../components/utils/Filter";
 
 function Search() {
   const { searchTerms } = useParams();
@@ -20,17 +20,17 @@ function Search() {
     }
   }, [searchTerms]);
   return (
-    <>
+    <main className="flex gap-3 px-5 md:px-6 lg:px-10 xl:px-16">
       {products ? (
-        <main className="flex flex-col px-5 md:px-6 lg:px-10 xl:px-16">
+        <Filter pageName="Search">
           <ProductGrid products={products} />
-        </main>
+        </Filter>
       ) : (
         <div className="flex justify-center items-center h-[90vh]">
           Search terms are empty
         </div>
       )}
-    </>
+    </main>
   );
 }
 

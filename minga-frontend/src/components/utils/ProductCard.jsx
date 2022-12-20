@@ -1,5 +1,4 @@
 import React from "react";
-import { Link } from "react-router-dom";
 function ProductCard({ product }) {
   let min = 0;
   let stock = 0;
