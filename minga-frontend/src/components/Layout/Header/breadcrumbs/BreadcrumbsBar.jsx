@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 function BreadcrumbsBar({ category, slug }) {
   const breadcrumbs = [];
 
-  console.log(category, slug);
+  //console.log(category, slug);
   if (category && !slug) {
     breadcrumbs.push(
       <Link underline="hover" key="1" color="inherit" to="/">

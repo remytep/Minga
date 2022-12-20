@@ -27,7 +27,7 @@ function Category() {
               element.charAt(0).toUpperCase() + element.slice(1).toLowerCase()
           )}
       >
-        <ProductGrid products={products} />
+        <ProductGrid products={products} category={category} />
       </Filter>
     </main>
   );

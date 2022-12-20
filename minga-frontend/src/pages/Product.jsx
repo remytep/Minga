@@ -4,11 +4,9 @@ import { useParams } from "react-router-dom";
 import { Button, ButtonGroup } from "@mui/material";
 import Rating from "@mui/material/Rating";
 import Typography from "@mui/material/Typography";
-import ColorPicker from "../components/ProductPage/ColorPicker";
 import DimensionPicker from "../components/ProductPage/DimensionPicker";
-import { ToggleButtonGroup } from "@mui/material";
-import { ToggleButton } from "@mui/material";
 import { CartContext } from "../contexts/CartContext";
+import ColorRadio from "../components/ProductPage/ColorRadio";
 
 function Product() {
   let { category, slug } = useParams();
@@ -16,16 +14,10 @@ function Product() {
   const [quantity, setQuantity] = useState(1);
   const [product, setProduct] = useState(null);
   const [colorId, setColorId] = useState("");
-  const [dimensionsId, setDimensionsId] = useState("");
+  const [sizeId, setSizeId] = useState("");
   const [color, setColor] = useState([]);
-  const [dimensions, setDimensions] = useState([]);
+  const [size, setSize] = useState([]);
   const [variant, setVariant] = useState(null);
-  const handleColor = (e, newColor) => {
-    setColorId(newColor);
-  };
-  const handleDimensions = (e, newDimensions) => {
-    setDimensionsId(newDimensions);
-  };
 
   useEffect(() => {
     axios({
@@ -33,7 +25,7 @@ function Product() {
       url: "https://localhost:8000/api/products/" + slug,
       headers: { "content-type": "application/json" },
     }).then((response) => {
-      console.log(response.data);
+      //console.log(response.data);
       if (response.data.productCategory.name === category) {
         setProduct(response.data);
       }
@@ -50,7 +42,7 @@ function Product() {
       headers: { "content-type": "application/json" },
     })
       .then((response) => {
-        //console.log(response.data["hydra:member"]);
+        //console.log("color", response.data["hydra:member"]);
         setColor(response.data["hydra:member"]);
       })
       .catch((error) => {
@@ -60,17 +52,17 @@ function Product() {
       method: "GET",
       url:
         "https://localhost:8000/api/sku_values?product_option_value=/api/product_option_values/" +
-        dimensionsId,
+        sizeId,
       headers: { "content-type": "application/json" },
     })
       .then((response) => {
-        //console.log(response.data["hydra:member"]);
-        setDimensions(response.data["hydra:member"]);
+        //console.log("size", response.data["hydra:member"]);
+        setSize(response.data["hydra:member"]);
       })
       .catch((error) => {
         console.log(error);
       });
-  }, [colorId, dimensionsId]);
+  }, [colorId, sizeId]);
 
   useEffect(() => {
     let skuValues1 = {};
@@ -79,7 +71,7 @@ function Product() {
       skuValues1[sku] = obj;
     });
     let skuValues2 = {};
-    dimensions.forEach((obj) => {
+    size.forEach((obj) => {
       let sku = obj.Sku;
       skuValues2[sku] = obj;
     });
@@ -91,7 +83,7 @@ function Product() {
         commonSkuValues.push(skuValues2[sku]);
       }
     });
-    if (commonSkuValues.length == 2) {
+    if (commonSkuValues.length === 2) {
       axios({
         method: "GET",
         url: "https://localhost:8000" + commonSkuValues[0].Sku,
@@ -105,15 +97,16 @@ function Product() {
           console.log(error);
         });
     }
-  }, [color, dimensions]);
+  }, [color, size]);
   let stock;
   if (variant && variant.stock >= 10) {
     stock = <p className="text-green-600 font-semibold">In stock</p>;
   } else if (variant && variant.stock > 0) {
-    stock = <p className="text-orange-500 font-semibold">Few left</p>;
+    stock = <p className="text-orange-500 font-semibold">Only a few left</p>;
   } else {
     stock = <p className="text-red-600 font-semibold">Out of stock</p>;
   }
+
   const handleLess = () => {
     if (quantity > 1) {
       setQuantity(quantity - 1);
@@ -133,7 +126,7 @@ function Product() {
               <div className="flex gap-2">
                 <Rating name="read-only" value={4.5} precision={0.5} readOnly />
                 <Typography component="legend" className="text-gray-500">
-                  (23)
+                  23 reviews
                 </Typography>
               </div>
             </div>
@@ -153,37 +146,23 @@ function Product() {
             {product.description}
           </div>
           <div className="flex flex-col gap-6 md:gap-2 md:flex-row">
-            <div id="options" className="flex flex-col gap-2">
+            <div id="options" className="flex flex-col gap-4">
               {product.productOptions.map((option) => (
                 <div key={option.name}>
-                  <h4 className="font-Inder text-2xl pb-2">{option.name} :</h4>
+                  <h4 className="text-2xl mb-2">{option.name}</h4>
                   {option.name === "Color" ? (
-                    <ToggleButtonGroup
-                      value={colorId}
-                      exclusive
-                      className="flex flex-row"
-                      onChange={handleColor}
-                    >
-                      {option.productOptionValues.map((value) => (
-                        <ToggleButton value={value.id} key={value.id}>
-                          <ColorPicker color={value.value} />
-                        </ToggleButton>
-                      ))}
-                    </ToggleButtonGroup>
+                    <ColorRadio
+                      option={option}
+                      colorId={colorId}
+                      setColorId={setColorId}
+                    />
                   ) : null}
                   {option.name === "Dimensions" || option.name === "Size" ? (
-                    <ToggleButtonGroup
-                      value={dimensionsId}
-                      exclusive
-                      className="flex flex-row items-center"
-                      onChange={handleDimensions}
-                    >
-                      {option.productOptionValues.map((value) => (
-                        <ToggleButton value={value.id} key={value.id}>
-                          <DimensionPicker dimensions={value.value} />
-                        </ToggleButton>
-                      ))}
-                    </ToggleButtonGroup>
+                    <DimensionPicker
+                      option={option}
+                      sizeId={sizeId}
+                      setSizeId={setSizeId}
+                    />
                   ) : null}
                 </div>
               ))}

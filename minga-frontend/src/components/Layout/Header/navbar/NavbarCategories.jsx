@@ -9,6 +9,7 @@ import axios from "axios";
 
 function NavbarCategories() {
   const [categories, setCategories] = useState([]);
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const handleDrawerOpen = () => {
     setIsOpen(true);

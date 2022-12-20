@@ -11,7 +11,7 @@ import {
 } from "@heroicons/react/20/solid";
 
 const sortOptions = [
-  { name: "Most Popular", href: "#", current: true },
+  { name: "Most Popular", href: "#", current: false },
   { name: "Best Rating", href: "#", current: false },
   { name: "Newest", href: "#", current: false },
   { name: "Price: Low to High", href: "#", current: false },
@@ -31,7 +31,7 @@ const filters = [
     options: [
       { value: "new-arrivals", label: "New Arrivals", checked: false },
       { value: "sale", label: "Sale", checked: false },
-      { value: "travel", label: "Travel", checked: true },
+      { value: "travel", label: "Travel", checked: false },
       { value: "organization", label: "Organization", checked: false },
       { value: "accessories", label: "Accessories", checked: false },
     ],
@@ -42,7 +42,7 @@ const filters = [
     options: [
       { value: "white", label: "White", checked: false },
       { value: "beige", label: "Beige", checked: false },
-      { value: "blue", label: "Blue", checked: true },
+      { value: "blue", label: "Blue", checked: false },
       { value: "brown", label: "Brown", checked: false },
       { value: "green", label: "Green", checked: false },
       { value: "purple", label: "Purple", checked: false },
@@ -117,10 +117,7 @@ function Filter({ children, pageName }) {
                   {/* Filters */}
                   <form className="mt-4 border-t border-gray-200">
                     <h3 className="sr-only">Categories</h3>
-                    <ul
-                      role="list"
-                      className="px-2 py-3 font-medium text-gray-900"
-                    >
+                    <ul className="px-2 py-3 font-medium text-gray-900">
                       {subCategories.map((category) => (
                         <li key={category.name}>
                           <a href={category.href} className="block px-2 py-3">
@@ -273,10 +270,7 @@ function Filter({ children, pageName }) {
               {/* Filters */}
               <form className="hidden lg:block">
                 <h3 className="sr-only">Categories</h3>
-                <ul
-                  role="list"
-                  className="space-y-4 border-b border-gray-200 pb-6 text-sm font-medium text-gray-900"
-                >
+                <ul className="space-y-4 border-b border-gray-200 pb-6 text-sm font-medium text-gray-900">
                   {subCategories.map((category) => (
                     <li key={category.name}>
                       <a href={category.href}>{category.name}</a>

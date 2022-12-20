@@ -4,10 +4,11 @@ function ProductCard({ product }) {
   let stock = 0;
   product.skus.forEach((sku) => {
     stock += sku.stock;
-    if (min < sku.stock) {
-      min = sku.stock;
+    if (min < sku.price) {
+      min = sku.price;
     }
   });
+
   if (stock >= 10) {
     stock = <p className="text-green-600 font-semibold">In stock</p>;
   } else if (stock > 0) {
