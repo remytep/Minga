@@ -24,12 +24,11 @@ class FileUploader
         $this->relativeUploadsDir = str_replace($publicPath, '', $this->uploadPath).'/';
     }
  
-    public function upload(UploadedFile $file)
+    public function upload(UploadedFile $file, $referenceNumber)
     {
         $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
         $safeFilename = $this->slugger->slug($originalFilename);
-        $fileName = $safeFilename.'-'.uniqid().'.'.$file->guessExtension();
- 
+        $fileName = $referenceNumber.'.'.$file->guessExtension();
         try {
             $file->move($this->getuploadPath(), $fileName);
         } catch (FileException $e) {
@@ -37,6 +36,43 @@ class FileUploader
         }
  
         return $fileName;
+    }
+
+    public function update($file, $referenceNumber, $oldThumbnail) 
+    {
+        $originalFilename = pathinfo($file["name"], PATHINFO_FILENAME);
+        $safeFilename = $this->slugger->slug($originalFilename);
+        $fileName = $referenceNumber.'.'.pathinfo($file["name"])["extension"];
+        try {
+            //unlink when update image
+            if (file_exists($this->getuploadPath() . "/" . $oldThumbnail)){
+                unlink($this->getuploadPath() . "/" . $oldThumbnail);
+            }
+
+            rename($file["tmp_name"], $this->getuploadPath()."/".$fileName);
+        } catch (FileException $e) {
+            // ... handle exception if something happens during file upload
+        }
+ 
+        return $fileName;
+    }
+
+    public function rename($oldName, $newName)
+    {
+        if (!file_exists($this->getuploadPath() . "/" . $oldName)){
+            return null;
+        }
+        try {
+
+            $extension = pathinfo($this->getuploadPath() . "/" . $oldName)["extension"];
+            $fileName = $newName . "." .  $extension;
+            rename($this->getuploadPath() . "/" . $oldName, $this->getuploadPath() . "/" . $fileName);
+        }
+        catch (FileException $e) {
+        }
+
+        return $fileName;
+
     }
  
     public function getuploadPath()

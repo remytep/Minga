@@ -31,7 +31,7 @@ const ProductOptionValueCreate = (props) => {
             <FormDataConsumer>
                 {({ formData, scopedFormData, ...rest }) => {
                     setProduct(formData.product);
-                    console.log(optionsByProduct);
+                    // console.log(optionsByProduct);
                     return (
                         <AutocompleteInput
                             source="productOption"

@@ -1,13 +1,12 @@
-import { FieldGuesser, ListGuesser } from "@api-platform/admin";
+import { FieldGuesser, ShowGuesser } from "@api-platform/admin";
 import { FunctionField, ReferenceField, WithRecord } from "react-admin";
-import "../style.css";
-
-const SkuList = (props) => (
-    <ListGuesser {...props} >
+import "./style.css"
+const SkuShow = () => (
+    <ShowGuesser>
         <ReferenceField source="product.@id" reference="products" />
         <FunctionField
             label="Price"
-            render={record => record ? record["price"] + " €" : null}
+            render={record => record && record["price"] + " €"}
         />
         <WithRecord
             label="Stock"
@@ -17,8 +16,11 @@ const SkuList = (props) => (
             }
         />
         <FieldGuesser source="referenceNumber" />
-        <FieldGuesser source="thumbnail" />
+        <WithRecord label="thumbnail" render={record =>
+            <img className="thumbnail" src={`http://localhost:8000/uploads/${record.thumbnail}`} />
+        } />
+        <FieldGuesser source="skuValues" />
 
-    </ListGuesser >
-);
-export default SkuList;
+    </ShowGuesser>
+)
+export default SkuShow;

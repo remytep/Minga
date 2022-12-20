@@ -9,11 +9,8 @@ import * as create from "./create";
 import * as edit from "./edit";
 import * as list from "./list";
 import * as show from "./show";
-import { ProductCategoryShow, ProductOptionValueShow, ProductShow } from "./ShowComponents";
-import { CustomRoutes, Resource } from "react-admin";
-import { dataProvider } from "./config";
-import { MyLayout } from "./config";
-
+import { Resource } from "react-admin";
+import { dataProvider, MyLayout } from "./config";
 
 const AdminPanel = () => (
   <HydraAdmin
@@ -56,9 +53,15 @@ const AdminPanel = () => (
       name={"skus"}
       list={list.SkuList}
       create={create.SkuCreate}
+      show={show.SkuShow}
+      edit={edit.SkuEdit}
     />
     <Resource name={"sku_values"} />
-    <Resource name={"users"} create={create.UserCreate} />
+    <Resource
+      name={"users"}
+      list={list.UserList}
+      create={create.UserCreate}
+    />
   </HydraAdmin>
 );
 

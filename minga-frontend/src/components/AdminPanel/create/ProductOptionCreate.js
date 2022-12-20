@@ -3,6 +3,10 @@ import { CreateGuesser, InputGuesser } from "@api-platform/admin";
 import { ReferenceInput } from "react-admin";
 import { required } from 'react-admin';
 
+const optionValidation = (value, allValues) => {
+
+}
+
 const ProductOptionCreate = (props) => (
     <CreateGuesser {...props}>
         <ReferenceInput source="product" reference="products" />

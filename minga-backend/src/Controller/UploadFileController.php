@@ -7,6 +7,7 @@ use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use App\Entity\Product;
 use App\Entity\ProductCategory;
+use App\Entity\Sku;
 use App\Service\FileUploader;
 use App\Repository\ProductCategoryRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -14,31 +15,30 @@ use Doctrine\Persistence\ManagerRegistry;
 #[AsController]
 final class UploadFileController extends AbstractController
 {
-    public function __invoke(Request $request, FileUploader $fileUploader, ManagerRegistry $doctrine): Product
+    public function __invoke(Request $request, FileUploader $fileUploader, ManagerRegistry $doctrine): Sku
     {        
         $entityManager = $doctrine->getManager();
 
-        dd($request->getContent());
+        //dd($request->get("stock"));
         $uploadedFile = $request->files->get('thumbnail');
         if (!$uploadedFile) {
             throw new BadRequestHttpException('"thumbnail" is required');
         }
- 
         // create a new entity and set its values
-        $product = new Product();
+        $sku = new Sku();
         // keep only numeric value of the request
-        $id = preg_replace('/[^0-9.]+/', '', $request->get("productCategory"));
-        $product_category = $entityManager
-                            ->getRepository(ProductCategory::class)
-                            ->find($id);
-        $product->setName($request->get('name'));
-        $product->setDescription($request->get('description'));
-        $product->setProductCategory($product_category);
-        $product->setSlug($request->get('slug'));
+        $slug = str_replace("/api/products/", "", $request->get("product"));
+        $product = $entityManager
+                            ->getRepository(Product::class)
+                            ->findOneBy(['slug' => $slug]);
+        $sku->setPrice($request->get('price'));
+        $sku->setStock($request->get('stock'));
+        $sku->setProduct($product);
+        $sku->setReferenceNumber($request->get('referenceNumber'));
         // upload the file and save its filename
-        $product->setThumbnail($fileUploader->upload($uploadedFile));
+        $sku->setThumbnail($fileUploader->upload($uploadedFile, $request->get('referenceNumber')));
  
-        return $product;
+        return $sku;
     }
 }
 

@@ -3,6 +3,9 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Core\Annotation\ApiProperty;
+use App\Controller\UploadFileController;
+use App\Controller\UpdateFileController;
 use App\Repository\SkuRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -25,8 +28,8 @@ use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
     operations: [
         new GetCollection(),
         new Get(),
-        new Put(),
-        new Post(),
+        new Put(controller: UpdateFileController::class, deserialize: false),
+        new Post(controller: UploadFileController::class, deserialize: false),
         new Patch(),
         new Delete()
     ]
@@ -62,6 +65,11 @@ class Sku
     private Collection $skuValues;
 
     #[ORM\Column(length: 255)]
+    #[ApiProperty(types: ['https://schema.org/image'], openapi_context: [
+            "type" => "string",
+        ]
+    )]
+    #[Groups(['sku.read', 'sku.write', 'product.read'])]
     private ?string $thumbnail = null;
 
     public function __construct()
@@ -112,7 +120,7 @@ class Sku
 
     public function getReferenceNumber(): ?string
     {
-        return $this->reference_number;
+        return $this->referenceNumber;
     }
 
     public function setReferenceNumber(string $referenceNumber): self

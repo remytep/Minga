@@ -9,7 +9,13 @@ import {
     FunctionField,
     WithRecord,
     DateField,
+    ArrayField,
+    TextField,
 } from "react-admin";
+
+const EditSku = (id, resource, record) => {
+    window.location.href = `/admin/skus/%2Fapi%2Fskus%2F${record.id}/show`;
+}
 
 const ProductList = (props) => (
     <ListGuesser {...props}>
@@ -24,10 +30,13 @@ const ProductList = (props) => (
         <DateField source="createdAt" showTime />
         <ReferenceField source="productCategory.@id" reference="product_categories" />
 
-        <ReferenceArrayField source="skus" reference="skus">
-            <Datagrid rowClick="edit">
-                <ReferenceField source="productOption" reference="product_options" />
-                <FieldGuesser source="optionValue" />
+        <ArrayField source="skus">
+            <FunctionField
+                render={record => record.skus.length === 0
+                    && <p>No skus found</p>
+                }
+            />
+            <Datagrid rowClick={EditSku}>
                 <FunctionField
                     label="Price"
                     render={record => record && record["price"] + " €"}
@@ -39,8 +48,9 @@ const ProductList = (props) => (
                         : <span className="in-stock">{record.stock}</span>
                     }
                 />
+                <TextField source="referenceNumber" />
             </Datagrid>
-        </ReferenceArrayField>
+        </ArrayField>
         <FieldGuesser source={"slug"} />
         <FunctionField
             label="featured"

@@ -10,8 +10,9 @@ import {
     WithRecord,
     TopToolbar,
     Link,
+    FunctionField,
+    ReferenceArrayField,
 } from "react-admin";
-import "../style.css";
 import { useEffect, useState } from "react";
 import Chip from '@mui/material/Chip';
 import {
@@ -24,6 +25,7 @@ import AddIcon from '@mui/icons-material/Add';
 import Autocomplete from '@mui/material/Autocomplete';
 import { TextField as TextFieldMui } from '@mui/material';
 import axios from "axios";
+import "../style.css";
 
 
 const ListActions = () => (
@@ -114,15 +116,17 @@ const CreateProductOption = () => {
 };
 
 const ProductOptionList = (props) => (
-    <ListGuesser {...props} actions={<ListActions />}>
+    <ListGuesser {...props}>
         <ReferenceField source="product.@id" reference="products" />
         <FieldGuesser source="name" />
-        {/* <FieldGuesser source="productOptionValues" /> */}
-        {/* <ReferenceArrayField source="productOptionValues" reference="product_option_values" /> */}
         <ArrayField source="productOptionValues">
+            <FunctionField
+                render={record => record.productOptionValues.length === 0
+                    && <p>No option values found</p>
+                }
+            />
             <SingleFieldList linkType={false}>
                 <WithRecord
-                    label="Stock"
                     render={record => record &&
                         <Chip
                             label={record.value}

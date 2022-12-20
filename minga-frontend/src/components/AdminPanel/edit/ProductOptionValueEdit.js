@@ -1,7 +1,7 @@
 import { EditGuesser, InputGuesser } from "@api-platform/admin";
 import axios from "axios";
 import { useEffect, useState } from "react";
-import { AutocompleteInput, ReferenceInput, FormDataConsumer } from "react-admin";
+import { AutocompleteInput, ReferenceInput, FormDataConsumer, required } from "react-admin";
 
 const ProductOptionValueEdit = (props) => {
 
@@ -35,12 +35,13 @@ const ProductOptionValueEdit = (props) => {
                             source="productOption"
                             choices={optionsByProduct}
                             optionValue="@id"
+                            validate={required()}
                             {...rest}
                         />
                     )
                 }}
             </FormDataConsumer>
-            <InputGuesser source="value" fullWidth />
+            <InputGuesser source="value" validate={required()} fullWidth />
         </EditGuesser>
     )
 }

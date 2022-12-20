@@ -13,7 +13,9 @@ import {
     Tab,
     WithRecord,
     FunctionField,
-    DateField
+    DateField,
+    Datagrid,
+    TextField
 } from "react-admin";
 import { ProductTitle } from "../TitleComponents";
 import Chip from '@mui/material/Chip';
@@ -50,6 +52,10 @@ const AddOptionValue = () => {
     );
 }
 
+const EditSku = (id, resource, record) => {
+    window.location.href = `/admin/skus/%2Fapi%2Fskus%2F${record.id}/show`;
+}
+
 const ProductShow = (props) => (
     <ShowGuesser title={<ProductTitle />} {...props} >
         <TabbedShowLayout>
@@ -76,7 +82,6 @@ const ProductShow = (props) => (
                     />
                     <SingleFieldList linkType={false}>
                         <WithRecord
-                            label="Stock"
                             render={record => record &&
                                 <Chip
                                     label={record.name}
@@ -91,7 +96,28 @@ const ProductShow = (props) => (
             </Tab>
 
             <Tab label="SKU">
+                <ArrayField source="skus">
+                    <FunctionField
+                        render={record => record.skus.length === 0
+                            && <p>No skus found</p>
+                        }
+                    />
+                    <Datagrid rowClick={EditSku}>
+                        <FunctionField
+                            label="Price"
+                            render={record => record && record.price + " €"}
+                        />
+                        <WithRecord
+                            label="Stock"
+                            render={record => record.stock === 0 ?
+                                <span className="no-stock">Out of stock</span>
+                                : <span className="in-stock">{record.stock}</span>
+                            }
+                        />
+                        <TextField source="referenceNumber" />
+                    </Datagrid>
 
+                </ArrayField>
                 <AddSkuValue {...props} />
             </Tab>
         </TabbedShowLayout>
