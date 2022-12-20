@@ -56,7 +56,7 @@ export default function CartDropdown() {
                 <div className="rounded-lg bg-white border-black border-2">
                   <div className="flex justify-between p-2">
                     <h2>My Cart ({itemAmount})</h2>
-                    <Link to="/cart" className="text-blue">
+                    <Link to="/panier" className="text-blue">
                       View all
                     </Link>
                   </div>
