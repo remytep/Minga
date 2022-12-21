@@ -4,20 +4,18 @@ import { useParams } from "react-router-dom";
 import { Button, ButtonGroup } from "@mui/material";
 import Rating from "@mui/material/Rating";
 import Typography from "@mui/material/Typography";
-import DimensionPicker from "../components/ProductPage/DimensionPicker";
 import { CartContext } from "../contexts/CartContext";
-import ColorRadio from "../components/ProductPage/ColorRadio";
+import Options1 from "../components/ProductPage/Options1";
+import Options2 from "../components/ProductPage/Options2";
+import Options3 from "../components/ProductPage/Options3";
 
 function Product() {
-  let { category, slug } = useParams();
+  let { subcategory, slug } = useParams();
   const { addToCart } = useContext(CartContext);
   const [quantity, setQuantity] = useState(1);
   const [product, setProduct] = useState(null);
-  const [colorId, setColorId] = useState("");
-  const [sizeId, setSizeId] = useState("");
-  const [color, setColor] = useState([]);
-  const [size, setSize] = useState([]);
   const [variant, setVariant] = useState(null);
+  const [optionGroup, setOptionGroup] = useState(null);
 
   useEffect(() => {
     axios({
@@ -25,79 +23,35 @@ function Product() {
       url: "https://localhost:8000/api/products/" + slug,
       headers: { "content-type": "application/json" },
     }).then((response) => {
-      //console.log(response.data);
-      if (response.data.ProductSubCategory.name === category) {
+      console.log(response.data);
+      if (response.data.productSubCategory.name === subcategory) {
         setProduct(response.data);
       }
     });
   }, [slug]);
 
   useEffect(() => {
-    setVariant(null);
-    axios({
-      method: "GET",
-      url:
-        "https://localhost:8000/api/sku_values?product_option_value=/api/product_option_values/" +
-        colorId,
-      headers: { "content-type": "application/json" },
-    })
-      .then((response) => {
-        //console.log("color", response.data["hydra:member"]);
-        setColor(response.data["hydra:member"]);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-    axios({
-      method: "GET",
-      url:
-        "https://localhost:8000/api/sku_values?product_option_value=/api/product_option_values/" +
-        sizeId,
-      headers: { "content-type": "application/json" },
-    })
-      .then((response) => {
-        //console.log("size", response.data["hydra:member"]);
-        setSize(response.data["hydra:member"]);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
-  }, [colorId, sizeId]);
-
-  useEffect(() => {
-    let skuValues1 = {};
-    color.forEach((obj) => {
-      let sku = obj.Sku;
-      skuValues1[sku] = obj;
-    });
-    let skuValues2 = {};
-    size.forEach((obj) => {
-      let sku = obj.Sku;
-      skuValues2[sku] = obj;
-    });
-
-    let commonSkuValues = [];
-    Object.keys(skuValues1).forEach((sku) => {
-      if (skuValues2[sku]) {
-        commonSkuValues.push(skuValues1[sku]);
-        commonSkuValues.push(skuValues2[sku]);
+    if (product)
+      switch (product.productOptions.length) {
+        case 1:
+          setOptionGroup(
+            <Options1 product={product} setVariant={setVariant} />
+          );
+          break;
+        case 2:
+          setOptionGroup(
+            <Options2 product={product} setVariant={setVariant} />
+          );
+          break;
+        case 3:
+          setOptionGroup(
+            <Options3 product={product} setVariant={setVariant} />
+          );
+          break;
+        default:
+          return;
       }
-    });
-    if (commonSkuValues.length === 2) {
-      axios({
-        method: "GET",
-        url: "https://localhost:8000" + commonSkuValues[0].Sku,
-        headers: { "content-type": "application/json" },
-      })
-        .then((response) => {
-          //console.log(response.data);
-          setVariant(response.data);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    }
-  }, [color, size]);
+  }, [product]);
   let stock;
   if (variant && variant.stock >= 10) {
     stock = <p className="text-green-600 font-semibold">In stock</p>;
@@ -145,116 +99,101 @@ function Product() {
           <div id="description" className="flex-1 text-gray-500">
             {product.description}
           </div>
-          <div className="flex flex-col gap-6 md:gap-2 md:flex-row">
-            <div id="options" className="flex flex-col gap-4">
-              {product.productOptions.map((option) => (
-                <div key={option.name}>
-                  <h4 className="text-2xl mb-2">{option.name}</h4>
-                  {option.name === "Color" ? (
-                    <ColorRadio
-                      option={option}
-                      colorId={colorId}
-                      setColorId={setColorId}
-                    />
-                  ) : null}
-                  {option.name === "Dimensions" || option.name === "Size" ? (
-                    <DimensionPicker
-                      option={option}
-                      sizeId={sizeId}
-                      setSizeId={setSizeId}
-                    />
-                  ) : null}
-                </div>
-              ))}
-            </div>
-            <div className="flex-1 flex flex-col gap-2 justify-center md:justify-end md:items-end">
-              {variant ? (
-                <>
-                  <ButtonGroup color="inherit" disableElevation>
-                    <Button
-                      onClick={handleLess}
-                      variant="contained"
-                      disableElevation
-                    >
-                      <p className="text-black text-xl">-</p>
-                    </Button>
-                    <Button
-                      disabled
-                      variant="outlined"
-                      disableElevation
-                      sx={{
-                        borderColor: "#E0E0E0",
-                      }}
-                    >
-                      <p className="text-black text-xl">{quantity}</p>
-                    </Button>
-                    <Button
-                      onClick={handleMore}
-                      variant="contained"
-                      disableElevation
-                    >
-                      <p className="text-black text-xl">+</p>
-                    </Button>
-                  </ButtonGroup>
-                  {variant.stock > 0 ? (
-                    <Button
-                      variant="contained"
-                      color="inherit"
-                      className="transition ease-in duration-200 uppercase rounded-full hover:bg-gray-800 border-2 border-gray-900 focus:outline-none"
-                      onClick={() => addToCart(variant, variant.id, quantity)}
-                      disableElevation
-                    >
-                      <p className="px-6 py-4 text-xl">Add to cart</p>
-                    </Button>
-                  ) : (
-                    <Button
-                      variant="contained"
-                      className="px-6 py-2 text-xl transition ease-in duration-200 uppercase focus:outline-none"
-                      disabled
-                      disableElevation
-                    >
-                      <p className="px-6 py-4 text-xl">Out of stock</p>
-                    </Button>
-                  )}
-                </>
-              ) : null}
-            </div>
+          {optionGroup}
+          <div className="flex-1 flex flex-col gap-2 justify-center md:justify-end md:items-end md:h-96">
+            {variant ? (
+              <>
+                <ButtonGroup color="inherit" disableElevation>
+                  <Button
+                    onClick={handleLess}
+                    variant="contained"
+                    disableElevation
+                  >
+                    <p className="text-black text-xl">-</p>
+                  </Button>
+                  <Button
+                    disabled
+                    variant="outlined"
+                    disableElevation
+                    sx={{
+                      borderColor: "#E0E0E0",
+                    }}
+                  >
+                    <p className="text-black text-xl">{quantity}</p>
+                  </Button>
+                  <Button
+                    onClick={handleMore}
+                    variant="contained"
+                    disableElevation
+                  >
+                    <p className="text-black text-xl">+</p>
+                  </Button>
+                </ButtonGroup>
+                {variant.stock > 0 ? (
+                  <Button
+                    variant="contained"
+                    color="inherit"
+                    className="transition ease-in duration-200 uppercase rounded-full hover:bg-gray-800 border-2 border-gray-900 focus:outline-none"
+                    onClick={() => addToCart(variant, variant.id, quantity)}
+                    disableElevation
+                  >
+                    <p className="px-6 py-4 text-xl">Add to cart</p>
+                  </Button>
+                ) : (
+                  <Button
+                    variant="contained"
+                    className="px-6 py-2 text-xl transition ease-in duration-200 uppercase focus:outline-none"
+                    disabled
+                    disableElevation
+                  >
+                    <p className="px-6 py-4 text-xl">Out of stock</p>
+                  </Button>
+                )}
+              </>
+            ) : (
+              <>
+                <ButtonGroup color="inherit" disableElevation>
+                  <Button
+                    onClick={handleLess}
+                    variant="contained"
+                    disableElevation
+                    disabled
+                  >
+                    <p className="text-gray text-xl">-</p>
+                  </Button>
+                  <Button
+                    disabled
+                    variant="contained"
+                    disableElevation
+                    sx={{
+                      borderColor: "#E0E0E0",
+                    }}
+                  >
+                    <p className="text-gray text-xl">{quantity}</p>
+                  </Button>
+                  <Button
+                    onClick={handleMore}
+                    variant="contained"
+                    disableElevation
+                    disabled
+                  >
+                    <p className="text-gray text-xl">+</p>
+                  </Button>
+                </ButtonGroup>
+                <Button
+                  variant="contained"
+                  className="px-6 py-2 text-xl transition ease-in duration-200 uppercase focus:outline-none"
+                  disabled
+                  disableElevation
+                >
+                  <p className="px-6 py-4 text-xl">Add to cart</p>
+                </Button>
+              </>
+            )}
           </div>
         </div>
       </main>
     );
-
-    /* 
-           
-            <p>{product.description}</p>
-            {variant ? (
-              <>
-                <div className="font-bold text-xl">
-                  Price : {variant.price}€
-                </div>
-                <div>Stock : {variant.stock}</div>
-                <div>Reference : {variant.reference_number}</div>
-              </>
-            ) : null}
-
-            <div className="w-full flex items-center justify-between">
-              <div className="w-full flex items-center">
-                {variant ? (
-                  <button
-                    className="px-6 py-2 transition ease-in duration-200 uppercase rounded-full hover:bg-gray-800 hover:text-white border-2 border-gray-900 focus:outline-none"
-                    onClick={() => addToCart(variant, variant.id)}
-                  >
-                    Add to cart
-                  </button>
-                ) : null}
-              </div>
-
-              <p className="text-sm font-medium whitespace-nowrap cursor-pointer underline underline-offset-2"></p>
-            </div>
-          </div>
-        </div>
-      </div>
- */
   }
 }
 

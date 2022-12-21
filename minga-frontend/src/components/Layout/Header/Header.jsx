@@ -7,7 +7,7 @@ import NavbarCategories from "./navbar/NavbarCategories";
 import BreadcrumbsBar from "./breadcrumbs/BreadcrumbsBar";
 
 function Header() {
-  let { category, slug } = useParams();
+  let { category, subcategory, slug } = useParams();
   const location = useLocation();
   if (location.pathname.includes("/search/")) {
     category = "search";
@@ -36,7 +36,11 @@ function Header() {
       </div>
       {category || slug ? (
         <div className="px-5 md:px-6 lg:px-10 xl:px-16 py-2 lg:py-4">
-          <BreadcrumbsBar category={category} slug={slug} />
+          <BreadcrumbsBar
+            category={category}
+            subcategory={subcategory}
+            slug={slug}
+          />
         </div>
       ) : null}
     </>

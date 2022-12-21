@@ -39,6 +39,7 @@ function NavbarCategories() {
               <li key={categorie.id} className="pr-2 font-semibold">
                 <Link to={categorie.name}>
                   {categorie.name
+                    .replace("-", " ")
                     .split(" ")
                     .map(
                       (element) =>
@@ -84,6 +85,7 @@ function NavbarCategories() {
                 >
                   <Link to={categorie.name} onClick={handleDrawerClose}>
                     {categorie.name
+                      .replace("-", "o")
                       .split(" ")
                       .map(
                         (element) =>
