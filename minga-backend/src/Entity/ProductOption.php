@@ -25,18 +25,10 @@ use Symfony\Component\Validator\Constraints as Assert;
     operations: [
         new GetCollection(),
         new Get(normalizationContext: ['groups' => ['product_option.read', 'product_option.item.get']]),
-        new Put(security: 'is_granted("ROLE_ADMIN")', openapiContext: [
-            'security' => [['bearerAuth' => []]]
-        ]),
-        new Post(security: 'is_granted("ROLE_ADMIN")', openapiContext: [
-            'security' => [['bearerAuth' => []]]
-        ]),
-        new Patch(security: 'is_granted("ROLE_ADMIN")', openapiContext: [
-            'security' => [['bearerAuth' => []]]
-        ]),
-        new Delete(security: 'is_granted("ROLE_ADMIN")', openapiContext: [
-            'security' => [['bearerAuth' => []]]
-        ])
+        new Put(),
+        new Post(),
+        new Patch(),
+        new Delete()
     ],
     normalizationContext: ['groups' => ['product_option.read']],
     denormalizationContext: ['groups' => ['product_option.write']],
@@ -60,14 +52,14 @@ class ProductOption
 
     #[ORM\ManyToOne(inversedBy: 'productOptions')]
     #[ORM\JoinColumn()]
-    #[Groups(['product_option.read','product_option.write'])]
+    #[Groups(['product_option.read', 'product_option.write'])]
     private ?Product $product = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['product_option.read', 'product_option.item.get','product_option.write', 'product_option_value.read','product.read', 'product.write', 'sku.read'])]
+    #[Groups(['product_option.read', 'product_option.item.get', 'product_option.write', 'product_option_value.read', 'product.read', 'product.write', 'sku.read'])]
     private ?string $name = null;
 
-    #[ORM\OneToMany(mappedBy: 'productOption', targetEntity: ProductOptionValue::class, cascade: ["persist"])]
+    #[ORM\OneToMany(mappedBy: 'productOption', targetEntity: ProductOptionValue::class, cascade: ["persist"], orphanRemoval: true)]
     #[Groups(['product_option.read', 'product_option.write', 'product.read'])]
     #[Assert\Valid()]
     private Collection $productOptionValues;

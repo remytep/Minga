@@ -2,8 +2,8 @@
 
 namespace App\Entity;
 
+use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
-use ApiPlatform\Metadata\Link;
 use App\Repository\ProductCategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -15,13 +15,9 @@ use ApiPlatform\Metadata\Patch;
 use ApiPlatform\Metadata\Put;
 use ApiPlatform\Metadata\Delete;
 use Symfony\Component\Serializer\Annotation\Groups;
-use ApiPlatform\Metadata\ApiFilter;
-use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
-use ApiPlatform\Metadata\ApiProperty;
-use Symfony\Component\Validator\Constraints\Length;
+
 
 #[ORM\Entity(repositoryClass: ProductCategoryRepository::class)]
-
 #[ApiResource(
     paginationEnabled: false,
     operations: [
@@ -35,28 +31,27 @@ use Symfony\Component\Validator\Constraints\Length;
     normalizationContext: ['groups' => ['product_category.read']],
     denormalizationContext: ['groups' => ['product_category.write']],
 )]
-#[ApiFilter(SearchFilter::class, properties: ['name' => 'exact'])]
 class ProductCategory
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
     #[ApiProperty(identifier: false)]
-    #[Groups(['product_category.read'])]
+    #[Groups(['product_category.read', 'product_category.write', 'product_sub_category.read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
     #[ApiProperty(identifier: true)]
-    #[Groups(['product_category.read', 'product_category.write', 'product.read', 'product_category.item.get']), Length(min: 3)]
+    #[Groups(['product_category.read', 'product_category.write'])]
     private ?string $name = null;
 
-    #[ORM\OneToMany(mappedBy: 'productCategory', targetEntity: Product::class)]
+    #[ORM\OneToMany(mappedBy: 'productCategory', targetEntity: ProductSubCategory::class, orphanRemoval: true)]
     #[Groups(['product_category.read', 'product_category.write'])]
-    private Collection $products;
+    private Collection $productSubCategories;
 
     public function __construct()
     {
-        $this->products = new ArrayCollection();
+        $this->productSubCategories = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -77,29 +72,29 @@ class ProductCategory
     }
 
     /**
-     * @return Collection<int, Product>
+     * @return Collection<int, ProductSubCategory>
      */
-    public function getProducts(): Collection
+    public function getProductSubCategories(): Collection
     {
-        return $this->products;
+        return $this->productSubCategories;
     }
 
-    public function addProduct(Product $product): self
+    public function addProductSubCategory(ProductSubCategory $productSubCategory): self
     {
-        if (!$this->products->contains($product)) {
-            $this->products->add($product);
-            $product->setProductCategory($this);
+        if (!$this->productSubCategories->contains($productSubCategory)) {
+            $this->productSubCategories->add($productSubCategory);
+            $productSubCategory->setProductCategory($this);
         }
 
         return $this;
     }
 
-    public function removeProduct(Product $product): self
+    public function removeProductSubCategory(ProductSubCategory $productSubCategory): self
     {
-        if ($this->products->removeElement($product)) {
+        if ($this->productSubCategories->removeElement($productSubCategory)) {
             // set the owning side to null (unless already changed)
-            if ($product->getProductCategory() === $this) {
-                $product->setProductCategory(null);
+            if ($productSubCategory->getProductCategory() === $this) {
+                $productSubCategory->setProductCategory(null);
             }
         }
 

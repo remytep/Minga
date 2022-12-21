@@ -49,23 +49,25 @@ class Sku
     private ?Product $product = null;
 
     #[ORM\Column]
-    #[Groups(['sku.read', 'sku.write','product.read', 'product_category.read'])]
+    #[Groups(['sku.read', 'sku.write', 'product.read', 'product_sub_category.read'])]
     private ?int $price = null;
 
     #[ORM\Column]
-    #[Groups(['sku.read', 'sku.write', 'product.read', 'product_category.read'])]
+    #[Groups(['sku.read', 'sku.write', 'product.read', 'product_sub_category.read'])]
     private ?int $stock = null;
 
     #[ORM\Column(length: 255)]
     #[Groups(['sku.read', 'sku.write', 'product.read'])]
     private ?string $referenceNumber = null;
 
-    #[ORM\OneToMany(mappedBy: 'Sku', targetEntity: SkuValue::class, cascade: ['persist'], cascade: ['persist'])]
+    #[ORM\OneToMany(mappedBy: 'Sku', targetEntity: SkuValue::class, cascade: ['persist'], orphanRemoval: true)]
     #[Groups(['sku.read', 'sku.write', 'product.read'])]
     private Collection $skuValues;
 
     #[ORM\Column(length: 255)]
-    #[ApiProperty(types: ['https://schema.org/image'], openapi_context: [
+    #[ApiProperty(
+        types: ['https://schema.org/image'],
+        openapi_context: [
             "type" => "string",
         ]
     )]
