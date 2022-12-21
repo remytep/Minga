@@ -50,11 +50,11 @@ export default function CartDropdown() {
               leaveFrom="opacity-100 translate-y-0"
               leaveTo="opacity-0 translate-y-1"
             >
-              <Popover.Panel className="absolute z-10 p-2 w-[32rem] right-0">
-                <div className="bg-white border-gray-200 border-2 py-3 px-6">
+              <Popover.Panel className="absolute z-10 w-[32rem] right-0">
+                <div className="bg-white border-gray-200 flex flex-col border-2 px-6 max-h-half overflow-y-scroll">
                   {itemAmount > 0 ? (
                     <>
-                      <div className="flex justify-between mb-3">
+                      <div className="flex justify-between my-3">
                         <h2 className="text-xl">
                           Shopping Cart ({itemAmount})
                         </h2>
@@ -66,22 +66,24 @@ export default function CartDropdown() {
                           );
                         })}
                       </div>
-                      <h2 className="text-right text-xl my-4">
-                        Total : {parseFloat(total).toFixed(2)} €
-                      </h2>
-                      <div className="flex justify-between gap-3">
-                        <Link
-                          to="/cart"
-                          className="flex-1 text-center py-3 bg-[#C9C5BA] text-black"
-                        >
-                          Continue shopping
-                        </Link>
-                        <Link
-                          to="/cart"
-                          className="flex-1 text-center py-3 bg-black text-white"
-                        >
-                          Proceed to checkout
-                        </Link>
+                      <div className="sticky bottom-0 bg-white py-3">
+                        <h2 className="text-right text-xl">
+                          Total : {parseFloat(total).toFixed(2)} €
+                        </h2>
+                        <div className="flex justify-between gap-3">
+                          <Link
+                            to="/cart"
+                            className="flex-1 text-center py-3 bg-[#C9C5BA] text-black"
+                          >
+                            Continue shopping
+                          </Link>
+                          <Link
+                            to="/cart"
+                            className="flex-1 text-center py-3 bg-black text-white"
+                          >
+                            Proceed to checkout
+                          </Link>
+                        </div>
                       </div>
                     </>
                   ) : (

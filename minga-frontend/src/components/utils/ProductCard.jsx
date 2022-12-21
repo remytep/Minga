@@ -2,6 +2,7 @@ import React from "react";
 function ProductCard({ product }) {
   let min = 0;
   let stock = 0;
+  //console.log(product);
   product.skus.forEach((sku) => {
     stock += sku.stock;
     if (min < sku.price) {

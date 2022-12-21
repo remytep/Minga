@@ -6,7 +6,7 @@ import ProductGrid from "../components/utils/ProductGrid";
 
 function Accueil() {
   const [products, setProducts] = useState([]);
-
+  const [featuredProducts, setFeaturedProducts] = useState([]);
   useEffect(() => {
     axios({
       method: "GET",
@@ -14,6 +14,13 @@ function Accueil() {
       headers: { "content-type": "application/json" },
     }).then((response) => {
       setProducts(response.data["hydra:member"]);
+    });
+    axios({
+      method: "GET",
+      url: "https://localhost:8000/api/products?featured=true",
+      headers: { "content-type": "application/json" },
+    }).then((response) => {
+      setFeaturedProducts(response.data["hydra:member"]);
     });
   }, []);
   return (
@@ -26,7 +33,7 @@ function Accueil() {
         </div>
         <div className="">
           <h2 className="text-2xl font-bold py-3">Featured</h2>
-          <ProductGrid products={products} />
+          <ProductGrid products={featuredProducts} />
         </div>
       </main>
     </>

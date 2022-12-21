@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\ApiProperty;
@@ -21,6 +22,7 @@ use ApiPlatform\Metadata\Delete;
 use Symfony\Component\Serializer\Annotation\Groups;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Doctrine\Orm\Filter\BooleanFilter;
 use Symfony\Component\Serializer\Annotation\SerializedName;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Constraints\Length;
@@ -48,6 +50,7 @@ use Symfony\Component\Validator\Constraints\Length;
     ],
     operations: [new GetCollection()]
 )]
+#[ApiFilter(BooleanFilter::class, properties: ['featured'])]
 #[ApiFilter(SearchFilter::class, properties: ['name' => 'partial', 'productCategory.name' => 'partial', 'productOptions.name' => 'exact',  'productOptions.productOptionValues.value' => 'exact', 'slug' => 'exact'])]
 class Product
 {
