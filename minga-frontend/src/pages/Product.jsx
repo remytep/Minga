@@ -22,7 +22,7 @@ function Product() {
   useEffect(() => {
     axios({
       method: "GET",
-      url: "https://localhost:8000/api/products/" + slug,
+      url: "http://localhost:8000/api/products/" + slug,
       headers: { "content-type": "application/json" },
     }).then((response) => {
       //console.log(response.data);
@@ -37,7 +37,7 @@ function Product() {
     axios({
       method: "GET",
       url:
-        "https://localhost:8000/api/sku_values?product_option_value=/api/product_option_values/" +
+        "http://localhost:8000/api/sku_values?product_option_value=/api/product_option_values/" +
         colorId,
       headers: { "content-type": "application/json" },
     })
@@ -51,7 +51,7 @@ function Product() {
     axios({
       method: "GET",
       url:
-        "https://localhost:8000/api/sku_values?product_option_value=/api/product_option_values/" +
+        "http://localhost:8000/api/sku_values?product_option_value=/api/product_option_values/" +
         sizeId,
       headers: { "content-type": "application/json" },
     })
@@ -86,7 +86,7 @@ function Product() {
     if (commonSkuValues.length === 2) {
       axios({
         method: "GET",
-        url: "https://localhost:8000" + commonSkuValues[0].Sku,
+        url: "http://localhost:8000" + commonSkuValues[0].Sku,
         headers: { "content-type": "application/json" },
       })
         .then((response) => {

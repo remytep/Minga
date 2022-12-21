@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Sku;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -21,8 +21,7 @@ final class UpdateFileController extends AbstractController
     {
         $data = new FormData($request->getContent());
         $entityManager = $doctrine->getManager();
-
-
+        $path = "sku";
 
         //dd($request->get("data"));
         if (count($data->inputs) === 0) {
@@ -41,7 +40,8 @@ final class UpdateFileController extends AbstractController
             $sku->setThumbnail(
                 $fileUploader->rename(
                     $request->get("previous_data")->getThumbnail(),
-                    $data->referenceNumber
+                    $data->referenceNumber,
+                    $path
                 )
             );
         } else {
@@ -61,6 +61,7 @@ final class UpdateFileController extends AbstractController
             $sku->setThumbnail($fileUploader->update(
                 $uploadedFile,
                 $data->inputs["referenceNumber"],
+                $path,
                 $request->get("previous_data")->getThumbnail(),
             ));
         }

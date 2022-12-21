@@ -13,10 +13,11 @@ const ProductSubCategoryList = (props) => (
   <ListGuesser {...props}>
     <FieldGuesser source={"name"} />
     <ReferenceField
-      source="productCategory.@id"
+      source="productCategory"
       reference="product_categories"
     />
     <WithRecord
+      label="Products"
       render={(record) =>
         record.products.length === 0 ? (
           <span>No products found</span>

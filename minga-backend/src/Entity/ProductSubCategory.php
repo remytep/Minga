@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\ProductSubCategoryRepository;
+use App\Controller\ProductSubCategory\UploadFileController;
+use App\Controller\ProductSubCategory\UpdateFileController;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -26,8 +28,8 @@ use Symfony\Component\Validator\Constraints\Length;
     operations: [
         new GetCollection(),
         new Get(normalizationContext: ['groups' => ['product_sub_category.read', 'product_sub_category.item.get']]),
-        new Put(),
-        new Post(),
+        new Put(controller: UpdateFileController::class, deserialize: false),
+        new Post(controller: UploadFileController::class, deserialize: false),
         new Patch(),
         new Delete()
     ],
@@ -57,6 +59,10 @@ class ProductSubCategory
     #[ORM\JoinColumn(nullable: false)]
     #[Groups(['product_sub_category.read', 'product_sub_category.write'])]
     private ?ProductCategory $productCategory = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['product_sub_category.read', 'product_sub_category.write'])]
+    private ?string $thumbnail = null;
 
 
     public function __construct()
@@ -119,6 +125,18 @@ class ProductSubCategory
     public function setProductCategory(?ProductCategory $productCategory): self
     {
         $this->productCategory = $productCategory;
+
+        return $this;
+    }
+
+    public function getThumbnail(): ?string
+    {
+        return $this->thumbnail;
+    }
+
+    public function setThumbnail(?string $thumbnail): self
+    {
+        $this->thumbnail = $thumbnail;
 
         return $this;
     }

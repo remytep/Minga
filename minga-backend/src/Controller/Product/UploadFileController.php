@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller;
+namespace App\Controller\Product;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -8,7 +8,6 @@ use Symfony\Component\HttpKernel\Attribute\AsController;
 use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 use App\Entity\Product;
 use App\Entity\ProductSubCategory;
-use App\Entity\Sku;
 use App\Service\FileUploader;
 use App\Repository\ProductSubCategoryRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -16,7 +15,7 @@ use Doctrine\Persistence\ManagerRegistry;
 #[AsController]
 final class UploadFileController extends AbstractController
 {
-    public function __invoke(Request $request, FileUploader $fileUploader, ManagerRegistry $doctrine): Sku
+    public function __invoke(Request $request, FileUploader $fileUploader, ManagerRegistry $doctrine): Product
     {
         $entityManager = $doctrine->getManager();
 
@@ -26,19 +25,24 @@ final class UploadFileController extends AbstractController
             throw new BadRequestHttpException('"thumbnail" is required');
         }
         // create a new entity and set its values
-        $sku = new Sku();
+        $product = new Product();
         // keep only numeric value of the request
-        $slug = str_replace("/api/products/", "", $request->get("product"));
-        $product = $entityManager
-            ->getRepository(Product::class)
-            ->findOneBy(['slug' => $slug]);
-        $sku->setPrice($request->get('price'));
-        $sku->setStock($request->get('stock'));
-        $sku->setProduct($product);
-        $sku->setReferenceNumber($request->get('referenceNumber'));
+        $name = str_replace("/api/product_sub_categories/", "", $request->get("ProductSubCategory"));
+        $productSubCategory = $entityManager
+            ->getRepository(ProductSubCategory::class)
+            ->findOneBy(['name' => $name]);
+        $product->setName($request->get('name'));
+        $product->setDescription($request->get('description'));
+        $product->setSlug($request->get('slug'));
+        $product->setFeatured($request->get('featured'));
+        $product->setProductSubCategory($productSubCategory);
         // upload the file and save its filename
-        $sku->setThumbnail($fileUploader->upload($uploadedFile, $request->get('referenceNumber')));
+        $product->setThumbnail($fileUploader->upload(
+            $uploadedFile, 
+            $request->get('slug'),
+            "product",
+        ));
 
-        return $sku;
+        return $product;
     }
 }

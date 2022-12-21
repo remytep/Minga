@@ -4,6 +4,8 @@ namespace App\Entity;
 
 
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use App\Controller\Product\UploadFileController;
+use App\Controller\Product\UpdateFileController;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\Link;
@@ -35,8 +37,8 @@ use Symfony\Component\Validator\Constraints\Length;
     operations: [
         new GetCollection(),
         new Get(),
-        new Put(),
-        new Post(),
+        new Put(controller: UpdateFileController::class, deserialize: false),
+        new Post(controller: UploadFileController::class, deserialize: false),
         new Patch(),
         new Delete()
     ],

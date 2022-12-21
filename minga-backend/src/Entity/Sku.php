@@ -4,8 +4,8 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Core\Annotation\ApiProperty;
-use App\Controller\UploadFileController;
-use App\Controller\UpdateFileController;
+use App\Controller\Sku\UploadFileController;
+use App\Controller\Sku\UpdateFileController;
 use App\Repository\SkuRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;

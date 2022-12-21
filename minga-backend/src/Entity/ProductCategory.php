@@ -4,6 +4,8 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\ApiResource;
+use App\Controller\ProductCategory\UploadFileController;
+use App\Controller\ProductCategory\UpdateFileController;
 use App\Repository\ProductCategoryRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -23,8 +25,8 @@ use Symfony\Component\Serializer\Annotation\Groups;
     operations: [
         new GetCollection(),
         new Get(normalizationContext: ['groups' => ['product_category.read', 'product_category.item.get']]),
-        new Put(),
-        new Post(),
+        new Put(controller: UpdateFileController::class, deserialize: false),
+        new Post(controller: UploadFileController::class, deserialize: false),
         new Patch(),
         new Delete()
     ],
@@ -37,7 +39,7 @@ class ProductCategory
     #[ORM\GeneratedValue]
     #[ORM\Column]
     #[ApiProperty(identifier: false)]
-    #[Groups(['product_category.read', 'product_category.write', 'product_sub_category.read'])]
+    #[Groups(['product_category.read', 'product_category.write'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
@@ -48,6 +50,10 @@ class ProductCategory
     #[ORM\OneToMany(mappedBy: 'productCategory', targetEntity: ProductSubCategory::class, orphanRemoval: true)]
     #[Groups(['product_category.read', 'product_category.write'])]
     private Collection $productSubCategories;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['product_category.read', 'product_category.write'])]
+    private ?string $thumbnail = null;
 
     public function __construct()
     {
@@ -97,6 +103,18 @@ class ProductCategory
                 $productSubCategory->setProductCategory(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getThumbnail(): ?string
+    {
+        return $this->thumbnail;
+    }
+
+    public function setThumbnail(?string $thumbnail): self
+    {
+        $this->thumbnail = $thumbnail;
 
         return $this;
     }

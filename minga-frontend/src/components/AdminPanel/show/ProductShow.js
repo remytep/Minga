@@ -58,8 +58,17 @@ const ProductShow = (props) => (
         <FieldGuesser source="name" />
         <FieldGuesser source="description" />
         <DateField source={"createdAt"} showTime />
+        <WithRecord
+          label="thumbnail"
+          render={(record) => (
+            <img
+              className="thumbnail"
+              src={`http://localhost:8000/uploads/${record.thumbnail}`}
+            />
+          )}
+        />
         <ReferenceField
-          source="ProductSubCategory.@id"
+          source="productSubCategory.@id"
           reference="product_sub_categories"
         />
         <FieldGuesser source="slug" />

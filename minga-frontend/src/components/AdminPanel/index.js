@@ -28,19 +28,19 @@ const AdminPanel = () => (
       recordRepresentation="name"
     />
     <Resource
-      name={"product_sub_categories"}
-      create={create.ProductSubCategoryCreate}
-      list={list.ProductSubCategoryList}
-      edit={edit.ProductSubCategoryEdit}
-      show={show.ProductSubCategoryShow}
-      recordRepresentation="name"
-    />
-    <Resource
       name={"product_categories"}
       create={create.ProductCategoryCreate}
       list={list.ProductCategoryList}
       edit={edit.ProductCategoryEdit}
       show={show.ProductCategoryShow}
+      recordRepresentation="name"
+    />
+    <Resource
+      name={"product_sub_categories"}
+      create={create.ProductSubCategoryCreate}
+      list={list.ProductSubCategoryList}
+      edit={edit.ProductSubCategoryEdit}
+      show={show.ProductSubCategoryShow}
       recordRepresentation="name"
     />
     <Resource

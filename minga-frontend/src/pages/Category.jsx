@@ -10,7 +10,7 @@ function Category() {
   useEffect(() => {
     axios({
       method: "GET",
-      url: "https://localhost:8000/api/product_categories/" + category,
+      url: "http://localhost:8000/api/product_categories/" + category,
       headers: { "content-type": "application/json" },
     }).then((response) => {
       //console.log(response.data.products);
