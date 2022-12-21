@@ -3,6 +3,9 @@
 namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
+use ApiPlatform\Core\Annotation\ApiProperty;
+use App\Controller\UploadFileController;
+use App\Controller\UpdateFileController;
 use App\Repository\SkuRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -25,8 +28,8 @@ use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
     operations: [
         new GetCollection(),
         new Get(),
-        new Put(),
-        new Post(),
+        new Put(controller: UpdateFileController::class, deserialize: false),
+        new Post(controller: UploadFileController::class, deserialize: false),
         new Patch(),
         new Delete()
     ]
@@ -42,24 +45,32 @@ class Sku
 
     #[ORM\ManyToOne(inversedBy: 'skus')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['sku.read'])]
+    #[Groups(['sku.read', 'sku.write'])]
     private ?Product $product = null;
 
     #[ORM\Column]
-    #[Groups(['sku.read', 'product.read', 'product_category.read'])]
+    #[Groups(['sku.read', 'sku.write','product.read', 'product_category.read'])]
     private ?int $price = null;
 
     #[ORM\Column]
-    #[Groups(['sku.read', 'product.read', 'product_category.read'])]
+    #[Groups(['sku.read', 'sku.write', 'product.read', 'product_category.read'])]
     private ?int $stock = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['sku.read', 'product.read'])]
-    private ?string $reference_number = null;
+    #[Groups(['sku.read', 'sku.write', 'product.read'])]
+    private ?string $referenceNumber = null;
 
-    #[ORM\OneToMany(mappedBy: 'Sku', targetEntity: SkuValue::class, cascade: ['persist'])]
-    #[Groups(['sku.read', 'product.read'])]
+    #[ORM\OneToMany(mappedBy: 'Sku', targetEntity: SkuValue::class, cascade: ['persist'], cascade: ['persist'])]
+    #[Groups(['sku.read', 'sku.write', 'product.read'])]
     private Collection $skuValues;
+
+    #[ORM\Column(length: 255)]
+    #[ApiProperty(types: ['https://schema.org/image'], openapi_context: [
+            "type" => "string",
+        ]
+    )]
+    #[Groups(['sku.read', 'sku.write', 'product.read'])]
+    private ?string $thumbnail = null;
 
     public function __construct()
     {
@@ -109,12 +120,12 @@ class Sku
 
     public function getReferenceNumber(): ?string
     {
-        return $this->reference_number;
+        return $this->referenceNumber;
     }
 
-    public function setReferenceNumber(string $reference_number): self
+    public function setReferenceNumber(string $referenceNumber): self
     {
-        $this->reference_number = $reference_number;
+        $this->referenceNumber = $referenceNumber;
 
         return $this;
     }
@@ -145,6 +156,18 @@ class Sku
                 $skuValue->setSku(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getThumbnail(): ?string
+    {
+        return $this->thumbnail;
+    }
+
+    public function setThumbnail(string $thumbnail): self
+    {
+        $this->thumbnail = $thumbnail;
 
         return $this;
     }

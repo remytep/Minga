@@ -62,7 +62,7 @@ class Product
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['product.read', 'product.write', 'product_category.item.get', 'product_option.read', 'sku.read']), Length(min: 3)]
+    #[Groups(['product.read', 'product.write', 'product_category.item.get', 'product_option.read', 'sku.read', 'sku_value.read']), Length(min: 3)]
     private ?string $name = null;
 
     #[ORM\Column(length: 255, unique: true)]
@@ -74,10 +74,6 @@ class Product
     #[Groups(['product.read', 'product.write', 'product_category.item.get']), Length(min: 10)]
     private ?string $description = null;
 
-    #[ORM\Column(type: Types::TEXT)]
-    #[Groups(['product.read', 'product.write', 'product_category.item.get'])]
-    private ?string $thumbnail = null;
-
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     #[Groups(['product.read', 'product_category.item.get'])]
     private ?\DateTimeInterface $createdAt = null;
@@ -88,7 +84,7 @@ class Product
     private ?ProductCategory $productCategory;
 
     #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductOption::class, cascade: ["persist"])]
-    #[Groups(['product.read', 'product.write'])]
+    #[Groups(['product.read', 'sku_value.read', 'product.write'])]
     #[Assert\Valid()]
     private Collection $productOptions;
 
@@ -156,18 +152,6 @@ class Product
     public function setDescription(string $description): self
     {
         $this->description = $description;
-
-        return $this;
-    }
-
-    public function getThumbnail(): ?string
-    {
-        return $this->thumbnail;
-    }
-
-    public function setThumbnail(string $thumbnail): self
-    {
-        $this->thumbnail = $thumbnail;
 
         return $this;
     }

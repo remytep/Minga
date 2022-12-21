@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
-import Admin from "./components/AdminPanel";
+
 
 // Pages
 import Accueil from "./pages/Accueil";
@@ -14,6 +14,7 @@ import Register from "./components/Auth/Register";
 // Components
 import Layout from "./components/Layout/Layout";
 import { AuthProvider } from "./contexts/AuthContext";
+import AdminPanel from "./components/AdminPanel";
 import CartProvider from "./contexts/CartContext";
 
 function App() {
@@ -26,7 +27,7 @@ function App() {
               <Route path="/" element={<Accueil />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
-              <Route path="/admin/*" element={<Admin />} />
+              <Route path="/admin/*" element={<AdminPanel />} />
               <Route path="/:category/:slug" element={<Product />} />
               <Route path="/:category" element={<Category />} />
               <Route path="/search/" element={<Search />}>
