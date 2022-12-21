@@ -5,7 +5,6 @@ import Admin from "./components/AdminPanel";
 
 // Pages
 import Accueil from "./pages/Accueil";
-import MonPanier from "./pages/MonPanier";
 import Search from "./pages/Search";
 import Product from "./pages/Product";
 import Category from "./pages/Category";
@@ -16,6 +15,7 @@ import Register from "./components/Auth/Register";
 import Layout from "./components/Layout/Layout";
 import { AuthProvider } from "./contexts/AuthContext";
 import CartProvider from "./contexts/CartContext";
+import Cart from "./components/Layout/Header/cart/Cart";
 
 function App() {
   return (
@@ -33,6 +33,7 @@ function App() {
               <Route path="/search/" element={<Search />}>
                 <Route path=":searchTerms" element={<Search />} />
               </Route>
+              <Route path="/cart" element={<Cart />} />
             </Route>
           </Routes>
         </AuthProvider>

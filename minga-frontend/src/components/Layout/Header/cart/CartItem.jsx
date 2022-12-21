@@ -4,9 +4,8 @@ import { IoMdClose, IoMdRemove, IoMdAdd } from "react-icons/io";
 import { CartContext } from "../../../../contexts/CartContext";
 
 function CartItem({ product }) {
-  //console.log(product);
-  const { deleteItem, increaseAmount, decreaseAmount } =
-    useContext(CartContext);
+  console.log(product);
+  const { deleteItem, increaseAmount, decreaseAmount } = useContext(CartContext);
 
   return (
     <div className="flex bg-[#C9C5BA]">
