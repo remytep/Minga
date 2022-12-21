@@ -27,7 +27,9 @@ const ProductOptionValueCreate = (props) => {
 
     return (
         <CreateGuesser {...props}>
-            <ReferenceInput source="product" reference="products" />
+            <ReferenceInput source="product" reference="products">
+                <AutocompleteInput source="name" validate={required()} fullWidth />
+            </ReferenceInput>
             <FormDataConsumer>
                 {({ formData, scopedFormData, ...rest }) => {
                     setProduct(formData.product);

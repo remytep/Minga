@@ -38,6 +38,7 @@ const AdminPanel = () => (
       name={"product_options"}
       create={create.ProductOptionCreate}
       list={list.ProductOptionList}
+      edit={edit.ProductOptionEdit}
       recordRepresentation="name"
 
     />
@@ -62,6 +63,7 @@ const AdminPanel = () => (
       list={list.SkuValueList}
       create={create.SkuValueCreate}
       edit={edit.SkuValueEdit}
+      show={show.SkuValueShow}
     />
     <Resource
       name={"users"}
