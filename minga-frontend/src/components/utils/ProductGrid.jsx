@@ -8,7 +8,7 @@ function ProductGrid({ products, category }) {
       {products.map((product) => {
         return (
           <Link
-            to={`/${category ? category : product.productCategory.name}/${
+            to={`/${category ? category : product.ProductSubCategory.name}/${
               product.slug
             }`}
             className="flex flex-col justify-between group-hover:opacity-75"

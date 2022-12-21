@@ -1,19 +1,15 @@
 import { FieldGuesser, ShowGuesser } from "@api-platform/admin";
 import { ChipField, ReferenceArrayField, SingleFieldList } from "react-admin";
-import { ProductCategoryTitle } from "../TitleComponents";
+import { ProductSubCategoryTitle } from "../TitleComponents";
 
-const ProductCategoryShow = (props) => (
-  <ShowGuesser title={<ProductCategoryTitle />} {...props}>
+const ProductSubCategoryShow = (props) => (
+  <ShowGuesser title={<ProductSubCategoryTitle />} {...props}>
     <FieldGuesser source={"name"} />
-
-    <ReferenceArrayField
-      source="productSubCategories"
-      reference="product_sub_categories"
-    >
+    <ReferenceArrayField source="products" reference="products">
       <SingleFieldList>
         <ChipField source="name" />
       </SingleFieldList>
     </ReferenceArrayField>
   </ShowGuesser>
 );
-export default ProductCategoryShow;
+export default ProductSubCategoryShow;

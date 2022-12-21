@@ -26,7 +26,7 @@ function Product() {
       headers: { "content-type": "application/json" },
     }).then((response) => {
       //console.log(response.data);
-      if (response.data.productCategory.name === category) {
+      if (response.data.ProductSubCategory.name === category) {
         setProduct(response.data);
       }
     });

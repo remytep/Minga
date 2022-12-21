@@ -41,6 +41,16 @@ export default function ProfileDropdown() {
                   My Profile
                 </a>
               </Menu.Item>
+              {user.roles.includes("ROLE_ADMIN") ? (
+                <Menu.Item>
+                  <a
+                    href="/admin"
+                    className="text-gray-900 block px-4 py-2 text-sm"
+                  >
+                    Admin Panel
+                  </a>
+                </Menu.Item>
+              ) : null}
               <Menu.Item>
                 <a
                   href="/"
