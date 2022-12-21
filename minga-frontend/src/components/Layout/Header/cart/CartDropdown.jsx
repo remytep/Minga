@@ -67,7 +67,7 @@ export default function CartDropdown() {
                         })}
                       </div>
                       <div className="sticky bottom-0 bg-white py-3">
-                        <h2 className="text-right text-xl">
+                        <h2 className="text-right text-xl pb-3">
                           Total : {parseFloat(total).toFixed(2)} €
                         </h2>
                         <div className="flex justify-between gap-3">
