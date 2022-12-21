@@ -17,8 +17,6 @@ const SkuList = (props) => (
             }
         />
         <FieldGuesser source="referenceNumber" />
-        <FieldGuesser source="thumbnail" />
-
     </ListGuesser >
 );
 export default SkuList;

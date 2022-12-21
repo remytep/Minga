@@ -28,7 +28,6 @@ const SkuShow = () => (
                 />
             )}
         />
-        <FieldGuesser source="skuValues" />
     </ShowGuesser>
 );
 export default SkuShow;
