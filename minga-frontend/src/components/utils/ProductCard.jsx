@@ -1,5 +1,5 @@
 import React from "react";
-function ProductCard({ product }) {
+function ProductCard({ product, featured }) {
   let min = 0;
   let stock = 0;
   //console.log(product);
@@ -24,7 +24,7 @@ function ProductCard({ product }) {
         <div className="flex flex-col gap-3">
           <div className="flex justify-between items-center">
             <h3 className="font-semibold text-xl">{product.name}</h3>
-            {product.featured ? (
+            {featured && product.featured ? (
               <p className="text-gray-700 text-sm">Featured</p>
             ) : null}
           </div>

@@ -73,9 +73,17 @@ const AuthProvider = ({ children }) => {
     let refreshToken = localStorage.getItem("refresh_token");
     if (refreshToken) {
       return axios
-        .post(`${ENTRYPOINT}/refresh/token`, {
-          refresh_token: refreshToken,
-        })
+        .post(
+          `${ENTRYPOINT}/refresh/token`,
+          {
+            refresh_token: refreshToken,
+          },
+          {
+            headers: {
+              "Access-Control-Allow-Origin": "*",
+            },
+          }
+        )
         .then((response) => {
           if (response.data.token) {
             const newUser = jwtDecode(response.data.token);

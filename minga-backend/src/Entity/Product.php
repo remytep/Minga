@@ -36,6 +36,7 @@ use Symfony\Component\Validator\Constraints\Length;
     paginationEnabled: false,
     operations: [
         new GetCollection(),
+        new GetCollection(name: "get_popular", uriTemplate: 'products/popular', order: ["viewCount" => "DESC"]),
         new Get(),
         new Put(controller: UpdateFileController::class, deserialize: false),
         new Post(controller: UploadFileController::class, deserialize: false),
@@ -45,13 +46,13 @@ use Symfony\Component\Validator\Constraints\Length;
     normalizationContext: ['groups' => ['product.read', 'product_sub_category.item.get']],
     denormalizationContext: ['groups' => ['product.write', 'product_sub_category.item.get']],
 )]
-#[ApiResource(
+/* #[ApiResource(
     uriTemplate: '/product_sub_category/{ProductSubCategoryId}/products',
     uriVariables: [
         'ProductSubCategoryId' => new Link(fromClass: ProductSubCategory::class, toProperty: 'ProductSubCategory'),
     ],
     operations: [new GetCollection()]
-)]
+)] */
 #[ApiFilter(BooleanFilter::class, properties: ['featured'])]
 #[ApiFilter(SearchFilter::class, properties: ['name' => 'partial', 'ProductSubCategory.name' => 'partial', 'productOptions.name' => 'exact',  'productOptions.productOptionValues.value' => 'exact', 'slug' => 'exact'])]
 class Product
@@ -101,6 +102,10 @@ class Product
     #[ORM\Column(length: 255, nullable: false)]
     #[Groups(['product.read', 'product.write'])]
     private ?string $thumbnail = null;
+
+    #[ORM\Column]
+    #[Groups(['product.read'])]
+    private ?int $viewCount = null;
 
 
     public function __construct()
@@ -267,6 +272,18 @@ class Product
     public function setThumbnail(string $thumbnail): self
     {
         $this->thumbnail = $thumbnail;
+
+        return $this;
+    }
+
+    public function getViewCount(): ?int
+    {
+        return $this->viewCount;
+    }
+
+    public function setViewCount(int $viewCount): self
+    {
+        $this->viewCount = $viewCount;
 
         return $this;
     }

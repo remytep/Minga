@@ -29,7 +29,7 @@ use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
         new Delete()
     ]
 )]
-#[ApiFilter(SearchFilter::class, properties: ['product_option_value' => 'exact'])]
+#[ApiFilter(SearchFilter::class, properties: ['productOptionValue' => 'exact'])]
 class SkuValue
 {
     #[ORM\Id]

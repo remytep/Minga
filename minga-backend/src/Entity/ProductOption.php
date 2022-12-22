@@ -33,14 +33,14 @@ use Symfony\Component\Validator\Constraints as Assert;
     normalizationContext: ['groups' => ['product_option.read']],
     denormalizationContext: ['groups' => ['product_option.write']],
 )]
-#[ApiResource(
+/* #[ApiResource(
     uriTemplate: '/product/{productId}/options',
     uriVariables: [
         'productId' => new Link(fromClass: Product::class, toProperty: 'product'),
     ],
     operations: [new GetCollection(normalizationContext: ['groups' => ['product_option.read']],)],
 
-)]
+)] */
 #[ApiFilter(SearchFilter::class, properties: ['name' => 'partial', 'productOptionValues.value' => 'exact'])]
 class ProductOption
 {
