@@ -12,7 +12,7 @@ function Options1({ product, setVariant }) {
       axios({
         method: "GET",
         url:
-          "https://localhost:8000/api/sku_values?productOptionValue=" + option1,
+          "http://localhost:8000/api/sku_values?productOptionValue=" + option1,
         headers: { "content-type": "application/json" },
       })
         .then((response) => {
@@ -29,7 +29,7 @@ function Options1({ product, setVariant }) {
     if (option1Value.Sku)
       axios({
         method: "GET",
-        url: "https://localhost:8000" + option1Value.Sku,
+        url: "http://localhost:8000" + option1Value.Sku,
         headers: { "content-type": "application/json" },
       })
         .then((response) => {

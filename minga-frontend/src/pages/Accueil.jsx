@@ -11,14 +11,14 @@ function Accueil() {
   useEffect(() => {
     axios({
       method: "GET",
-      url: "https://localhost:8000/api/products/popular",
+      url: "http://localhost:8000/api/products/popular",
       headers: { "content-type": "application/json" },
     }).then((response) => {
       setProducts(response.data["hydra:member"]);
     });
     axios({
       method: "GET",
-      url: "https://localhost:8000/api/products/?featured=true",
+      url: "http://localhost:8000/api/products/?featured=true",
       headers: { "content-type": "application/json" },
     }).then((response) => {
       setFeaturedProducts(response.data["hydra:member"]);

@@ -55,7 +55,7 @@ function Product() {
       }
       axios({
         method: "POST",
-        url: "https://localhost:8000/api/products/viewCount/" + product.id,
+        url: "http://localhost:8000/api/products/viewCount/" + product.id,
       })
         .then((response) => {
           //console.log(response.data.status);
