@@ -50,6 +50,17 @@ const ProductList = (props) => (
                         )
                     }
                 />
+                <WithRecord
+                    label="Weight"
+                    render={(record) =>
+                        record.weight >= 1000 ? (
+                            <span>{record.weight / 1000} kg</span>
+                        ) : (
+                            <span>{record.weight} g</span>
+
+                        )
+                    }
+                />
                 <TextField source="referenceNumber" />
             </Datagrid>
         </ArrayField>

@@ -32,6 +32,7 @@ const SkuEdit = () => (
         />
         <InputGuesser source="price" validate={required()} />
         <InputGuesser source="stock" validate={required()} />
+        <InputGuesser source="weight" validate={required()} />
         <InputGuesser source="referenceNumber" validate={required()} />
     </EditGuesser>
 );

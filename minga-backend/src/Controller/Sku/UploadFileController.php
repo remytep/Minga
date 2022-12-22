@@ -34,6 +34,7 @@ final class UploadFileController extends AbstractController
             ->findOneBy(['slug' => $slug]);
         $sku->setPrice($request->get('price'));
         $sku->setStock($request->get('stock'));
+        $sku->setWeight($request->get('weight'));
         $sku->setProduct($product);
         $sku->setReferenceNumber($request->get('referenceNumber'));
         // upload the file and save its filename

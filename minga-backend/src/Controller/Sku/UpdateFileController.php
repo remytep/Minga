@@ -36,6 +36,7 @@ final class UpdateFileController extends AbstractController
             $sku->setStock($data->stock);
             $sku->setPrice($data->price);
             $sku->setReferenceNumber($data->referenceNumber);
+            $sku->setWeight($data->weight);
             $sku->setProduct($product);
             $sku->setThumbnail(
                 $fileUploader->rename(
@@ -54,6 +55,7 @@ final class UpdateFileController extends AbstractController
                 ->findOneBy(['slug' => $slug]);
             $sku->setPrice($data->inputs["price"]);
             $sku->setStock($data->inputs["stock"]);
+            $sku->setWeight($data->inputs["weight"]);
             $sku->setProduct($product);
             $sku->setReferenceNumber($data->inputs["referenceNumber"]);
             // upload the file and save its filename

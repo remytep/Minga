@@ -50,7 +50,7 @@ class Sku
 
     #[ORM\Column]
     #[Groups(['sku.read', 'sku.write', 'product.read', 'product_sub_category.read'])]
-    private ?int $price = null;
+    private ?float $price = null;
 
     #[ORM\Column]
     #[Groups(['sku.read', 'sku.write', 'product.read', 'product_sub_category.read'])]
@@ -74,6 +74,11 @@ class Sku
     #[Groups(['sku.read', 'sku.write', 'product.read'])]
     private ?string $thumbnail = null;
 
+    #[ORM\Column]
+    #[Groups(['sku.read', 'sku.write', 'product.read'])]
+    private ?float $weight = null;
+
+
     public function __construct()
     {
         $this->skuValues = new ArrayCollection();
@@ -96,12 +101,12 @@ class Sku
         return $this;
     }
 
-    public function getPrice(): ?int
+    public function getPrice(): ?float
     {
         return $this->price;
     }
 
-    public function setPrice(int $price): self
+    public function setPrice(float $price): self
     {
         $this->price = $price;
 
@@ -173,4 +178,17 @@ class Sku
 
         return $this;
     }
+
+    public function getWeight(): ?float
+    {
+        return $this->weight;
+    }
+
+    public function setWeight(float $weight): self
+    {
+        $this->weight = $weight;
+
+        return $this;
+    }
+
 }

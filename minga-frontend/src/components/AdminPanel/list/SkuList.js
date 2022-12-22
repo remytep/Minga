@@ -16,6 +16,17 @@ const SkuList = (props) => (
                 : <span className="in-stock">{record.stock}</span>
             }
         />
+        <WithRecord
+            label="Weight"
+            render={(record) =>
+                record.weight >= 1000 ? (
+                    <span>{record.weight / 1000} kg</span>
+                ) : (
+                    <span>{record.weight} g</span>
+
+                )
+            }
+        />
         <FieldGuesser source="referenceNumber" />
     </ListGuesser >
 );
