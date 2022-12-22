@@ -22,16 +22,18 @@ function Product() {
       method: "GET",
       url: "https://localhost:8000/api/products/" + slug,
       headers: { "content-type": "application/json" },
-    }).then((response) => {
-      console.log(response.data);
-      if (response.data.productSubCategory.name === subcategory) {
-        setProduct(response.data);
-      }
-    });
+    })
+      .then((response) => {
+        //console.log(response.data);
+        if (response.data.productSubCategory.name === subcategory) {
+          setProduct(response.data);
+        }
+      })
+      .catch((error) => console.log(error));
   }, [slug]);
 
   useEffect(() => {
-    if (product)
+    if (product) {
       switch (product.productOptions.length) {
         case 1:
           setOptionGroup(
@@ -51,6 +53,15 @@ function Product() {
         default:
           return;
       }
+      axios({
+        method: "POST",
+        url: "https://localhost:8000/api/products/viewCount/" + product.id,
+      })
+        .then((response) => {
+          //console.log(response.data.status);
+        })
+        .catch((error) => console.log(error));
+    }
   }, [product]);
   let stock;
   if (variant && variant.stock >= 10) {

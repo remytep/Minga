@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import ProductCard from "./ProductCard";
 
-function ProductGrid({ products, category, subcategory }) {
+function ProductGrid({ products, category, subcategory, featured }) {
   //console.log(products);
   return (
     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-[30px]">
@@ -25,6 +25,7 @@ function ProductGrid({ products, category, subcategory }) {
                   product={product}
                   subcategory={subcategory}
                   category={category}
+                  featured={featured}
                 />
               </Link>
             );

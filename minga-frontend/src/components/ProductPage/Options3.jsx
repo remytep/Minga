@@ -111,11 +111,13 @@ function Options3({ product, setVariant }) {
                 setSizeId={setOption1}
               />
             )}
+            <h4 className="text-2xl mb-2">{product.productOptions[1].name}</h4>
             <TextRadio
               option={option}
               sizeId={option2}
               setSizeId={setOption2}
             />
+            <h4 className="text-2xl mb-2">{product.productOptions[2].name}</h4>
             <TextRadio
               option={option}
               sizeId={option3}

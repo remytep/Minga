@@ -1,4 +1,5 @@
-import React from "react";
+import React, { useEffect } from "react";
+
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 // Pages
@@ -22,7 +23,7 @@ function App() {
       <CartProvider>
         <AuthProvider>
           <Routes>
-            <Route path="/" element={<Layout />}>
+            <Route element={<Layout />}>
               <Route path="/" element={<Accueil />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />

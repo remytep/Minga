@@ -8,34 +8,37 @@ function Options1({ product, setVariant }) {
   const [option1Value, setOption1Value] = useState([]);
   //console.log(product);
   useEffect(() => {
-    axios({
-      method: "GET",
-      url:
-        "https://localhost:8000/api/sku_values?productOptionValue=" + option1,
-      headers: { "content-type": "application/json" },
-    })
-      .then((response) => {
-        //console.log("color", response.data["hydra:member"][0]);
-        setOption1Value(response.data["hydra:member"][0]);
+    if (option1) {
+      axios({
+        method: "GET",
+        url:
+          "https://localhost:8000/api/sku_values?productOptionValue=" + option1,
+        headers: { "content-type": "application/json" },
       })
-      .catch((error) => {
-        console.log(error);
-      });
+        .then((response) => {
+          //console.log("color", response.data["hydra:member"][0]);
+          setOption1Value(response.data["hydra:member"][0]);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    }
   }, [option1]);
 
   useEffect(() => {
-    axios({
-      method: "GET",
-      url: "https://localhost:8000" + option1Value.Sku,
-      headers: { "content-type": "application/json" },
-    })
-      .then((response) => {
-        //console.log(response.data);
-        setVariant(response.data);
+    if (option1Value.Sku)
+      axios({
+        method: "GET",
+        url: "https://localhost:8000" + option1Value.Sku,
+        headers: { "content-type": "application/json" },
       })
-      .catch((error) => {
-        console.log(error);
-      });
+        .then((response) => {
+          //console.log(response.data);
+          setVariant(response.data);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
   }, [option1Value]);
   return (
     <div className="flex flex-col gap-6 md:gap-2 md:flex-row">

@@ -33,6 +33,7 @@ function SubCategory() {
           products={products}
           category={category}
           subcategory={subcategory}
+          featured={true}
         />
       </Filter>
     </main>
