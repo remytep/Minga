@@ -1,5 +1,12 @@
 import { EditGuesser, InputGuesser } from "@api-platform/admin";
-import { required, ReferenceInput, AutocompleteInput, ImageInput, ImageField, WithRecord } from "react-admin";
+import {
+  required,
+  ReferenceInput,
+  AutocompleteInput,
+  ImageInput,
+  ImageField,
+  WithRecord,
+} from "react-admin";
 import { ProductSubCategoryTitle } from "../TitleComponents";
 
 const ProductSubCategoryEdit = (props) => (
@@ -16,7 +23,7 @@ const ProductSubCategoryEdit = (props) => (
       render={(record) => (
         <img
           className="thumbnail"
-          src={`http://localhost:8000/uploads/${record.thumbnail}`}
+          src={`https://localhost:8000/uploads/${record.thumbnail}`}
         />
       )}
     />

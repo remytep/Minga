@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React from "react";
 import { Link, useParams, useLocation } from "react-router-dom";
 import ProfileDropdown from "./profile/ProfileDropdown";
 import DynamicSearchBar from "./searchBar/DynamicSearchBar";

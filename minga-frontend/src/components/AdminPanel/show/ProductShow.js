@@ -63,7 +63,7 @@ const ProductShow = (props) => (
           render={(record) => (
             <img
               className="thumbnail"
-              src={`http://localhost:8000/uploads/${record.thumbnail}`}
+              src={`https://localhost:8000/uploads/${record.thumbnail}`}
             />
           )}
         />
@@ -133,7 +133,6 @@ const ProductShow = (props) => (
                   <span>{record.weight / 1000} kg</span>
                 ) : (
                   <span>{record.weight} g</span>
-
                 )
               }
             />

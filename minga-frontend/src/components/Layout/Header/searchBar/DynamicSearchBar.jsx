@@ -43,7 +43,7 @@ export default function DynamicSearchBar() {
   const navigate = useNavigate();
   useEffect(() => {
     axios
-      .get("http://localhost:8000/api/products")
+      .get("https://localhost:8000/api/products")
       .then((res) => {
         //console.log(Object.values(res.data["hydra:member"]));
         setProducts(Object.values(res.data["hydra:member"]));

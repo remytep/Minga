@@ -20,7 +20,7 @@ function Product() {
   useEffect(() => {
     axios({
       method: "GET",
-      url: "http://localhost:8000/api/products/" + slug,
+      url: "https://localhost:8000/api/products/" + slug,
       headers: { "content-type": "application/json" },
     })
       .then((response) => {
@@ -53,12 +53,12 @@ function Product() {
         default:
           return;
       }
-      axios({
-        method: "POST",
-        url: "https://localhost:8000/api/products/viewCount/" + product.id,
-      })
+      axios
+        .post("https://localhost:8000/api/products/viewCount/" + product.id, {
+          withCredentials: true,
+        })
         .then((response) => {
-          //console.log(response.data.status);
+          console.log(response.data);
         })
         .catch((error) => console.log(error));
     }

@@ -1,5 +1,10 @@
 import { FieldGuesser, ShowGuesser } from "@api-platform/admin";
-import { ChipField, ReferenceArrayField, SingleFieldList, WithRecord } from "react-admin";
+import {
+  ChipField,
+  ReferenceArrayField,
+  SingleFieldList,
+  WithRecord,
+} from "react-admin";
 import { ProductSubCategoryTitle } from "../TitleComponents";
 
 const ProductSubCategoryShow = (props) => (
@@ -10,7 +15,7 @@ const ProductSubCategoryShow = (props) => (
       render={(record) => (
         <img
           className="thumbnail"
-          src={`http://localhost:8000/uploads/${record.thumbnail}`}
+          src={`https://localhost:8000/uploads/${record.thumbnail}`}
         />
       )}
     />

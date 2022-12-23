@@ -4,15 +4,15 @@ import "./productCarousel.css";
 import { Carousel } from "react-responsive-carousel";
 import ProductCard from "./ProductCard";
 
-function ProductCarousel({ category, subcategory, featured }) {
-  const products = [
+function ProductCarousel({ products, category, subcategory, featured }) {
+  /*   const products = [
     { name: "Remy", slug: "remy" },
     { name: "Remy", slug: "remy" },
     { name: "Remy", slug: "remy" },
     { name: "Remy", slug: "remy" },
     { name: "Remy", slug: "remy" },
     { name: "Remy", slug: "remy" },
-  ];
+  ]; */
   const [windowDimensions, setWindowDimensions] = useState(
     getWindowDimensions()
   );
@@ -55,26 +55,20 @@ function ProductCarousel({ category, subcategory, featured }) {
       let columns = [];
       switch (size) {
         case "xs":
-          products.forEach((product) => {
+          products.forEach((product, i) => {
             array.push(
-              <Link className="flex flex-col justify-between group-hover:opacity-75 px-5 md:px-6 lg:px-10 xl:px-16">
-                <img className="object-contain" src="/product.webp" alt="" />
-                <div className="flex-1 flex flex-col gap-3 py-3 justify-between">
-                  <div className="flex flex-col gap-3">
-                    <div className="flex justify-between items-center">
-                      <h3 className="font-semibold text-xl">Remy</h3>
-                    </div>
-                    <p className="text-gray-500 text-sm">Test</p>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <div className="text-sm">
-                      Starting from <span className="font-semibold">300 €</span>
-                    </div>
-                    <div className="text-xs bg-gray-100 px-3 py-1 rounded-full">
-                      <p className="text-red-600 font-semibold">Out of stock</p>
-                    </div>
-                  </div>
-                </div>
+              <Link
+                to={`/${
+                  category
+                    ? category
+                    : product.productSubCategory.productCategory.name
+                }/${
+                  subcategory ? subcategory : product.productSubCategory.name
+                }/${product.slug}`}
+                key={product.slug}
+                className="flex flex-col justify-between group-hover:opacity-75 px-5 md:px-6 lg:px-10 xl:px-16"
+              >
+                <ProductCard product={product} featured={featured} />
               </Link>
             );
           });
@@ -83,24 +77,18 @@ function ProductCarousel({ category, subcategory, featured }) {
         case "sm":
           products.forEach((product, i) => {
             columns.push(
-              <Link className="col-span-1 flex flex-col justify-between group-hover:opacity-75">
-                <img className="object-contain" src="/product.webp" alt="" />
-                <div className="flex-1 flex flex-col gap-3 py-3 justify-between">
-                  <div className="flex flex-col gap-3">
-                    <div className="flex justify-between items-center">
-                      <h3 className="font-semibold text-xl">Remy</h3>
-                    </div>
-                    <p className="text-gray-500 text-sm">Test</p>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <div className="text-sm">
-                      Starting from <span className="font-semibold">300 €</span>
-                    </div>
-                    <div className="text-xs bg-gray-100 px-3 py-1 rounded-full">
-                      <p className="text-red-600 font-semibold">Out of stock</p>
-                    </div>
-                  </div>
-                </div>
+              <Link
+                to={`/${
+                  category
+                    ? category
+                    : product.productSubCategory.productCategory.name
+                }/${
+                  subcategory ? subcategory : product.productSubCategory.name
+                }/${product.slug}`}
+                key={product.slug}
+                className="col-span-1 flex flex-col justify-between group-hover:opacity-75"
+              >
+                <ProductCard product={product} featured={false} />
               </Link>
             );
             if ((i + 1) % 2 === 0) {
@@ -117,24 +105,18 @@ function ProductCarousel({ category, subcategory, featured }) {
         case "lg":
           products.forEach((product, i) => {
             columns.push(
-              <Link className="col-span-1 flex flex-col justify-between group-hover:opacity-75">
-                <img className="object-contain" src="/product.webp" alt="" />
-                <div className="flex-1 flex flex-col gap-3 py-3 justify-between">
-                  <div className="flex flex-col gap-3">
-                    <div className="flex justify-between items-center">
-                      <h3 className="font-semibold text-xl">Remy</h3>
-                    </div>
-                    <p className="text-gray-500 text-sm">Test</p>
-                  </div>
-                  <div className="flex justify-between items-center">
-                    <div className="text-sm">
-                      Starting from <span className="font-semibold">300 €</span>
-                    </div>
-                    <div className="text-xs bg-gray-100 px-3 py-1 rounded-full">
-                      <p className="text-red-600 font-semibold">Out of stock</p>
-                    </div>
-                  </div>
-                </div>
+              <Link
+                to={`/${
+                  category
+                    ? category
+                    : product.productSubCategory.productCategory.name
+                }/${
+                  subcategory ? subcategory : product.productSubCategory.name
+                }/${product.slug}`}
+                key={product.slug}
+                className="col-span-1 flex flex-col justify-between group-hover:opacity-75"
+              >
+                <ProductCard product={product} featured={false} />
               </Link>
             );
             if ((i + 1) % 3 === 0) {
@@ -165,7 +147,8 @@ function ProductCarousel({ category, subcategory, featured }) {
       showStatus={false}
       showIndicators={false}
     >
-      {carouselContent && carouselContent.map((content) => content)}
+      {carouselContent &&
+        carouselContent.map((content, i) => <div key={i}>{content}</div>)}
     </Carousel>
   );
 }
