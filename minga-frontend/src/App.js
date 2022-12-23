@@ -10,7 +10,7 @@ import Category from "./pages/Category";
 import SubCategory from "./pages/SubCategory";
 import Login from "./components/Auth/Login";
 import Register from "./components/Auth/Register";
-import Cart from "./pages/Cart";
+import Cart from "./pages/Checkout";
 
 // Components
 import Layout from "./components/Layout/Layout";

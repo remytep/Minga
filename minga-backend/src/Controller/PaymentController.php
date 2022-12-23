@@ -16,18 +16,25 @@ function calculateOrderAmount(array $items): int {
     // Replace this constant with a calculation of the order's amount
     // Calculate the order total on the server to prevent
     // people from directly manipulating the amount on the client
-    return 1400;
+    $items = json_decode($items[0]);
+    $totalAmount = 0;
+    foreach ($items as $item) {
+        $totalAmount += $item->price;
+    }
+    //stripe takes the amout from penny
+    return $totalAmount * 100;
 }
 
 class CreatePayment{
 
     #[Route('/api/create', name: 'create', methods: ['POST'])]
     public function create(){
-        \Stripe\Stripe::setApiKey('sk_test_51M98c5KpRc4HZ65yys9CzJpUpSI6pY5ZRVxMwKfAJL9KG7AuND2XC30OOYV1lAMXMsK9LKTfgQThOP509lEb4QYt006g4xxPEG');
+        \Stripe\Stripe::setApiKey($_SERVER['STRIPE_PRIVATE_KEY']);
         try {
             // retrieve JSON from POST body
             $jsonStr = file_get_contents('php://input');
             $jsonObj = json_decode($jsonStr);
+
 
             // Create a PaymentIntent with amount and currency
             $paymentIntent = \Stripe\PaymentIntent::create([

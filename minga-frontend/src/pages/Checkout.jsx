@@ -3,7 +3,7 @@ import { loadStripe } from "@stripe/stripe-js";
 import { Elements } from "@stripe/react-stripe-js";
 import CheckoutForm from "../components/Stripe/CheckoutForm";
 import axios from "axios";
-// import "./App.css";
+import "./Checkout.css";
 
 // Make sure to call loadStripe outside of a component’s render to avoid
 // recreating the Stripe object on every render.
@@ -16,7 +16,9 @@ function Cart() {
     useEffect(() => {
         // Create PaymentIntent as soon as the page loads
         axios.post(`${process.env.REACT_APP_ENTRYPOINT}/create`,
-            JSON.stringify({ items: [{ id: "xl-tshirt" }] }),
+            JSON.stringify({
+                items: localStorage.getItem("Mon panier").split()
+            }),
             { "Content-Type": "application/json" })
             .then((res) => {
                 setClientSecret(JSON.parse(res.data).clientSecret);
