@@ -91,7 +91,7 @@ function ProductCarousel({ products, category, subcategory, featured }) {
                 <ProductCard product={product} featured={false} />
               </Link>
             );
-            if ((i + 1) % 2 === 0) {
+            if ((i + 1) % 2 === 0 || i === products.length - 1) {
               array.push(
                 <div className="flex gap-[30px] px-5 md:px-6 lg:px-10 xl:px-16">
                   {columns}
@@ -119,7 +119,7 @@ function ProductCarousel({ products, category, subcategory, featured }) {
                 <ProductCard product={product} featured={false} />
               </Link>
             );
-            if ((i + 1) % 3 === 0) {
+            if ((i + 1) % 3 === 0 || i === products.length - 1) {
               array.push(
                 <div className="grid grid-cols-3 gap-[30px] px-5 md:px-6 lg:px-10 xl:px-16">
                   {columns}
