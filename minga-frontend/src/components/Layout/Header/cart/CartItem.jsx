@@ -4,7 +4,7 @@ import { IoMdClose, IoMdRemove, IoMdAdd } from "react-icons/io";
 import { CartContext } from "../../../../contexts/CartContext";
 
 function CartItem({ product }) {
-  //console.log(product);
+  console.log(product);
   const { deleteItem, increaseAmount, decreaseAmount } =
     useContext(CartContext);
 
@@ -19,7 +19,7 @@ function CartItem({ product }) {
                 {product.product.name}
               </Link>
               <span className="text-xs text-gray-500">
-                {product.reference_number}
+                {product.referenceNumber}
               </span>
             </div>
             <div
@@ -33,11 +33,12 @@ function CartItem({ product }) {
           <div className="flex flex-col">
             {product.skuValues.map((skuvalue, i) => (
               <div className="flex" key={i}>
+                {console.log(skuvalue)}
                 <p className="text-gray-600 text-sm">
-                  {skuvalue.product_option.name}:
+                  {skuvalue.productOption.name}:
                 </p>
                 <p className="text-black text-sm mx-2">
-                  {skuvalue.product_option_value.value}
+                  {skuvalue.productOptionValue.value}
                 </p>
               </div>
             ))}

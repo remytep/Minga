@@ -4,8 +4,8 @@ namespace App\Entity;
 
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Core\Annotation\ApiProperty;
-use App\Controller\UploadFileController;
-use App\Controller\UpdateFileController;
+use App\Controller\Sku\UploadFileController;
+use App\Controller\Sku\UpdateFileController;
 use App\Repository\SkuRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -49,28 +49,35 @@ class Sku
     private ?Product $product = null;
 
     #[ORM\Column]
-    #[Groups(['sku.read', 'sku.write','product.read', 'product_category.read'])]
-    private ?int $price = null;
+    #[Groups(['sku.read', 'sku.write', 'product.read', 'product_sub_category.read'])]
+    private ?float $price = null;
 
     #[ORM\Column]
-    #[Groups(['sku.read', 'sku.write', 'product.read', 'product_category.read'])]
+    #[Groups(['sku.read', 'sku.write', 'product.read', 'product_sub_category.read'])]
     private ?int $stock = null;
 
     #[ORM\Column(length: 255)]
     #[Groups(['sku.read', 'sku.write', 'product.read'])]
     private ?string $referenceNumber = null;
 
-    #[ORM\OneToMany(mappedBy: 'Sku', targetEntity: SkuValue::class, cascade: ['persist'], cascade: ['persist'])]
+    #[ORM\OneToMany(mappedBy: 'Sku', targetEntity: SkuValue::class, cascade: ['persist'], orphanRemoval: true)]
     #[Groups(['sku.read', 'sku.write', 'product.read'])]
     private Collection $skuValues;
 
     #[ORM\Column(length: 255)]
-    #[ApiProperty(types: ['https://schema.org/image'], openapi_context: [
+    #[ApiProperty(
+        types: ['https://schema.org/image'],
+        openapi_context: [
             "type" => "string",
         ]
     )]
     #[Groups(['sku.read', 'sku.write', 'product.read'])]
     private ?string $thumbnail = null;
+
+    #[ORM\Column]
+    #[Groups(['sku.read', 'sku.write', 'product.read'])]
+    private ?float $weight = null;
+
 
     public function __construct()
     {
@@ -94,12 +101,12 @@ class Sku
         return $this;
     }
 
-    public function getPrice(): ?int
+    public function getPrice(): ?float
     {
         return $this->price;
     }
 
-    public function setPrice(int $price): self
+    public function setPrice(float $price): self
     {
         $this->price = $price;
 
@@ -171,4 +178,17 @@ class Sku
 
         return $this;
     }
+
+    public function getWeight(): ?float
+    {
+        return $this->weight;
+    }
+
+    public function setWeight(float $weight): self
+    {
+        $this->weight = $weight;
+
+        return $this;
+    }
+
 }

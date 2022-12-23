@@ -13,6 +13,7 @@ const SkuCreate = (props) => (
         </ImageInput>
         <InputGuesser source="price" fullWidth validate={required()} />
         <InputGuesser source="stock" fullWidth validate={required()} />
+        <InputGuesser source="weight" fullWidth validate={required()} />
         <InputGuesser source="referenceNumber" fullWidth validate={required()} />
     </CreateGuesser>
 )

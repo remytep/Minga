@@ -17,7 +17,8 @@ const AdminPanel = () => (
     layout={MyLayout}
     dataProvider={dataProvider()}
     basename="/admin"
-    entrypoint={process.env.REACT_APP_ENTRYPOINT}>
+    entrypoint={process.env.REACT_APP_ENTRYPOINT}
+  >
     <Resource
       name={"products"}
       create={create.ProductCreate}
@@ -35,12 +36,19 @@ const AdminPanel = () => (
       recordRepresentation="name"
     />
     <Resource
+      name={"product_sub_categories"}
+      create={create.ProductSubCategoryCreate}
+      list={list.ProductSubCategoryList}
+      edit={edit.ProductSubCategoryEdit}
+      show={show.ProductSubCategoryShow}
+      recordRepresentation="name"
+    />
+    <Resource
       name={"product_options"}
       create={create.ProductOptionCreate}
       list={list.ProductOptionList}
       edit={edit.ProductOptionEdit}
       recordRepresentation="name"
-
     />
     <Resource
       name={"product_option_values"}
@@ -65,13 +73,8 @@ const AdminPanel = () => (
       edit={edit.SkuValueEdit}
       show={show.SkuValueShow}
     />
-    <Resource
-      name={"users"}
-      list={list.UserList}
-      create={create.UserCreate}
-    />
+    <Resource name={"users"} list={list.UserList} create={create.UserCreate} />
   </HydraAdmin>
 );
-
 
 export default AdminPanel;

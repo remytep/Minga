@@ -6,7 +6,8 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\String\Slugger\SluggerInterface;
 use Symfony\Component\HttpFoundation\UrlHelper;
- 
+use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
+
 class FileUploader
 {
     private $uploadPath;
@@ -24,54 +25,54 @@ class FileUploader
         $this->relativeUploadsDir = str_replace($publicPath, '', $this->uploadPath).'/';
     }
  
-    public function upload(UploadedFile $file, $referenceNumber)
+    public function upload(UploadedFile $file, $name, $path = NULL)
     {
-        $originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
-        $safeFilename = $this->slugger->slug($originalFilename);
-        $fileName = $referenceNumber.'.'.$file->guessExtension();
+        //$originalFilename = pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME);
+        //$safeFilename = $this->slugger->slug($originalFilename);
+        $fileName = $name.'.'.$file->guessExtension();
         try {
-            $file->move($this->getuploadPath(), $fileName);
+            $file->move($this->getuploadPath() . "/" . $path . "/", $fileName);
         } catch (FileException $e) {
             // ... handle exception if something happens during file upload
         }
  
-        return $fileName;
+        return $path . "/" . $fileName;
     }
 
-    public function update($file, $referenceNumber, $oldThumbnail) 
+    public function update($file, $name, $path, $oldThumbnail) 
     {
-        $originalFilename = pathinfo($file["name"], PATHINFO_FILENAME);
-        $safeFilename = $this->slugger->slug($originalFilename);
-        $fileName = $referenceNumber.'.'.pathinfo($file["name"])["extension"];
+        $fullPath = $this->getuploadPath(). "/" . $path;
+        //$originalFilename = pathinfo($file["name"], PATHINFO_FILENAME);
+        //$safeFilename = $this->slugger->slug($originalFilename);
+        $fileName = $name.'.'.pathinfo($file["name"])["extension"];
         try {
             //unlink when update image
-            if (file_exists($this->getuploadPath() . "/" . $oldThumbnail)){
-                unlink($this->getuploadPath() . "/" . $oldThumbnail);
+            if (file_exists($this->getuploadPath(). "/" . $oldThumbnail)){
+                unlink($this->getuploadPath(). "/" . $oldThumbnail);
             }
-
-            rename($file["tmp_name"], $this->getuploadPath()."/".$fileName);
+            rename($file["tmp_name"], $fullPath."/".$fileName);
         } catch (FileException $e) {
             // ... handle exception if something happens during file upload
         }
- 
-        return $fileName;
+        return $path . "/" . $fileName;
     }
 
-    public function rename($oldName, $newName)
+    public function rename($oldName, $newName, $path)
     {
+        $fullPath = $this->getuploadPath(). "/" . $path;
+
         if (!file_exists($this->getuploadPath() . "/" . $oldName)){
-            return null;
+            throw new BadRequestHttpException('Thumbnail cannot be updated');
         }
         try {
-
-            $extension = pathinfo($this->getuploadPath() . "/" . $oldName)["extension"];
+            $extension = pathinfo($fullPath . "/" . $oldName)["extension"];
             $fileName = $newName . "." .  $extension;
-            rename($this->getuploadPath() . "/" . $oldName, $this->getuploadPath() . "/" . $fileName);
+            rename($this->getuploadPath() . "/" . $oldName, $fullPath . "/" . $fileName);
         }
         catch (FileException $e) {
         }
 
-        return $fileName;
+        return $path . "/" . $fileName;
 
     }
  

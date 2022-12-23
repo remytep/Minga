@@ -1,13 +1,13 @@
 import React from "react";
+
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-
-
 
 // Pages
 import Accueil from "./pages/Accueil";
 import Search from "./pages/Search";
 import Product from "./pages/Product";
 import Category from "./pages/Category";
+import SubCategory from "./pages/SubCategory";
 import Login from "./components/Auth/Login";
 import Register from "./components/Auth/Register";
 
@@ -23,13 +23,17 @@ function App() {
       <CartProvider>
         <AuthProvider>
           <Routes>
-            <Route path="/" element={<Layout />}>
+            <Route element={<Layout />}>
               <Route path="/" element={<Accueil />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
               <Route path="/admin/*" element={<AdminPanel />} />
-              <Route path="/:category/:slug" element={<Product />} />
               <Route path="/:category" element={<Category />} />
+              <Route path="/:category/:subcategory" element={<SubCategory />} />
+              <Route
+                path="/:category/:subcategory/:slug"
+                element={<Product />}
+              />
               <Route path="/search/" element={<Search />}>
                 <Route path=":searchTerms" element={<Search />} />
               </Route>
