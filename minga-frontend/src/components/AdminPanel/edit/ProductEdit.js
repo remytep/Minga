@@ -29,7 +29,7 @@ const ProductEdit = (props) => (
             )}
         />
         <ReferenceInput
-            source="ProductSubCategory"
+            source="ProductSubCategory.@id"
             reference="product_sub_categories"
         >
             <AutocompleteInput optionText="name" fullWidth validate={required()} />

@@ -62,7 +62,7 @@ class FileUploader
         $fullPath = $this->getuploadPath(). "/" . $path;
 
         if (!file_exists($this->getuploadPath() . "/" . $oldName)){
-            throw new BadRequestHttpException('Thumbnail cannot be updated');
+            throw new BadRequestHttpException('Thumbnail cannot be updated or does not exist');
         }
         try {
             $extension = pathinfo($fullPath . "/" . $oldName)["extension"];

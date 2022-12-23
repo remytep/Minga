@@ -8,6 +8,7 @@ import {
     WithRecord,
 } from "react-admin";
 import Chip from "@mui/material/Chip";
+import { padding } from "@mui/system";
 
 const ProductCategoryList = (props) => (
     <ListGuesser {...props}>
@@ -18,10 +19,20 @@ const ProductCategoryList = (props) => (
                 record.productSubCategories.length === 0 ? (
                     <span>No subcategories found</span>
                 ) : (
-                    <ReferenceArrayField
-                        source="productSubCategories"
-                        reference="product_sub_categories"
-                    />
+                    <ArrayField source="productSubCategories">
+                        <SingleFieldList>
+                            <WithRecord
+                                label="Subcategories"
+                                render={(record) =>
+                                    record &&
+                                    <span>{record.name}</span>
+                                }
+                                sx={{ ms: 2 }}
+                            />
+                        </SingleFieldList>
+
+
+                    </ArrayField>
                 )
             }
         />

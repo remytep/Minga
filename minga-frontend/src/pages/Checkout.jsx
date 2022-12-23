@@ -13,12 +13,22 @@ const stripePromise = loadStripe("pk_test_51M98c5KpRc4HZ65yzWoUwcy8Fh3kRVge4MCI6
 function Cart() {
     const [clientSecret, setClientSecret] = useState("");
 
+    // console.log(localStorage.getItem("Mon panier"));
+    const Cart = JSON.parse(localStorage.getItem("Mon panier")).map((item) => {
+        console.log(item)
+        return (
+            {
+                referenceNumber: item.referenceNumber
+            }
+        )
+    })
+
     useEffect(() => {
         // Create PaymentIntent as soon as the page loads
         axios.post(`${process.env.REACT_APP_ENTRYPOINT}/create`,
-            JSON.stringify({
-                items: localStorage.getItem("Mon panier").split()
-            }),
+            JSON.stringify(
+                localStorage.getItem("Mon panier")
+            ),
             { "Content-Type": "application/json" })
             .then((res) => {
                 setClientSecret(JSON.parse(res.data).clientSecret);

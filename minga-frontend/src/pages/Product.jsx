@@ -10,7 +10,7 @@ import Options2 from "../components/ProductPage/Options2";
 import Options3 from "../components/ProductPage/Options3";
 
 function Product() {
-  let { subcategory, slug } = useParams();
+  let { category, subcategory, slug } = useParams();
   const { addToCart } = useContext(CartContext);
   const [quantity, setQuantity] = useState(1);
   const [product, setProduct] = useState(null);

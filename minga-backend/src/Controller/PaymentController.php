@@ -16,7 +16,7 @@ function calculateOrderAmount(array $items): int {
     // Replace this constant with a calculation of the order's amount
     // Calculate the order total on the server to prevent
     // people from directly manipulating the amount on the client
-    $items = json_decode($items[0]);
+    $items = json_decode($items);
     $totalAmount = 0;
     foreach ($items as $item) {
         $totalAmount += $item->price;
@@ -33,12 +33,12 @@ class CreatePayment{
         try {
             // retrieve JSON from POST body
             $jsonStr = file_get_contents('php://input');
-            $jsonObj = json_decode($jsonStr);
+            $jsonObj = json_decode($jsonStr)[0];
 
-
+            dd($jsonObj);
             // Create a PaymentIntent with amount and currency
             $paymentIntent = \Stripe\PaymentIntent::create([
-                'amount' => calculateOrderAmount($jsonObj->items),
+                'amount' => calculateOrderAmount($jsonObj),
                 'currency' => 'eur',
                 'automatic_payment_methods' => [
                     'enabled' => true,
