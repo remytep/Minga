@@ -10,6 +10,7 @@ import Category from "./pages/Category";
 import SubCategory from "./pages/SubCategory";
 import Login from "./components/Auth/Login";
 import Register from "./components/Auth/Register";
+import Cart from "./pages/Cart";
 
 // Components
 import Layout from "./components/Layout/Layout";
@@ -37,6 +38,7 @@ function App() {
               <Route path="/search/" element={<Search />}>
                 <Route path=":searchTerms" element={<Search />} />
               </Route>
+              <Route path="/cart" element={<Cart />} />
             </Route>
           </Routes>
         </AuthProvider>
