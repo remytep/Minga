@@ -17,20 +17,8 @@ import Layout from "./components/Layout/Layout";
 import { AuthProvider } from "./contexts/AuthContext";
 import AdminPanel from "./components/AdminPanel";
 import CartProvider from "./contexts/CartContext";
-import axios from "axios";
 
 function App() {
-
-  const [categories, setCategories] = useState([]);
-
-  useEffect(() => {
-    axios.get(`${process.env.REACT_APP_ENTRYPOINT}/product_categories`)
-      .then((res) => {
-        res.data["hydra:member"].map((obj) => {
-          setCategories((categories) => [...categories, obj.name]);
-        })
-      })
-  }, [true])
 
   return (
     <Router>
@@ -41,18 +29,13 @@ function App() {
               <Route path="/" element={<Accueil />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
-              <Route path="/admin/*" element={<AdminPanel />}>
-                <Route path="*" element={<AdminPanel />} />
-              </Route>
+              <Route path="/admin/*" element={<AdminPanel />} />
               <Route path="/:category" element={<Category />} />
               <Route path="/:category/:subcategory" element={<SubCategory />} />
-              {
-                categories &&
-                <Route
-                  path={`/:category${categories.join('|')}/:subcategory/:slug`}
-                  element={<Product />}
-                />
-              }
+              <Route
+                path={`/:category/:subcategory/*`}
+                element={<Product />}
+              />
               <Route path="/search/" element={<Search />}>
                 <Route path=":searchTerms" element={<Search />} />
               </Route>

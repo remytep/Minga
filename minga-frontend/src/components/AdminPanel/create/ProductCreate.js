@@ -14,8 +14,20 @@ const ProductCreate = (props) => {
     regex(/^[A-Za-z0-9_]*$/, "Spaces are not allowed"),
   ];
 
+  const transform = (data) => {
+    const sanitizedData = {};
+    for (const key in data) {
+      if (key === "featured") {
+        sanitizedData[key] = data[key] === false ? 0 : 1;
+        continue;
+      }
+      sanitizedData[key] = data[key];
+    }
+    return sanitizedData;
+  };
+
   return (
-    <CreateGuesser {...props}>
+    <CreateGuesser transform={transform}>
       <InputGuesser source="name" fullWidth validate={required()} />
       <InputGuesser
         source="description"

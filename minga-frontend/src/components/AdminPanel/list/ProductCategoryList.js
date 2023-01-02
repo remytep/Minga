@@ -25,13 +25,12 @@ const ProductCategoryList = (props) => (
                                 label="Subcategories"
                                 render={(record) =>
                                     record &&
-                                    <span>{record.name}</span>
-                                }
-                                sx={{ ms: 2 }}
+                                    <Chip
+                                        label={record.name}
+                                        onClick={() => window.location.href = `/admin/product_sub_categories/%2Fapi%2Fproduct_sub_categories%2F${record.name}/edit`}
+                                    />}
                             />
                         </SingleFieldList>
-
-
                     </ArrayField>
                 )
             }

@@ -73,7 +73,11 @@ const AdminPanel = () => (
       edit={edit.SkuValueEdit}
       show={show.SkuValueShow}
     />
-    <Resource name={"users"} list={list.UserList} create={create.UserCreate} />
+    <Resource
+      name={"users"}
+      list={list.UserList}
+      create={create.UserCreate}
+    />
   </HydraAdmin>
 );
 

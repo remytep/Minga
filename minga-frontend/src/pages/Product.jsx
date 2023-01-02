@@ -1,6 +1,6 @@
 import axios from "axios";
 import React, { useEffect, useState, useContext } from "react";
-import { useParams } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 import { Button, ButtonGroup } from "@mui/material";
 import Rating from "@mui/material/Rating";
 import Typography from "@mui/material/Typography";
@@ -8,9 +8,16 @@ import { CartContext } from "../contexts/CartContext";
 import Options1 from "../components/ProductPage/Options1";
 import Options2 from "../components/ProductPage/Options2";
 import Options3 from "../components/ProductPage/Options3";
+import AdminPanel from "../components/AdminPanel";
 
 function Product() {
-  let { category, subcategory, slug } = useParams();
+  const location = useLocation();
+  let params = location.pathname.split(`/`);
+  params.shift();
+  let category = params[0];
+  let subcategory = params[1];
+  let slug = params[2];
+
   const { addToCart } = useContext(CartContext);
   const [quantity, setQuantity] = useState(1);
   const [product, setProduct] = useState(null);
@@ -80,10 +87,14 @@ function Product() {
   const handleMore = () => {
     if (quantity < variant.stock) setQuantity(quantity + 1);
   };
-  if (product) {
+
+  if (category === "admin") {
+    return <AdminPanel />
+  }
+  if (product && category !== "admin") {
     return (
       <main className="flex flex-col lg:flex-row gap-6 py-2 px-5 md:px-6 lg:px-10 xl:px-16 w-screen md:h-full">
-        <img src="/product.webp" alt="" className="lg:w-1/2 object-cover" />
+        <img src={variant && `${process.env.REACT_APP_UPLOADS}/${variant.thumbnail}`} alt="" className="lg:w-1/2 object-cover" />
         <div className="flex flex-col gap-2 justify-between lg:w-1/2">
           <div id="name" className="flex justify-between h-18 md:h-24">
             <div className="flex flex-col">

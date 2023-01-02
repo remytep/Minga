@@ -8,7 +8,7 @@ const transform = data => ({
 
 const ProductOptionEdit = () => (
     <EditGuesser transform={transform}>
-        <ReferenceInput source="product" reference="products">
+        <ReferenceInput source="product.@id" reference="products">
             <AutocompleteInput source="name" validate={required()} fullWidth />
         </ReferenceInput>
         <InputGuesser source="name" validate={required()} fullWidth />

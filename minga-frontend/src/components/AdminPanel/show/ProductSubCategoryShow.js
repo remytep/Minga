@@ -1,6 +1,7 @@
 import { FieldGuesser, ShowGuesser } from "@api-platform/admin";
-import { ChipField, ReferenceArrayField, SingleFieldList, WithRecord } from "react-admin";
+import { ArrayField, SingleFieldList, WithRecord } from "react-admin";
 import { ProductSubCategoryTitle } from "../TitleComponents";
+import Chip from '@mui/material/Chip';
 
 const ProductSubCategoryShow = (props) => (
   <ShowGuesser title={<ProductSubCategoryTitle />} {...props}>
@@ -10,7 +11,7 @@ const ProductSubCategoryShow = (props) => (
       render={(record) => (
         <img
           className="thumbnail"
-          src={`http://localhost:8000/uploads/${record.thumbnail}`}
+          src={`${process.env.REACT_APP_UPLOADS}/${record.thumbnail}`}
         />
       )}
     />
@@ -20,7 +21,19 @@ const ProductSubCategoryShow = (props) => (
         record.products.length === 0 ? (
           <span>No products found</span>
         ) : (
-          <ReferenceArrayField source="products" reference="products" />
+          <ArrayField source="products">
+            <SingleFieldList>
+              <WithRecord
+                label="Products"
+                render={(record) =>
+                  record &&
+                  <Chip
+                    label={record.name}
+                    onClick={() => window.location.href = `/admin/products/%2Fapi%2Fproducts%2F${record.slug}/edit`}
+                  />}
+              />
+            </SingleFieldList>
+          </ArrayField>
         )
       }
     />

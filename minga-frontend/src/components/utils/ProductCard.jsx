@@ -17,9 +17,11 @@ function ProductCard({ product, featured }) {
   } else {
     stock = <p className="text-red-600 font-semibold">Out of stock</p>;
   }
+
+  console.log(product)
   return (
     <>
-      <img className="object-contain" src="/product.webp" alt="" />
+      <img className="object-contain" src={`${process.env.REACT_APP_UPLOADS}/${product.thumbnail}`} alt="" />
       <div className="flex-1 flex flex-col gap-3 py-3 justify-between">
         <div className="flex flex-col gap-3">
           <div className="flex justify-between items-center">

@@ -11,7 +11,7 @@ import {
 } from "react-admin";
 
 const EditSku = (id, resource, record) => {
-    window.location.href = `/admin/skus/%2Fapi%2Fskus%2F${record.id}/show`;
+    window.location.href = `/admin/skus/%2Fapi%2Fskus%2F${record.id}/edit`;
 };
 
 const ProductList = (props) => (
