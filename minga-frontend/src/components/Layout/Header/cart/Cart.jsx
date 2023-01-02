@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import { FiChevronLeft } from "react-icons/fi";
 import { Link } from "react-router-dom";
 import { IoMdClose, IoMdRemove, IoMdAdd } from "react-icons/io";
@@ -6,9 +6,10 @@ import { CartContext } from "../../../../contexts/CartContext";
 import CartItem from "./CartItem";
 
 
-function Cart({ product }) {
+function Cart() {
 
     const { cart, total, itemAmount } = useContext(CartContext);
+    const [showModal, setShowModal] = useState(false);
 
     return ( 
 
@@ -65,11 +66,66 @@ function Cart({ product }) {
                 </div>
                 <h3 className="py-2">Hors frais de livraison</h3>
               </div>
-              <div className="mt-5 flex-col bg-[#060606] rounded-md">
-                <div className=' items-center text-white p-3 text-center'>
-                  <h2>Valider mon panier</h2>
-                </div>
+              <div className="mt-5 flex-col text-white text-center bg-[#060606] rounded-md">
+                <button
+                  className="font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                  type="button"
+                  onClick={() => setShowModal(true)}
+                >
+                  Valider mon panier
+                </button>
               </div>
+              
+              {showModal ? (
+                <>
+                  <div
+                    className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none px-6"
+                  >
+                    <div className="relative w-auto my-6 mx-auto max-w-3xl">
+                      {/*content*/}
+                      <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
+                        {/*header*/}
+                        <div className="items-center text-center p-5 border-b border-solid border-slate-200 rounded-t">
+                          <h3 className="text-2xl font-semibold">Identification</h3>
+                        </div>
+                        
+                        {/*body*/}
+                        <div className="m-5 flex flex-wrap md:flex-nowrap px-16">
+          
+                          <div className="flex flex-col text-center justify-center w-full">
+                            <p>Connectez-vous pour payer</p>
+                            <div className='my-2 bg-[#060606] items-center text-white p-3 text-center rounded'>
+                              <Link to={'/login'}><h2>Connexion</h2></Link>
+                            </div>
+                          </div>
+                          
+                          <div className="flex justify-center w-full py-6 md:py-0 lg:py-0">
+                            <hr className="w-16 md:w-1 lg:w-1 md:h-44 lg:h-44 border-2 bg-[#e8e8e8]"/>
+                          </div>
+
+                          <div className=" flex flex-col text-center justify-center w-full">
+                            <p>Payer directement</p>
+                            <div className='my-2 bg-[#060606] items-center text-white p-3 text-center rounded'>
+                              <Link to={'/paiement'}><h2>Paiement</h2></Link>
+                            </div>
+                          </div>
+                        </div>
+                        {/*footer*/}
+                        <div className="flex items-center justify-end p-6 border-t border-solid border-slate-200 rounded-b">
+                          <button
+                            className="text-red-500 background-transparent font-bold uppercase px-6 py-2 text-sm outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"
+                            type="button"
+                            onClick={() => setShowModal(false)}
+                          >
+                            Close
+                          </button>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div className="opacity-40 fixed inset-0 z-40 bg-black"></div>
+                </>
+              ) : null}
             </div>
           </div>
         </div>

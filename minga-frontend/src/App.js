@@ -16,6 +16,7 @@ import Layout from "./components/Layout/Layout";
 import { AuthProvider } from "./contexts/AuthContext";
 import CartProvider from "./contexts/CartContext";
 import Cart from "./components/Layout/Header/cart/Cart";
+import Paiement from "./components/Layout/Header/cart/Paiement";
 
 function App() {
   return (
@@ -34,6 +35,7 @@ function App() {
                 <Route path=":searchTerms" element={<Search />} />
               </Route>
               <Route path="/cart" element={<Cart />} />
+              <Route path="/paiement" element={<Paiement />} />
             </Route>
           </Routes>
         </AuthProvider>
