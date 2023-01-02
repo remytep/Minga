@@ -44,6 +44,10 @@ class FileUploader
         $fullPath = $this->getuploadPath(). "/" . $path;
         //$originalFilename = pathinfo($file["name"], PATHINFO_FILENAME);
         //$safeFilename = $this->slugger->slug($originalFilename);
+        //prevent unlink error
+        if (!$oldThumbnail){
+            $oldThumbnail = uniqid();
+        }
         $fileName = $name.'.'.pathinfo($file["name"])["extension"];
         try {
             //unlink when update image

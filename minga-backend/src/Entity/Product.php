@@ -103,7 +103,7 @@ class Product
     #[Groups(['product.read', 'product.write'])]
     private ?string $thumbnail = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     #[Groups(['product.read'])]
     private ?int $viewCount = null;
 
