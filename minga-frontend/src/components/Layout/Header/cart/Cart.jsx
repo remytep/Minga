@@ -17,13 +17,6 @@ function Cart() {
         <div className="p-2 flex justify-center items-center w-full mx-auto md:px-14 lg:px-24">
           <div className="flex justify-center space-x-32 w-full">
             <div className="flex flex-col text-gray-600 justify-center items-center">
-              <h6>Panier</h6>
-              <div className="w-5 h-5 rounded-full bg-[#434748] text-xl text-gray-200 flex justify-center items-center">
-                <div className="w-2 h-2 rounded-full bg-white"></div>
-              </div>
-            </div>
-
-            <div className="flex flex-col text-gray-600 justify-center items-center">
               <h6>Paiement</h6>
               <div className="w-5 h-5 rounded-full bg-[#dbdbdb] text-xl text-gray-200 flex justify-center items-center">
                 <div className="w-2 h-2 rounded-full bg-white"></div>
@@ -117,7 +110,7 @@ function Cart() {
                             type="button"
                             onClick={() => setShowModal(false)}
                           >
-                            Close
+                            Fermer
                           </button>
                         </div>
                       </div>

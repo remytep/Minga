@@ -7,7 +7,7 @@ function Sidebar() {
 
   useEffect(() => {
     axios
-      .get("https://localhost:8000/api/product_categories")
+      .get("http://localhost:8000/api/product_categories")
       .then((res) => {
         /*        console.log(res.data["hydra:member"]); */
         setCategories(Object.values(res.data["hydra:member"]));

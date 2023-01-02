@@ -15,7 +15,7 @@ const ProductOptionValueEdit = (props) => {
   useEffect(() => {
     if (product) {
       axios
-        .get(`https://localhost:8000${product}`)
+        .get(`http://localhost:8000${product}`)
         .then((res) => {
           console.log(res.data.productOptions);
           return setOptionsByProduct(res.data.productOptions);

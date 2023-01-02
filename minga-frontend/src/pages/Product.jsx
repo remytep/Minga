@@ -20,7 +20,7 @@ function Product() {
   useEffect(() => {
     axios({
       method: "GET",
-      url: "https://localhost:8000/api/products/" + slug,
+      url: "http://localhost:8000/api/products/" + slug,
       headers: { "content-type": "application/json" },
     })
       .then((response) => {
@@ -54,7 +54,7 @@ function Product() {
           return;
       }
       axios
-        .post("https://localhost:8000/api/products/viewCount/" + product.id, {
+        .post("http://localhost:8000/api/products/viewCount/" + product.id, {
           withCredentials: true,
         })
         .then((response) => {

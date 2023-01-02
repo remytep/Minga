@@ -10,7 +10,7 @@ function SubCategory() {
   useEffect(() => {
     axios({
       method: "GET",
-      url: "https://localhost:8000/api/product_sub_categories/" + subcategory,
+      url: "http://localhost:8000/api/product_sub_categories/" + subcategory,
       headers: { "content-type": "application/json" },
     }).then((response) => {
       //console.log(response.data.products);

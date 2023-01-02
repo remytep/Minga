@@ -35,10 +35,10 @@ function CartItem({ product }) {
               <div className="flex" key={i}>
                 {console.log(skuvalue)}
                 <p className="text-gray-600 text-sm">
-                  {skuvalue.productOption.name}:
+                  {/* {skuvalue.productOption.name}: */}
                 </p>
                 <p className="text-black text-sm mx-2">
-                  {skuvalue.productOptionValue.value}
+                  {/* {skuvalue.productOptionValue.value} */}
                 </p>
               </div>
             ))}

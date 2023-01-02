@@ -31,7 +31,7 @@ const ProductEdit = (props) => (
       render={(record) => (
         <img
           className="thumbnail"
-          src={`https://localhost:8000/uploads/${record.thumbnail}`}
+          src={`http://localhost:8000/uploads/${record.thumbnail}`}
         />
       )}
     />
