@@ -28,6 +28,7 @@ module.exports = {
       width: {
         half: "50vw",
       },
+      maxHeight: { half: "50vh" },
     },
   },
   plugins: [

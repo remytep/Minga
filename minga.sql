@@ -50,7 +50,7 @@ INSERT INTO `doctrine_migration_versions` (`version`, `executed_at`, `execution_
 
 CREATE TABLE `product` (
   `id` int(11) NOT NULL,
-  `product_category_id` int(11) NOT NULL,
+  `product_sub_category_id` int(11) NOT NULL,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL,
   `description` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
   `thumbnail` longtext COLLATE utf8mb4_unicode_ci NOT NULL,
@@ -61,26 +61,26 @@ CREATE TABLE `product` (
 -- Dumping data for table `product`
 --
 
-INSERT INTO `product` (`id`, `product_category_id`, `name`, `description`, `thumbnail`, `created_at`) VALUES
+INSERT INTO `product` (`id`, `product_sub_category_id`, `name`, `description`, `thumbnail`, `created_at`) VALUES
 (1, 1, 'Minga', 'Minga desk frame', 'photo.jpg', '2022-11-30 16:18:31'),
 (2, 3, 'Desktop Test', 'Desktop test', 'photo.png', '2022-12-01 15:00:23');
 
 -- --------------------------------------------------------
 
 --
--- Table structure for table `product_category`
+-- Table structure for table `product_sub_category`
 --
 
-CREATE TABLE `product_category` (
+CREATE TABLE `product_sub_category` (
   `id` int(11) NOT NULL,
   `name` varchar(255) COLLATE utf8mb4_unicode_ci NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
--- Dumping data for table `product_category`
+-- Dumping data for table `product_sub_category`
 --
 
-INSERT INTO `product_category` (`id`, `name`) VALUES
+INSERT INTO `product_sub_category` (`id`, `name`) VALUES
 (1, 'Deskframes'),
 (3, 'Desktop');
 
@@ -203,12 +203,12 @@ ALTER TABLE `doctrine_migration_versions`
 --
 ALTER TABLE `product`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `IDX_D34A04ADBE6903FD` (`product_category_id`);
+  ADD KEY `IDX_D34A04ADBE6903FD` (`product_sub_category_id`);
 
 --
--- Indexes for table `product_category`
+-- Indexes for table `product_sub_category`
 --
-ALTER TABLE `product_category`
+ALTER TABLE `product_sub_category`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -260,9 +260,9 @@ ALTER TABLE `product`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
--- AUTO_INCREMENT for table `product_category`
+-- AUTO_INCREMENT for table `product_sub_category`
 --
-ALTER TABLE `product_category`
+ALTER TABLE `product_sub_category`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
@@ -303,7 +303,7 @@ ALTER TABLE `user`
 -- Constraints for table `product`
 --
 ALTER TABLE `product`
-  ADD CONSTRAINT `FK_D34A04ADBE6903FD` FOREIGN KEY (`product_category_id`) REFERENCES `product_category` (`id`);
+  ADD CONSTRAINT `FK_D34A04ADBE6903FD` FOREIGN KEY (`product_sub_category_id`) REFERENCES `product_sub_category` (`id`);
 
 --
 -- Constraints for table `product_option`

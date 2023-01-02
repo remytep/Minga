@@ -3,8 +3,7 @@ import React, { createContext, useState, useEffect } from "react";
 import axios from "axios";
 import jwtDecode from "jwt-decode";
 import { useNavigate } from "react-router-dom";
-
-const API_URL = "https://localhost:8000/api";
+import { ENTRYPOINT } from "../config";
 
 const initialState = {
   user: null,
@@ -29,7 +28,7 @@ const AuthProvider = ({ children }) => {
 
   const registration = (email, password) => {
     return axios
-      .post(`${API_URL}/users`, {
+      .post(`${ENTRYPOINT}/users`, {
         email,
         plainPassword: password,
       })
@@ -43,7 +42,7 @@ const AuthProvider = ({ children }) => {
 
   const login = (email, password) => {
     return axios
-      .post(`${API_URL}/login`, {
+      .post(`${ENTRYPOINT}/login`, {
         email,
         password,
       })
@@ -74,9 +73,17 @@ const AuthProvider = ({ children }) => {
     let refreshToken = localStorage.getItem("refresh_token");
     if (refreshToken) {
       return axios
-        .post(`${API_URL}/refresh/token`, {
-          refresh_token: refreshToken,
-        })
+        .post(
+          `${ENTRYPOINT}/refresh/token`,
+          {
+            refresh_token: refreshToken,
+          },
+          {
+            headers: {
+              "Access-Control-Allow-Origin": "*",
+            },
+          }
+        )
         .then((response) => {
           if (response.data.token) {
             const newUser = jwtDecode(response.data.token);

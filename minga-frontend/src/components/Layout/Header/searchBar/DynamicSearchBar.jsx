@@ -81,7 +81,7 @@ export default function DynamicSearchBar() {
             sx={{ justifyContent: "space-between" }}
           >
             <Link
-              to={`${results.productCategory.name}/${results.slug}`}
+              to={`/${results.productSubCategory.productCategory.name}/${results.productSubCategory.name}/${results.slug}`}
               className="flex items-center w-full"
             >
               <Avatar src={results.thumbnail} alt="cats"></Avatar>

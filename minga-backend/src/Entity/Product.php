@@ -2,12 +2,15 @@
 
 namespace App\Entity;
 
+
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
+use App\Controller\Product\UploadFileController;
+use App\Controller\Product\UpdateFileController;
 use ApiPlatform\Metadata\ApiResource;
 use ApiPlatform\Metadata\ApiProperty;
 use ApiPlatform\Metadata\Link;
 use App\Repository\ProductRepository;
-use App\Entity\ProductCategory;
+use App\Entity\ProductSubCategory;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
@@ -21,6 +24,7 @@ use ApiPlatform\Metadata\Delete;
 use Symfony\Component\Serializer\Annotation\Groups;
 use ApiPlatform\Metadata\ApiFilter;
 use ApiPlatform\Doctrine\Orm\Filter\SearchFilter;
+use ApiPlatform\Doctrine\Orm\Filter\BooleanFilter;
 use Symfony\Component\Serializer\Annotation\SerializedName;
 use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Component\Validator\Constraints\Length;
@@ -32,23 +36,25 @@ use Symfony\Component\Validator\Constraints\Length;
     paginationEnabled: false,
     operations: [
         new GetCollection(),
+        new GetCollection(name: "get_popular", uriTemplate: 'products/popular', order: ["viewCount" => "DESC"]),
         new Get(),
-        new Put(),
-        new Post(),
+        new Put(controller: UpdateFileController::class, deserialize: false),
+        new Post(controller: UploadFileController::class, deserialize: false),
         new Patch(),
         new Delete()
     ],
-    normalizationContext: ['groups' => ['product.read', 'product_category.item.get']],
-    denormalizationContext: ['groups' => ['product.write', 'product_category.item.get']],
+    normalizationContext: ['groups' => ['product.read', 'product_sub_category.item.get']],
+    denormalizationContext: ['groups' => ['product.write', 'product_sub_category.item.get']],
 )]
-#[ApiResource(
-    uriTemplate: '/product_category/{productCategoryId}/products',
+/* #[ApiResource(
+    uriTemplate: '/product_sub_category/{ProductSubCategoryId}/products',
     uriVariables: [
-        'productCategoryId' => new Link(fromClass: ProductCategory::class, toProperty: 'productCategory'),
+        'ProductSubCategoryId' => new Link(fromClass: ProductSubCategory::class, toProperty: 'ProductSubCategory'),
     ],
     operations: [new GetCollection()]
-)]
-#[ApiFilter(SearchFilter::class, properties: ['name' => 'partial', 'productCategory.name' => 'partial', 'productOptions.name' => 'exact',  'productOptions.productOptionValues.value' => 'exact', 'slug' => 'exact'])]
+)] */
+#[ApiFilter(BooleanFilter::class, properties: ['featured'])]
+#[ApiFilter(SearchFilter::class, properties: ['name' => 'partial', 'ProductSubCategory.name' => 'partial', 'productOptions.name' => 'exact',  'productOptions.productOptionValues.value' => 'exact', 'slug' => 'exact'])]
 class Product
 {
     #[ORM\Id]
@@ -59,43 +65,47 @@ class Product
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['product.read', 'product.write', 'product_category.item.get', 'product_option.read', 'sku.read']), Length(min: 3)]
+    #[Groups(['product.read', 'product.write', 'product_sub_category.item.get', 'product_option.read', 'sku.read', 'sku_value.read']), Length(min: 3)]
     private ?string $name = null;
 
     #[ORM\Column(length: 255, unique: true)]
     #[ApiProperty(identifier: true)]
-    #[Groups(['product.read', 'product.write', 'product_category.item.get'])]
+    #[Groups(['product.read', 'product.write', 'product_sub_category.item.get'])]
     private ?string $slug = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    #[Groups(['product.read', 'product.write', 'product_category.item.get']), Length(min: 10)]
+    #[Groups(['product.read', 'product.write', 'product_sub_category.item.get']), Length(min: 10)]
     private ?string $description = null;
 
-    #[ORM\Column(type: Types::TEXT)]
-    #[Groups(['product.read', 'product.write', 'product_category.item.get'])]
-    private ?string $thumbnail = null;
-
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
-    #[Groups(['product.read', 'product_category.item.get'])]
+    #[Groups(['product.read', 'product_sub_category.item.get'])]
     private ?\DateTimeInterface $createdAt = null;
 
     #[ORM\ManyToOne(inversedBy: 'products')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['product.read', 'product.write', 'product_category.item.get'])]
-    private ?ProductCategory $productCategory;
+    #[Groups(['product.read', 'product.write', 'product_sub_category.item.get'])]
+    private ?ProductSubCategory $productSubCategory;
 
-    #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductOption::class, cascade: ["persist"])]
-    #[Groups(['product.read', 'product.write'])]
+    #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductOption::class, cascade: ["persist"], orphanRemoval: true)]
+    #[Groups(['product.read', 'sku_value.read', 'product.write'])]
     #[Assert\Valid()]
     private Collection $productOptions;
 
-    #[ORM\OneToMany(mappedBy: 'product', targetEntity: Sku::class)]
-    #[Groups(['product.read', "product_category.item.get"])]
+    #[ORM\OneToMany(mappedBy: 'product', targetEntity: Sku::class, orphanRemoval: true)]
+    #[Groups(['product.read', "product_sub_category.item.get"])]
     private Collection $skus;
 
     #[ORM\Column(nullable: true)]
-    #[Groups(['product.read', 'product.write', 'product_category.item.get'])]
+    #[Groups(['product.read', 'product.write', 'product_sub_category.item.get'])]
     private ?bool $featured = null;
+
+    #[ORM\Column(length: 255, nullable: false)]
+    #[Groups(['product.read', 'product.write'])]
+    private ?string $thumbnail = null;
+
+    #[ORM\Column]
+    #[Groups(['product.read'])]
+    private ?int $viewCount = null;
 
 
     public function __construct()
@@ -111,14 +121,14 @@ class Product
     }
 
 
-    public function getProductCategory(): ?ProductCategory
+    public function getProductSubCategory(): ?ProductSubCategory
     {
-        return $this->productCategory;
+        return $this->productSubCategory;
     }
 
-    public function setProductCategory(?ProductCategory $productCategory): self
+    public function setProductSubCategory(?ProductSubCategory $productSubCategory): self
     {
-        $this->productCategory = $productCategory;
+        $this->productSubCategory = $productSubCategory;
 
         return $this;
     }
@@ -141,7 +151,7 @@ class Product
     }
 
     #[SerializedName('shortDescription')]
-    #[Groups(['product_category.item.get'])]
+    #[Groups(['product_sub_category.item.get'])]
     public function getShortDescription(): string
     {
         if (strlen($this->description) < 100) {
@@ -153,18 +163,6 @@ class Product
     public function setDescription(string $description): self
     {
         $this->description = $description;
-
-        return $this;
-    }
-
-    public function getThumbnail(): ?string
-    {
-        return $this->thumbnail;
-    }
-
-    public function setThumbnail(string $thumbnail): self
-    {
-        $this->thumbnail = $thumbnail;
 
         return $this;
     }
@@ -262,6 +260,30 @@ class Product
     public function setFeatured(?bool $featured): self
     {
         $this->featured = $featured;
+
+        return $this;
+    }
+
+    public function getThumbnail(): ?string
+    {
+        return $this->thumbnail;
+    }
+
+    public function setThumbnail(string $thumbnail): self
+    {
+        $this->thumbnail = $thumbnail;
+
+        return $this;
+    }
+
+    public function getViewCount(): ?int
+    {
+        return $this->viewCount;
+    }
+
+    public function setViewCount(int $viewCount): self
+    {
+        $this->viewCount = $viewCount;
 
         return $this;
     }
