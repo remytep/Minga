@@ -15,7 +15,7 @@ function CartItem({ product }) {
         <div className="flex-1 flex flex-col gap-2">
           <div className="flex justify-between">
             <div className="flex flex-col">
-              <Link to={`/products/${product.slug}`} className="text-lg">
+              <Link to={`/${product.product.productSubCategory.productCategory.name}/${product.product.productSubCategory.name}/${product.product.slug}`} className="text-lg">
                 {product.product.name}
               </Link>
               <span className="text-xs text-gray-500">
