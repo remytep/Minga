@@ -48,7 +48,7 @@ class ProductSubCategory
 
     #[ORM\Column(length: 255)]
     #[ApiProperty(identifier: true)]
-    #[Groups(['product_sub_category.read', 'product_sub_category.write', 'product.read', 'product_category.read', 'product_sub_category.item.get']), Length(min: 3)]
+    #[Groups(['product_sub_category.read', 'product_sub_category.write', 'product.read', 'product_category.read', 'product_sub_category.item.get', 'sku.read', 'sku_value.read']), Length(min: 3)]
     private ?string $name = null;
 
     #[ORM\OneToMany(mappedBy: 'productSubCategory', targetEntity: Product::class)]
@@ -57,7 +57,7 @@ class ProductSubCategory
 
     #[ORM\ManyToOne(inversedBy: 'productSubCategories')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['product_sub_category.read', 'product_sub_category.write', 'product.read'])]
+    #[Groups(['product_sub_category.read', 'product_sub_category.write', 'product.read', 'sku.read', 'sku_value.read'])]
     private ?ProductCategory $productCategory = null;
 
     #[ORM\Column(length: 255, nullable: true)]

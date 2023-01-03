@@ -10,12 +10,12 @@ function CartItem({ product }) {
 
   return (
     <div className="flex bg-[#C9C5BA]">
-      <img src="/product.webp" alt="desk" className="w-1/2" />
+      <img src={`${process.env.REACT_APP_UPLOADS}/${product.thumbnail}`} alt="desk" className="w-1/2" />
       <div className="flex-1 flex flex-col p-3">
         <div className="flex-1 flex flex-col gap-2">
           <div className="flex justify-between">
             <div className="flex flex-col">
-              <Link to={`/${product.product.productSubCategory.productCategory.name}/${product.product.productSubCategory.name}/${product.product.slug}`} className="text-lg">
+              <Link reloadDocument to={`/${product.product.productSubCategory.productCategory.name}/${product.product.productSubCategory.name}/${product.product.slug}`} className="text-lg">
                 {product.product.name}
               </Link>
               <span className="text-xs text-gray-500">

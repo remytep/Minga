@@ -13,15 +13,19 @@ function Cart() {
     const [showModal, setShowModal] = useState(false);
     const { user, logout } = useContext(AuthContext);
 
+    function createStripe() {
+        axios.post(`${process.env.REACT_APP_ENTRYPOINT}/create`,
+            localStorage.getItem("Mon panier")
+            ,
+            { "Content-Type": "application/json" })
+            .then((res) => {
+                window.location.href = JSON.parse(res.data);
+            })
+    }
+
     const handleClick = () => {
         if (user) {
-            axios.post(`${process.env.REACT_APP_ENTRYPOINT}/create`,
-                localStorage.getItem("Mon panier")
-                ,
-                { "Content-Type": "application/json" })
-                .then((res) => {
-                    window.location.href = JSON.parse(res.data);
-                })
+            createStripe();
         }
         else {
             setShowModal(true);
@@ -33,7 +37,7 @@ function Cart() {
             <div className="p-2 flex justify-center items-center w-full mx-auto md:px-14 lg:px-24">
                 <div className="flex justify-center space-x-32 w-full">
                     <div className="flex flex-col text-gray-600 justify-center items-center">
-                        <h6>Paiement</h6>
+                        <h6>Payment</h6>
                         <div className="w-5 h-5 rounded-full bg-[#dbdbdb] text-xl text-gray-200 flex justify-center items-center">
                             <div className="w-2 h-2 rounded-full bg-white"></div>
                         </div>
@@ -45,7 +49,7 @@ function Cart() {
                 <div className="flex flex-wrap md:flex-nowrap">
 
                     <div className="flex flex-wrap justify-center md:justify-start w-full md:w-xl lg:w-[50vw]">
-                        <Link to={'/'} className="text-md font-bold flex w-52 py-2"><FiChevronLeft className="mt-1" />Continuer mes achats</Link>
+                        <Link to={'/'} className="text-md font-bold flex w-52 py-2"><FiChevronLeft className="mt-1" />Continue my shopping</Link>
                         <div className=" md:mr-8 lg:mr-8 justify-center h-[60vh] mt-0 p-2 overflow-y-auto scrollbar-hide">
                             {itemAmount > 0 ? (
                                 <>
@@ -66,14 +70,14 @@ function Cart() {
                     </div>
 
                     <div className="w-full lg:w-[20vw]">
-                        <h3 className="text-md font-bold py-[10px]">Mon panier ({itemAmount})</h3>
+                        <h3 className="text-md font-bold py-[10px]">My cart ({itemAmount})</h3>
 
                         <div className="rounded-md border-2 border-[#e8e8e8] p-4 bg-[#f6f6f6]">
                             <div className="flex justify-between">
                                 <h2 className="font-bold text-sm">TOTAL ({itemAmount})</h2>
                                 <h2 className="font-bold">{total} €</h2>
                             </div>
-                            <h3 className="py-2">Hors frais de livraison</h3>
+                            <h3 className="py-2">Excluding shopping fees</h3>
                         </div>
                         <div className="mt-5 flex-col text-white text-center bg-[#060606] rounded-md">
                             <button
@@ -81,7 +85,7 @@ function Cart() {
                                 type="button"
                                 onClick={() => handleClick()}
                             >
-                                Valider mon panier
+                                Confirm cart
                             </button>
                         </div>
 
@@ -90,7 +94,7 @@ function Cart() {
                                 <div
                                     className="justify-center items-center flex overflow-x-hidden overflow-y-auto fixed inset-0 z-50 outline-none focus:outline-none px-6"
                                 >
-                                    <div className="relative w-auto my-6 mx-auto max-w-3xl">
+                                    <div className="relative my-6 mx-auto max-w-3xl">
                                         {/*content*/}
                                         <div className="border-0 rounded-lg shadow-lg relative flex flex-col w-full bg-white outline-none focus:outline-none">
                                             {/*header*/}
@@ -99,23 +103,23 @@ function Cart() {
                                             </div>
 
                                             {/*body*/}
-                                            <div className="m-5 flex flex-wrap md:flex-nowrap px-16">
+                                            <div className="m-5 flex flex-col px-16">
 
                                                 <div className="flex flex-col text-center justify-center w-full">
-                                                    <p>Connectez-vous pour payer</p>
+                                                    <p>Login to order</p>
                                                     <div className='my-2 bg-[#060606] items-center text-white p-3 text-center rounded'>
-                                                        <Link to={'/login'}><h2>Connexion</h2></Link>
+                                                        <Link to={'/login'}><h2>Login</h2></Link>
                                                     </div>
                                                 </div>
 
                                                 <div className="flex justify-center w-full py-6 md:py-0 lg:py-0">
-                                                    <hr className="w-16 md:w-1 lg:w-1 md:h-44 lg:h-44 border-2 bg-[#e8e8e8]" />
+                                                    <hr className="w-16 my-2 bg-[#e8e8e8]" />
                                                 </div>
 
                                                 <div className=" flex flex-col text-center justify-center w-full">
-                                                    <p>Payer directement</p>
+                                                    <p>Order now</p>
                                                     <div className='my-2 bg-[#060606] items-center text-white p-3 text-center rounded'>
-                                                        <Link to={'/paiement'}><h2>Paiement</h2></Link>
+                                                        <h2 className="cursor-pointer" onClick={() => createStripe()}>Pay</h2>
                                                     </div>
                                                 </div>
                                             </div>
@@ -126,7 +130,7 @@ function Cart() {
                                                     type="button"
                                                     onClick={() => setShowModal(false)}
                                                 >
-                                                    Fermer
+                                                    Close
                                                 </button>
                                             </div>
                                         </div>

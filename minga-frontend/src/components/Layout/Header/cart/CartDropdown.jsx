@@ -71,13 +71,14 @@ export default function CartDropdown() {
                           Total : {parseFloat(total).toFixed(2)} €
                         </h2>
                         <div className="flex justify-between gap-3">
-                          <Link
+                          <Popover.Button
                             to="/cart"
                             className="flex-1 text-center py-3 bg-[#C9C5BA] text-black"
                           >
                             Continue shopping
-                          </Link>
+                          </Popover.Button>
                           <Link
+                            reloadDocument
                             to="/cart"
                             className="flex-1 text-center py-3 bg-black text-white"
                           >

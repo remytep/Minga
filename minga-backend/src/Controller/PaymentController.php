@@ -16,13 +16,54 @@ function calculateOrderAmount(array $items): int {
     // Replace this constant with a calculation of the order's amount
     // Calculate the order total on the server to prevent
     // people from directly manipulating the amount on the client
-    $items = json_decode($items);
     $totalAmount = 0;
     foreach ($items as $item) {
         $totalAmount += $item->price;
     }
-    //stripe takes the amout from penny
-    return $totalAmount * 100;
+    //stripe takes the amout starting from penny
+    return $totalAmount;
+}
+
+function getLineItems(array $items): array {
+    $lineItems = [];
+    $stripe = new \Stripe\StripeClient(
+        $_SERVER['STRIPE_PRIVATE_KEY']
+    );
+
+    foreach ($items as $key => $item){
+        $product = $stripe->products->all(["ids" => [$item->id]]);
+        $price = $stripe->prices->search([
+            'query' => 'product:\''.$item->id.'\'',
+        ]);
+        //if product not exist, we create it with the price
+        if ($price->data){
+            $price = $price->data[0];
+        }
+        else if (!$product->data){
+            $stripe->products->create([
+                'id' => $item->id,
+                'name' => $item->product->name,
+                'description' => $item->product->description,
+            ]);
+            $price = $stripe->prices->create([
+                'unit_amount' => $item->price * 100,
+                'currency' => 'eur',
+                'tax_behavior' => 'inclusive',
+                'product' => $item->id,
+            ]);
+        }
+        else if (!$price->data) {
+            $id = $product->data[0]["id"];
+            $price = $stripe->prices->create([
+                'unit_amount' => $item->price * 100, 
+                'currency' => 'eur',
+                'tax_behavior' => 'inclusive',
+                'product' => $id,
+            ]);
+        }
+        array_push($lineItems, ['price' => $price->id, 'quantity' => $item->amount]);
+    }
+    return $lineItems;
 }
 
 class CreatePayment{
@@ -30,26 +71,35 @@ class CreatePayment{
     #[Route('/api/create', name: 'create', methods: ['POST'])]
     public function create(){
         \Stripe\Stripe::setApiKey($_SERVER['STRIPE_PRIVATE_KEY']);
+
         try {
             // retrieve JSON from POST body
             $jsonStr = file_get_contents('php://input');
-            $jsonObj = json_decode($jsonStr)[0];
+            $jsonObj = json_decode($jsonStr);
 
-            dd($jsonObj);
-            // Create a PaymentIntent with amount and currency
-            $paymentIntent = \Stripe\PaymentIntent::create([
-                'amount' => calculateOrderAmount($jsonObj),
-                'currency' => 'eur',
-                'automatic_payment_methods' => [
+            $array = getLineItems($jsonObj);
+            $standard_shipping = "shr_1MM7VOKpRc4HZ65yqaFXguj4";
+            //if order is over 1000 euros, the shipping is free
+            if (calculateOrderAmount($jsonObj) > 1000){
+                $standard_shipping = "shr_1MM71ZKpRc4HZ65yLFYDJwQo";
+            }
+            $checkout_session = \Stripe\Checkout\Session::create([
+                'shipping_address_collection' => ['allowed_countries' => ['FR']],
+                'payment_method_types' => ['card'],
+                'line_items' => getLineItems($jsonObj),
+                'mode' => 'payment',
+                'billing_address_collection' => 'required',
+                'shipping_options' => [
+                    ['shipping_rate' => $standard_shipping],
+                    ['shipping_rate' => 'shr_1MM732KpRc4HZ65yGGYa1tYU'],
+                ],
+                'success_url' => 'http://localhost:3000',
+                'automatic_tax' => [
                     'enabled' => true,
                 ],
             ]);
 
-            $output = [
-                'clientSecret' => $paymentIntent->client_secret,
-            ];
-
-            return new JsonResponse(json_encode($output));
+            return new JsonResponse(json_encode($checkout_session->url));
         } catch (Error $e) {
             http_response_code(500);
             return json_encode(['error' => $e->getMessage()]);
