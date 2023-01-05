@@ -17,7 +17,7 @@ import { AuthProvider } from "./contexts/AuthContext";
 import AdminPanel from "./components/AdminPanel";
 import CartProvider from "./contexts/CartContext";
 import Cart from "./components/Layout/Header/cart/Cart";
-import Paiement from "./components/Layout/Header/cart/Paiement";
+import Profile from "./pages/Profile";
 
 function App() {
   return (
@@ -40,8 +40,9 @@ function App() {
                 <Route path=":searchTerms" element={<Search />} />
               </Route>
               <Route path="/cart" element={<Cart />} />
-              <Route path="/paiement" element={<Paiement />} />
             </Route>
+            <Route path="/profil" element={<Profile />} />
+
           </Routes>
         </AuthProvider>
       </CartProvider>

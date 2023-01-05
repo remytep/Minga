@@ -35,10 +35,18 @@ export default function ProfileDropdown() {
             <div className="py-1">
               <Menu.Item>
                 <a
-                  href="/profile"
+                  href="/profil"
                   className="text-gray-900 block px-4 py-2 text-sm"
                 >
                   My Profile
+                </a>
+              </Menu.Item>
+              <Menu.Item>
+                <a
+                  href="/profie"
+                  className="text-gray-900 block px-4 py-2 text-sm"
+                >
+                  My Purchase
                 </a>
               </Menu.Item>
               {user.roles.includes("ROLE_ADMIN") ? (
