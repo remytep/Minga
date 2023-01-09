@@ -10,9 +10,24 @@ import * as edit from "./edit";
 import * as list from "./list";
 import * as show from "./show";
 import { Resource } from "react-admin";
-import { dataProvider, MyLayout } from "./config";
+import { dataProvider } from "./config";
+import { MyLayout } from "./Layout";
+import { AuthContext } from "../../contexts/AuthContext";
+import { Navigate } from "react-router-dom";
 
-const AdminPanel = () => (
+const AdminPanel = () =>
+// const { user, loaded, logout } = useContext(AuthContext);
+
+// //if there is a user which is not an admin or a guest, then navigate to home page
+// if (loaded &&
+//   (!user || (user && !user.roles.includes("ROLE_ADMIN")))
+// ) {
+//   return (
+//     <Navigate to="/" />
+//   )
+// }
+
+(
   <HydraAdmin
     layout={MyLayout}
     dataProvider={dataProvider()}

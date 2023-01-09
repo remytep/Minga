@@ -21,6 +21,13 @@ const AuthProvider = ({ children }) => {
       setState({
         user,
         isAuthenticated: true,
+        loaded: true,
+      });
+    }
+    else {
+      setState({
+        isAuthenticated: false,
+        loaded: true,
       });
     }
   }, []);
@@ -105,6 +112,7 @@ const AuthProvider = ({ children }) => {
       value={{
         user: state.user,
         isAuthenticated: state.isAuthenticated,
+        loaded: state.loaded,
         login,
         logout,
         registration,

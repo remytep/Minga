@@ -5,7 +5,7 @@ import Hero from "../components/HomePage/Hero";
 import ProductGrid from "../components/utils/ProductGrid";
 import ProductCarousel from "../components/utils/ProductCarousel";
 
-function Accueil() {
+function Home() {
   const [products, setProducts] = useState([]);
   const [featuredProducts, setFeaturedProducts] = useState([]);
   useEffect(() => {
@@ -43,4 +43,4 @@ function Accueil() {
   );
 }
 
-export default Accueil;
+export default Home

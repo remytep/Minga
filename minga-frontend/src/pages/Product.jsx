@@ -88,13 +88,11 @@ function Product() {
     if (quantity < variant.stock) setQuantity(quantity + 1);
   };
 
-  if (category === "admin") {
-    return <AdminPanel />
-  }
   if (product && category !== "admin") {
     return (
       <main className="flex flex-col lg:flex-row gap-6 py-2 px-5 md:px-6 lg:px-10 xl:px-16 w-screen md:h-full">
-        <img src={variant && `${process.env.REACT_APP_UPLOADS}/${variant.thumbnail}`} alt="" className="lg:w-1/2 object-cover" />
+        <img src={variant ? `${process.env.REACT_APP_UPLOADS}/${variant.thumbnail}`
+          : `${process.env.REACT_APP_UPLOADS}/${product.thumbnail}`} alt="" className="lg:w-1/2 object-cover" />
         <div className="flex flex-col gap-2 justify-between lg:w-1/2">
           <div id="name" className="flex justify-between h-18 md:h-24">
             <div className="flex flex-col">

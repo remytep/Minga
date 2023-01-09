@@ -2,10 +2,7 @@
 
 namespace App\Controller;
 
-require 'vendor/autoload.php';
-header('Content-Type: application/json');
-// This is your test secret API key.
-
+use App\Controller\ShippingController;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -24,52 +21,54 @@ function calculateOrderAmount(array $items): int {
     return $totalAmount;
 }
 
-function getLineItems(array $items): array {
-    $lineItems = [];
-    $stripe = new \Stripe\StripeClient(
-        $_SERVER['STRIPE_PRIVATE_KEY']
-    );
+function getLineItems($items): array {
+    $line_items = [];
 
     foreach ($items as $key => $item){
-        $product = $stripe->products->all(["ids" => [$item->id]]);
-        $price = $stripe->prices->search([
-            'query' => 'product:\''.$item->id.'\'',
-        ]);
-        //if product not exist, we create it with the price
-        if ($price->data){
-            $price = $price->data[0];
-        }
-        else if (!$product->data){
-            $stripe->products->create([
-                'id' => $item->id,
-                'name' => $item->product->name,
-                'description' => $item->product->description,
-            ]);
-            $price = $stripe->prices->create([
-                'unit_amount' => $item->price * 100,
-                'currency' => 'eur',
-                'tax_behavior' => 'inclusive',
-                'product' => $item->id,
-            ]);
-        }
-        else if (!$price->data) {
-            $id = $product->data[0]["id"];
-            $price = $stripe->prices->create([
-                'unit_amount' => $item->price * 100, 
-                'currency' => 'eur',
-                'tax_behavior' => 'inclusive',
-                'product' => $id,
-            ]);
-        }
-        array_push($lineItems, ['price' => $price->id, 'quantity' => $item->amount]);
+        array_push($line_items, [
+                'price_data' =>
+                [
+                    'unit_amount' => $item->price * 100, 
+                    'currency' => 'eur', 
+                    'product_data' => [
+                            'name' => $item->product->name,
+                            'description' => $item->product->description,
+                        ]
+                ],
+                'quantity' => $item->amount,
+            ]
+
+        );
     }
-    return $lineItems;
+    return $line_items;
 }
 
-class CreatePayment{
+function getShippingRates($rates){
+    $shipping_rates = [];
+    //stripe allows 5 shipping options max
+    $len = count($rates) < 5 ? count($rates) : 5;
+    for ($i = 0; $i < $len; $i++){
+        array_push($shipping_rates, [
+            'shipping_rate_data' => [
+                'type' => 'fixed_amount',
+                'fixed_amount' => ['amount' => round($rates[$i]->rate) * 100, 'currency' => 'eur'],
+                'display_name' => $rates[$i]->carrier." : ". $rates[$i]->service . " Shipping",
+                'delivery_estimate' => [
+                    'minimum' => ['unit' => 'business_day', 'value' => $rates[$i]->delivery_days ? $rates[$i]->delivery_days : 14],
+                    'maximum' => ['unit' => 'business_day', 'value' => $rates[$i]->delivery_days ? $rates[$i]->delivery_days + 5 : 21],
+                ],
+                'metadata' => ["id" => $rates[$i]->id]
 
-    #[Route('/api/create', name: 'create', methods: ['POST'])]
-    public function create(){
+            ],
+        ]);
+    }
+    return $shipping_rates;
+}
+
+class PaymentController{
+
+    #[Route('/api/pay', name: 'create', methods: ['POST'])]
+    public function pay(){
         \Stripe\Stripe::setApiKey($_SERVER['STRIPE_PRIVATE_KEY']);
 
         try {
@@ -77,29 +76,65 @@ class CreatePayment{
             $jsonStr = file_get_contents('php://input');
             $jsonObj = json_decode($jsonStr);
 
-            $array = getLineItems($jsonObj);
-            $standard_shipping = "shr_1MM7VOKpRc4HZ65yqaFXguj4";
+            $shipping = ShippingController::getShipping($jsonObj);
+            //sort ascending by rates
+            $rates = $shipping->rates;
+            usort($rates, function($a, $b) {
+                return $a->rate > $b->rate;
+            });
+            $shipping_rates = getShippingRates($rates);
+            $cart = json_decode($jsonObj->cart);
+            $lineItems = getLineItems($cart);
+
+        
             //if order is over 1000 euros, the shipping is free
-            if (calculateOrderAmount($jsonObj) > 1000){
+            if (calculateOrderAmount($cart) > 1000){
                 $standard_shipping = "shr_1MM71ZKpRc4HZ65yLFYDJwQo";
             }
+            $customer = $jsonObj->customerInfos;
+            $stripe = new \Stripe\StripeClient($_SERVER['STRIPE_PRIVATE_KEY']);
+
+            if (isset($jsonObj->id)){
+                $stripe_customer = $stripe->customers->search([
+                    'query' => 'metadata[\'id\']:\''.$jsonObj->id.'\'',
+                ]);
+            }
+
+            if (isset($stripe_customer) && count($stripe_customer->data) === 0){
+                $stripe_customer = $stripe->customers->create([     
+                    'name' => $customer->infos->name,
+                    'address' => [
+                        'city' => $customer->infos->address->city,
+                        'country' => $customer->infos->address->country,
+                        'line1' => $customer->infos->address->line1,
+                        'line2' => $customer->infos->address->line2,
+                        'postal_code' => $customer->infos->address->postal_code,
+                        'state' => $customer->infos->address->state,
+                    ],
+                    'phone' => $customer->infos->phone,
+                    'email' => $customer->email,    
+                    'metadata' => ["id" => $jsonObj->id]
+                ]);
+            }
+
+            if (!isset($stripe_customer)){
+                $id = null;
+            }
+            else {
+                $id = $stripe_customer->data[0]->id;
+            }
             $checkout_session = \Stripe\Checkout\Session::create([
-                'shipping_address_collection' => ['allowed_countries' => ['FR']],
+                'customer' => $id,
                 'payment_method_types' => ['card'],
-                'line_items' => getLineItems($jsonObj),
+                'line_items' => $lineItems,
                 'mode' => 'payment',
-                'billing_address_collection' => 'required',
-                'shipping_options' => [
-                    ['shipping_rate' => $standard_shipping],
-                    ['shipping_rate' => 'shr_1MM732KpRc4HZ65yGGYa1tYU'],
-                ],
-                'success_url' => 'http://localhost:3000',
-                'automatic_tax' => [
-                    'enabled' => true,
-                ],
+                'shipping_options' => $shipping_rates,
+                'success_url' => "http://localhost:3000/order/success?session_id={CHECKOUT_SESSION_ID}",
+                'cancel_url' => "http://localhost:3000/order/cancel?session_id={CHECKOUT_SESSION_ID}",
+                'metadata' => ["shipping" => $shipping->id]
             ]);
 
-            return new JsonResponse(json_encode($checkout_session->url));
+            return new Response($checkout_session->url);
         } catch (Error $e) {
             http_response_code(500);
             return json_encode(['error' => $e->getMessage()]);
