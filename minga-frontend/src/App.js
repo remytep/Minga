@@ -20,6 +20,7 @@ import Layout from "./components/Layout/Layout";
 import { AuthContext, AuthProvider } from "./contexts/AuthContext";
 import AdminPanel from "./components/AdminPanel";
 import CartProvider from "./contexts/CartContext";
+import Profile from "./pages/Profile";
 
 
 function App() {
@@ -35,6 +36,7 @@ function App() {
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
+              <Route path="/profile" element={<Profile />} />
               <Route path="/order/">
                 <Route path="shipping" element={<Shipping />} />
                 <Route path="success" element={<Success />} />
