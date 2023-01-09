@@ -34,6 +34,7 @@ const SkuEdit = () => (
     <InputGuesser source="stock" validate={required()} />
     <InputGuesser source="weight" validate={required()} />
     <InputGuesser source="referenceNumber" validate={required()} />
+    <InputGuesser source="discountPercent" validate={required()} />
   </EditGuesser>
 );
 export default SkuEdit;

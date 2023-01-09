@@ -6,6 +6,8 @@ import ProductOptionValueList from "./ProductOptionValueList";
 import SkuList from "./SkuList";
 import SkuValueList from "./SkuValueList";
 import UserList from "./UserList";
+import OrderList from "./OrderList";
+import OrderItemList from "./OrderItemList";
 
 export {
   ProductList,
@@ -16,4 +18,6 @@ export {
   SkuList,
   SkuValueList,
   UserList,
+  OrderList,
+  OrderItemList,
 };

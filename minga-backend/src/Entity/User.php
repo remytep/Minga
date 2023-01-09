@@ -12,6 +12,8 @@ use ApiPlatform\Metadata\Put;
 use App\Controller\MeController;
 use App\Repository\UserRepository;
 use App\State\UserPasswordHasher;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Symfony\Component\Validator\Constraints as Assert;
 use Doctrine\ORM\Mapping as ORM;
@@ -72,6 +74,14 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, JWTUser
     #[Assert\NotBlank]
     #[Groups(['user.write'])]
     private ?string $plainPassword = null;
+
+    #[ORM\OneToMany(mappedBy: 'user', targetEntity: Order::class)]
+    private Collection $orders;
+
+    public function __construct()
+    {
+        $this->orders = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -163,5 +173,35 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, JWTUser
     public static function createFromPayload($id, array $payload)
     {
         return (new User())->setId($id)->setEmail($payload['email'] ?? '')->setRoles($payload['roles'] ?? ["ROLE_USER"]);
+    }
+
+    /**
+     * @return Collection<int, Order>
+     */
+    public function getOrders(): Collection
+    {
+        return $this->orders;
+    }
+
+    public function addOrder(Order $order): self
+    {
+        if (!$this->orders->contains($order)) {
+            $this->orders->add($order);
+            $order->setUser($this);
+        }
+
+        return $this;
+    }
+
+    public function removeOrder(Order $order): self
+    {
+        if ($this->orders->removeElement($order)) {
+            // set the owning side to null (unless already changed)
+            if ($order->getUser() === $this) {
+                $order->setUser(null);
+            }
+        }
+
+        return $this;
     }
 }

@@ -40,3 +40,6 @@ services:
   App\Service\FileUploader:
     arguments:
       $uploadPath: "%uploads_directory%"
+      
+  App\Controller\OrderItemController:
+    tags: ["controller.service_arguments"]

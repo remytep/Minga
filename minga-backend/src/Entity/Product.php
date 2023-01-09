@@ -100,7 +100,7 @@ class Product
     private ?bool $featured = null;
 
     #[ORM\Column(length: 255, nullable: false)]
-    #[Groups(['product.read', 'product.write'])]
+    #[Groups(['product.read', 'product.write', 'sku.read', 'product_sub_category.item.get'])]
     private ?string $thumbnail = null;
 
     #[ORM\Column]

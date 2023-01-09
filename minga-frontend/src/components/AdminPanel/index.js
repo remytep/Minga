@@ -9,14 +9,14 @@ import * as create from "./create";
 import * as edit from "./edit";
 import * as list from "./list";
 import * as show from "./show";
-import { Resource } from "react-admin";
+import { Edit, Resource } from "react-admin";
 import { dataProvider, MyLayout } from "./config";
 
 const AdminPanel = () => (
   <HydraAdmin
     layout={MyLayout}
     dataProvider={dataProvider()}
-    basename="/admin"
+    basename="/admin/panel"
     entrypoint={process.env.REACT_APP_ENTRYPOINT}
   >
     <Resource
@@ -73,7 +73,27 @@ const AdminPanel = () => (
       edit={edit.SkuValueEdit}
       show={show.SkuValueShow}
     />
-    <Resource name={"users"} list={list.UserList} create={create.UserCreate} />
+    <Resource
+      name={"users"}
+      list={list.UserList}
+      create={create.UserCreate}
+      recordRepresentation="email"
+    />
+    <Resource
+      name={"orders"}
+      list={list.OrderList}
+      create={create.OrderCreate}
+      edit={edit.OrderEdit}
+      show={show.OrderShow}
+      recordRepresentation="orderNumber"
+    />
+    <Resource
+      name={"order_items"}
+      list={list.OrderItemList}
+      create={create.OrderItemCreate}
+      edit={edit.OrderItemEdit}
+      show={show.OrderItemShow}
+    />
   </HydraAdmin>
 );
 

@@ -38,6 +38,16 @@ const SkuShow = () => (
         />
       )}
     />
+    <WithRecord
+      label="Discount Percent"
+      render={(record) =>
+        record.discountPercent === 0 ? (
+          <span>Full price</span>
+        ) : (
+          <span className="discount">{record.discountPercent}%</span>
+        )
+      }
+    />
   </ShowGuesser>
 );
 export default SkuShow;

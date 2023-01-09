@@ -78,6 +78,10 @@ class Sku
     #[Groups(['sku.read', 'sku.write', 'product.read'])]
     private ?float $weight = null;
 
+    #[ORM\Column]
+    #[Groups(['sku.read', 'sku.write', 'product.read'])]
+    private ?int $discountPercent = null;
+
 
     public function __construct()
     {
@@ -191,4 +195,15 @@ class Sku
         return $this;
     }
 
+    public function getDiscountPercent(): ?int
+    {
+        return $this->discountPercent;
+    }
+
+    public function setDiscountPercent(?int $discountPercent): self
+    {
+        $this->discountPercent = $discountPercent;
+
+        return $this;
+    }
 }

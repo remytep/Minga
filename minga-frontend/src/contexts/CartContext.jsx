@@ -27,7 +27,11 @@ function CartProvider({ children }) {
 
     // total price
     const total = cart.reduce((accumulator, currentItem) => {
-      return accumulator + currentItem.price * currentItem.amount;
+      return (
+        accumulator +
+        ((currentItem.price * (100 - currentItem.discountPercent)) / 100) *
+          currentItem.amount
+      );
     }, 0);
     setTotal(total);
 

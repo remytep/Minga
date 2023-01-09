@@ -19,7 +19,11 @@ function ProductCard({ product, featured }) {
   }
   return (
     <>
-      <img className="object-contain" src="/product.webp" alt="" />
+      <img
+        className="object-cover h-96"
+        src={`http://localhost:8000/uploads/${product.thumbnail}`}
+        alt=""
+      />
       <div className="flex-1 flex flex-col gap-3 py-3 justify-between">
         <div className="flex flex-col gap-3">
           <div className="flex justify-between items-center">

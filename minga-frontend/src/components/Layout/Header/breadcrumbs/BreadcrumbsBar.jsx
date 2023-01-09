@@ -92,17 +92,18 @@ function BreadcrumbsBar({ category, subcategory, slug }) {
       </Typography>
     );
   }
-
-  return (
-    <Stack spacing={2}>
-      <Breadcrumbs
-        separator={<NavigateNextIcon fontSize="small" />}
-        aria-label="breadcrumb"
-      >
-        {breadcrumbs}
-      </Breadcrumbs>
-    </Stack>
-  );
+  if (category !== "admin") {
+    return (
+      <Stack spacing={2}>
+        <Breadcrumbs
+          separator={<NavigateNextIcon fontSize="small" />}
+          aria-label="breadcrumb"
+        >
+          {breadcrumbs}
+        </Breadcrumbs>
+      </Stack>
+    );
+  }
 }
 
 export default BreadcrumbsBar;

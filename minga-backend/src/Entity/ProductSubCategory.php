@@ -61,7 +61,7 @@ class ProductSubCategory
     private ?ProductCategory $productCategory = null;
 
     #[ORM\Column(length: 255, nullable: true)]
-    #[Groups(['product_sub_category.read', 'product_sub_category.write'])]
+    #[Groups(['product_sub_category.read', 'product_sub_category.write', 'product_category.read'])]
     private ?string $thumbnail = null;
 
 
