@@ -33,6 +33,7 @@ function getLineItems($items): array {
                     'product_data' => [
                             'name' => $item->product->name,
                             'description' => $item->product->description,
+                            'metadata' => ["reference" => $item->referenceNumber]
                         ]
                 ],
                 'quantity' => $item->amount,
@@ -99,32 +100,30 @@ class PaymentController{
                     'query' => 'metadata[\'id\']:\''.$jsonObj->id.'\'',
                 ]);
             }
-
             if (isset($stripe_customer) && count($stripe_customer->data) === 0){
                 $stripe_customer = $stripe->customers->create([     
                     'name' => $customer->infos->name,
                     'address' => [
-                        'city' => $customer->infos->address->city,
-                        'country' => $customer->infos->address->country,
-                        'line1' => $customer->infos->address->line1,
-                        'line2' => $customer->infos->address->line2,
-                        'postal_code' => $customer->infos->address->postal_code,
-                        'state' => $customer->infos->address->state,
+                        'street1' => $customer->address->street_number . " " . $customer->address->route,
+                        'city' => $customer->address->locality,
+                        'state' => $customer->address->administrative_area_level_1,
+                        'postal_code' => $customer->address->postal_code,
+                        'country' => $customer->address->country,
                     ],
-                    'phone' => $customer->infos->phone,
+                    'phone' => $customer->phone,
                     'email' => $customer->email,    
                     'metadata' => ["id" => $jsonObj->id]
                 ]);
             }
 
-            if (!isset($stripe_customer)){
-                $id = null;
-            }
-            else {
+            $id = null;
+            if (isset($stripe_customer)){
                 $id = $stripe_customer->data[0]->id;
             }
+
             $checkout_session = \Stripe\Checkout\Session::create([
                 'customer' => $id,
+                'customer_email' => $customer->email,
                 'payment_method_types' => ['card'],
                 'line_items' => $lineItems,
                 'mode' => 'payment',
