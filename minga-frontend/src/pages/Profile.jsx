@@ -1,15 +1,24 @@
-import React, { useContext } from 'react'
-// import ProfileSidebar from '../components/Layout/Header/profile/ProfileSidebar';
+import React, { useContext, useState } from 'react'
 import { AuthContext } from '../contexts/AuthContext'
 import { HiShoppingCart, HiUserCircle, HiMapPin } from "react-icons/hi2"
-import { AiFillIdcard } from "react-icons/ai";
+import { AiFillCreditCard } from "react-icons/ai";
+
 import ProfileWelcome from '../components/Layout/Header/profile/ProfileWelcome';
 import ProfileMesCommandes from '../components/Layout/Header/profile/ProfileMesCommandes';
+import ProfileAdresse from '../components/Layout/Header/profile/ProfileAdresse';
 
 
 function Profile() {
-  const { logout } = useContext(AuthContext);
+  const { user, logout } = useContext(AuthContext);
 
+  const [tab, setTab] = useState("welcome");
+
+  const landingCommand = [
+    {name: "welcome", component: <ProfileWelcome/>},
+    {name: "commandes", component: <ProfileMesCommandes/>},
+    {name: "adresses", component: <ProfileAdresse/>},
+
+  ]
   return (
     <div className='bg-[#C9C5BA] w-screen lg:h-screen'>
       <header className='h-24 p-6'>
@@ -39,23 +48,42 @@ function Profile() {
                       <div className='bg-gray-400 w-16 h-16 rounded-full flex justify-center items-center'>
                         <HiUserCircle className='text-2xl'/>
                       </div>
-                      <h5 className='text-xl ml-5 '>User Name</h5>
+                      <h5 className='text-md font-medium'>{user && user.email}</h5>
                   </div>
               </div>
-              <div className="mt-2 flex justify-center text-white text-center bg-[#060606] font-bold uppercase text-sm px-6 py-3 hover:cursor-pointer">
+              <div 
+                onClick={() => setTab("welcome")}  
+                className="mt-2 flex justify-center text-white text-center bg-[#060606] font-bold uppercase text-sm px-6 py-3 hover:cursor-pointer"
+              >
                 <h4 className='mt-1'>Mon compte</h4>
               </div>
-              <div className="mt-2 flex text-white text-center bg-[#060606] font-bold uppercase text-sm px-6 py-3 hover:cursor-pointer">
-                <HiShoppingCart className='text-3xl mr-5'/>
+              <div
+                onClick={() => setTab("commandes")}  
+                className="mt-2 flex text-white text-center bg-[#060606] font-bold uppercase text-sm px-2 py-3 hover:cursor-pointer"
+              >
+                <HiShoppingCart className='text-2xl mr-5'/>
                 <h4 className='mt-1'>Mes commande</h4>
               </div>
-              <div className="mt-2 flex text-white text-center bg-[#060606] font-bold uppercase text-sm px-6 py-3 hover:cursor-pointer">
-                <HiMapPin className='text-3xl mr-5'/>
-                <h4 className='mt-1'>Carnet d'adresses</h4>
+              <div 
+                 onClick={() => setTab("adresses")}
+                className="mt-2 flex text-white text-center bg-[#060606] font-bold uppercase text-sm px-2 py-3 hover:cursor-pointer"
+              >
+                <HiMapPin className='text-2xl mr-5'/>
+                <p className='mt-1'>Mon carnet d'adresses</p>
+              </div>
+              <div className="mt-2 flex text-white text-center bg-[#060606] font-bold uppercase text-sm px-2 py-3 hover:cursor-pointer">
+                <AiFillCreditCard className='text-2xl mr-5'/>
+                <p className='mt-1'>Mes moyens de paiement</p>
               </div>
             </div>
-            <ProfileMesCommandes />
-            {/* <ProfileWelcome /> */}
+
+            {
+              landingCommand.map((obj, i) => {
+                if (obj.name === tab){
+                  return ( obj.component)
+                }
+              })
+            }
           </div>
         </div>
     </div>
