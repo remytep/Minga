@@ -11,10 +11,15 @@ use DateTimeImmutable;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: OrderRepository::class)]
 #[ORM\Table(name: '`order`')]
-#[ApiResource(paginationEnabled: false)]
+#[ApiResource(
+    paginationEnabled: false,
+    normalizationContext: ['groups' => ['order.read']],
+    denormalizationContext: ['groups' => ['order.write']]
+),]
 #[ApiFilter(SearchFilter::class, properties: ['status' => 'exact'])]
 class Order
 {
@@ -32,27 +37,37 @@ class Order
     #[ORM\Column]
     private ?int $id = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, unique: true)]
+    #[Groups(['order.read', 'order.write'])]
     private ?string $orderNumber = null;
 
     #[ORM\ManyToOne(inversedBy: 'orders')]
+    #[Groups(['order.read', 'order.write'])]
     private ?User $user = null;
 
     #[ORM\Column]
+    #[Groups(['order.read', 'order.write'])]
     private ?int $totalAmount = 0;
 
-
     #[ORM\OneToMany(mappedBy: 'orderNumber', targetEntity: OrderItem::class, orphanRemoval: true)]
+    #[Groups(['order.read', 'order.write'])]
     private Collection $orderItems;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['order.read', 'order.write'])]
     private ?string $status = self::STATUS_CART;
 
     #[ORM\Column]
+    #[Groups(['order.read', 'order.write'])]
     private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
+    #[Groups(['order.read', 'order.write'])]
     private ?\DateTimeImmutable $updatedAt = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['order.read', 'order.write'])]
+    private ?string $stripeCustomerId = null;
 
     public function __construct()
     {
@@ -197,6 +212,18 @@ class Order
     public function setUpdatedAt(\DateTimeImmutable $updatedAt): self
     {
         $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    public function getStripeCustomerId(): ?string
+    {
+        return $this->stripeCustomerId;
+    }
+
+    public function setStripeCustomerId(?string $stripeCustomerId): self
+    {
+        $this->stripeCustomerId = $stripeCustomerId;
 
         return $this;
     }

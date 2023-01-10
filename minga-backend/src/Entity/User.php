@@ -57,7 +57,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface, JWTUser
     private ?int $id = null;
 
     #[ORM\Column(length: 180, unique: true)]
-    #[Groups(['user.read', 'user.write'])]
+    #[Groups(['user.read', 'user.write', 'order.read'])]
     private ?string $email = null;
 
     #[ORM\Column(type: 'json')]
