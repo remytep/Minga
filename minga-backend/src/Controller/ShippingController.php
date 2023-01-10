@@ -36,7 +36,7 @@ class ShippingController extends AbstractController
     public static function getShipping($jsonObj) {
         \EasyPost\EasyPost::setApiKey($_SERVER["EASYPOST_KEY"]);
 
-        $cart = json_decode($jsonObj->cart);
+        $cart = $jsonObj->cart;
         $parcel_weight = calculateTotalWeightInOz($cart);
         $customer = $jsonObj->customerInfos; 
         $custom_items = getCustomItems($cart);

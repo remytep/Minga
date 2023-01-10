@@ -5,7 +5,7 @@ import axios from 'axios';
 import { CartContext } from '../contexts/CartContext';
 import CartItem from '../components/Layout/Header/cart/CartItem';
 import CartBreadcrumb from '../components/utils/CartBreadcrumb';
-import { Link } from 'react-router-dom';
+import { Link, Navigate } from 'react-router-dom';
 import { FiChevronLeft } from 'react-icons/fi';
 import { AuthContext } from '../contexts/AuthContext';
 import Autocomplete from "react-google-autocomplete";
@@ -17,9 +17,9 @@ const Shipping = (props) => {
     const [customerInfos, setCustomerInfos] = useState({});
     const { user, loaded, logout } = useContext(AuthContext);
     const [country, setCountry] = useState(window.navigator.language.split("-")[1]);
+    let cartStorage = localStorage.getItem("Mon panier");
 
     const handleClick = () => {
-        let cart = localStorage.getItem("Mon panier");
         axios.post(`${process.env.REACT_APP_ENTRYPOINT}/pay`, { id: user && user.id, customerInfos, cart })
             .then((res) => {
                 window.open(res.data);
@@ -28,6 +28,13 @@ const Shipping = (props) => {
                 console.log(e);
             })
     }
+
+    if (!cartStorage) {
+        return (
+            <Navigate to="/" replace={true} />
+        )
+    }
+    console.log(itemAmount);
 
     return (
         <>

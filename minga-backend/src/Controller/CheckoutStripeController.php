@@ -75,8 +75,7 @@ class CheckoutStripeController extends AbstractController{
                     $entityManager->flush();
                 }
             }
-
-
+            dd($session);
             //create a fake tracker for shipment
             $tracker = \EasyPost\Tracker::create([
                 'tracking_code' => "EZ1000000001",

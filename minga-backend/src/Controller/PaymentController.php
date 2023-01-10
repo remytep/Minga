@@ -84,14 +84,9 @@ class PaymentController{
                 return $a->rate > $b->rate;
             });
             $shipping_rates = getShippingRates($rates);
-            $cart = json_decode($jsonObj->cart);
+            $cart = $jsonObj->cart;
             $lineItems = getLineItems($cart);
 
-        
-            //if order is over 1000 euros, the shipping is free
-            if (calculateOrderAmount($cart) > 1000){
-                $standard_shipping = "shr_1MM71ZKpRc4HZ65yLFYDJwQo";
-            }
             $customer = $jsonObj->customerInfos;
             $stripe = new \Stripe\StripeClient($_SERVER['STRIPE_PRIVATE_KEY']);
 
@@ -102,9 +97,9 @@ class PaymentController{
             }
             if (isset($stripe_customer) && count($stripe_customer->data) === 0){
                 $stripe_customer = $stripe->customers->create([     
-                    'name' => $customer->infos->name,
+                    'name' => $customer->name,
                     'address' => [
-                        'street1' => $customer->address->street_number . " " . $customer->address->route,
+                        'line1' => $customer->address->street_number . " " . $customer->address->route,
                         'city' => $customer->address->locality,
                         'state' => $customer->address->administrative_area_level_1,
                         'postal_code' => $customer->address->postal_code,
@@ -117,20 +112,41 @@ class PaymentController{
             }
 
             $id = null;
+            $email = $customer->email;
+            //if is connected, we give id to the session
             if (isset($stripe_customer)){
                 $id = $stripe_customer->data[0]->id;
+                $email = null;
             }
 
             $checkout_session = \Stripe\Checkout\Session::create([
+                'billing_address_collection' => 'required',
                 'customer' => $id,
-                'customer_email' => $customer->email,
+                'customer_email' => $email,
+                'customer_update' => ["address" =>  "auto"],
                 'payment_method_types' => ['card'],
+                'payment_intent_data' => [
+                    "setup_future_usage" => "on_session",
+                    "shipping" => [
+                        'address' => [
+                            'line1' => $customer->address->street_number . " " . $customer->address->route,
+                            'city' => $customer->address->locality,
+                            'state' => $customer->address->administrative_area_level_1,
+                            'postal_code' => $customer->address->postal_code,
+                            'country' => $customer->address->country,
+                        ],
+                        'name' => $customer->name,
+                    ]
+                ],
                 'line_items' => $lineItems,
                 'mode' => 'payment',
                 'shipping_options' => $shipping_rates,
                 'success_url' => "http://localhost:3000/order/success?session_id={CHECKOUT_SESSION_ID}",
                 'cancel_url' => "http://localhost:3000/order/cancel?session_id={CHECKOUT_SESSION_ID}",
-                'metadata' => ["shipping" => $shipping->id]
+                'phone_number_collection' => [
+                    'enabled' => true,
+                ],
+                'metadata' => ["shipping" => $shipping->id],
             ]);
 
             return new Response($checkout_session->url);
