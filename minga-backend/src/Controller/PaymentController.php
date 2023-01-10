@@ -123,8 +123,10 @@ class PaymentController{
                 'billing_address_collection' => 'required',
                 'customer' => $id,
                 'customer_email' => $email,
-                'customer_update' => ["address" =>  "auto"],
+                //automatically update address if it's needed
+                'customer_update' => $id ? ["address" =>  "auto"] : null,
                 'payment_method_types' => ['card'],
+                //save card and adress information
                 'payment_intent_data' => [
                     "setup_future_usage" => "on_session",
                     "shipping" => [
@@ -146,6 +148,7 @@ class PaymentController{
                 'phone_number_collection' => [
                     'enabled' => true,
                 ],
+                //we keeping easypost id shipping
                 'metadata' => ["shipping" => $shipping->id],
             ]);
 
