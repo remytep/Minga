@@ -1,7 +1,8 @@
 import React, { useContext, useState } from 'react'
 import { AuthContext } from '../contexts/AuthContext'
-import { HiShoppingCart, HiUserCircle, HiMapPin } from "react-icons/hi2"
+import { HiShoppingCart, HiUserCircle, HiIdentification } from "react-icons/hi2"
 import { AiFillCreditCard } from "react-icons/ai";
+import { IoSettingsSharp } from "react-icons/io5";
 
 import ProfileWelcome from '../components/Layout/Header/profile/ProfileWelcome';
 import ProfileMesCommandes from '../components/Layout/Header/profile/ProfileMesCommandes';
@@ -45,7 +46,7 @@ function Profile() {
             <div className="w-full lg:w-[20vw] p-5">
               <div className="border-2 border-[#e8e8e8] p-4 bg-[#f6f6f6] space-x-2">
                   <div className='flex items-center p-5 space-x-3'>
-                      <div className='bg-gray-400 w-16 h-16 rounded-full flex justify-center items-center'>
+                      <div className='bg-gray-400 w-14 h-14 rounded-full flex justify-center items-center'>
                         <HiUserCircle className='text-2xl'/>
                       </div>
                       <h5 className='text-md font-medium'>{user && user.email}</h5>
@@ -68,15 +69,10 @@ function Profile() {
                  onClick={() => setTab("adresses")}
                 className="mt-2 flex text-white text-center bg-[#060606] font-bold uppercase text-sm px-2 py-3 hover:cursor-pointer"
               >
-                <HiMapPin className='text-2xl mr-5'/>
-                <p className='mt-1'>Mon carnet d'adresses</p>
-              </div>
-              <div className="mt-2 flex text-white text-center bg-[#060606] font-bold uppercase text-sm px-2 py-3 hover:cursor-pointer">
-                <AiFillCreditCard className='text-2xl mr-5'/>
-                <p className='mt-1'>Mes moyens de paiement</p>
+                <HiIdentification className='text-2xl mr-5'/>
+                <p className='mt-1'>Mes informations</p>
               </div>
             </div>
-
             {
               landingCommand.map((obj, i) => {
                 if (obj.name === tab){
