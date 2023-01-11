@@ -65,16 +65,16 @@ class Product
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['product.read', 'product.write', 'product_sub_category.item.get', 'product_option.read', 'sku.read', 'sku_value.read']), Length(min: 3)]
+    #[Groups(['product.read', 'product.write', 'product_sub_category.item.get', 'product_option.read', 'sku.read', 'sku_value.read', 'order.read']), Length(min: 3)]
     private ?string $name = null;
 
     #[ORM\Column(length: 255, unique: true)]
     #[ApiProperty(identifier: true)]
-    #[Groups(['product.read', 'product.write', 'product_sub_category.item.get'])]
+    #[Groups(['product.read', 'product.write', 'product_sub_category.item.get', 'order.read'])]
     private ?string $slug = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    #[Groups(['product.read', 'product.write', 'product_sub_category.item.get']), Length(min: 10)]
+    #[Groups(['product.read', 'product.write', 'product_sub_category.item.get', 'order.read']), Length(min: 10)]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
@@ -83,7 +83,7 @@ class Product
 
     #[ORM\ManyToOne(inversedBy: 'products')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['product.read', 'product.write', 'product_sub_category.item.get'])]
+    #[Groups(['product.read', 'product.write', 'product_sub_category.item.get', 'order.read'])]
     private ?ProductSubCategory $productSubCategory;
 
     #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductOption::class, cascade: ["persist"], orphanRemoval: true)]

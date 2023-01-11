@@ -56,7 +56,7 @@ class ProductOption
     private ?Product $product = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['product_option.read', 'product_option.item.get', 'product_option.write', 'product_option_value.read', 'product.read', 'product.write', 'sku.read'])]
+    #[Groups(['product_option.read', 'product_option.item.get', 'product_option.write', 'product_option_value.read', 'product.read', 'product.write', 'sku.read', 'order.read'])]
     private ?string $name = null;
 
     #[ORM\OneToMany(mappedBy: 'productOption', targetEntity: ProductOptionValue::class, cascade: ["persist"], orphanRemoval: true)]

@@ -5,6 +5,7 @@ namespace App\Entity;
 use ApiPlatform\Metadata\ApiResource;
 use App\Repository\OrderItemRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: OrderItemRepository::class)]
 #[ApiResource()]
@@ -21,9 +22,11 @@ class OrderItem
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
+    #[Groups(['order.read'])]
     private ?Sku $sku = null;
 
     #[ORM\Column]
+    #[Groups(['order.read'])]
     private ?int $quantity = 1;
 
     /**

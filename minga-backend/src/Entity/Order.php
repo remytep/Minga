@@ -35,6 +35,7 @@ class Order
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
+    #[Groups(['order.read'])]
     private ?int $id = null;
 
     #[ORM\Column(length: 255, unique: true)]
@@ -76,22 +77,6 @@ class Order
         $this->updatedAt = new DateTimeImmutable('now');
     }
 
-    /**
-     * Calculates the order total.
-     *
-     * @return float
-     */
-    public function getTotal(): float
-    {
-        $total = 0;
-
-        foreach ($this->getOrderItems() as $item) {
-            $total += $item->getTotal();
-        }
-
-        return $total;
-    }
-
     public function getId(): ?int
     {
         return $this->id;
@@ -123,6 +108,10 @@ class Order
 
     public function getTotalAmount(): ?int
     {
+        foreach ($this->getOrderItems() as $item) {
+            $this->totalAmount += $item->getTotal();
+        }
+
         return $this->totalAmount;
     }
 

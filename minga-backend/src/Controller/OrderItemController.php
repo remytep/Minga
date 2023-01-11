@@ -85,7 +85,7 @@ class OrderItemController
         // return a JSON response with the normalized OrderItem entity
         return new Response($this->serializer->serialize('created', 'json'), 201);
     }
-    #[Route("/order_items", name: "app_order_item_patch", methods: ["PATCH"])]
+    #[Route("/order_items", name: "app_order_item_patch", methods: ["PUT"])]
     public function updateAction(Request $request): Response
     {
         // retrieve the sku parameter from the request as an IRI string
@@ -134,6 +134,7 @@ class OrderItemController
     #[Route("/order_items", name: "app_order_item_delete", methods: ['DELETE'])]
     public function deleteAction(Request $request): Response
     {
+
         // retrieve the sku parameter from the request as an IRI string
         $req = (json_decode($request->getContent()));
         $skuIri = $req->sku;
