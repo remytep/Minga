@@ -39,17 +39,17 @@ const StripeCouponList = () => {
             field: 'actions',
             renderCell: (params) => (
                 <>
-                    <Link component="button" underline="none" variant="h6"
-                        onClick={() => {
-                            navigate("/admin/coupon/edit/" + params.row.id)
-                        }}>
-                        <EditIcon />
-                    </Link>
                     <Link component="button" underline="none" variant="h5"
                         onClick={() => {
                             navigate("/admin/coupon/show/" + params.row.id)
                         }}>
                         <VisibilityIcon />
+                    </Link>
+                    <Link component="button" underline="none" variant="h6"
+                        onClick={() => {
+                            navigate("/admin/coupon/edit/" + params.row.id)
+                        }}>
+                        <EditIcon />
                     </Link>
                 </>
             ),
