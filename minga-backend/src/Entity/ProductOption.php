@@ -60,7 +60,7 @@ class ProductOption
     private ?string $name = null;
 
     #[ORM\OneToMany(mappedBy: 'productOption', targetEntity: ProductOptionValue::class, cascade: ["persist"], orphanRemoval: true)]
-    #[Groups(['product_option.read', 'product_option.write', 'product.read'])]
+    #[Groups(['product_option.read', 'product.read'])]
     #[Assert\Valid()]
     private Collection $productOptionValues;
 

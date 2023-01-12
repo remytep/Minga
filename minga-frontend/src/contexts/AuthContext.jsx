@@ -3,7 +3,6 @@ import React, { createContext, useState, useEffect } from "react";
 import axios from "axios";
 import jwtDecode from "jwt-decode";
 import { useNavigate } from "react-router-dom";
-import { ENTRYPOINT } from "../config";
 
 const initialState = {
   user: null,
@@ -22,13 +21,20 @@ const AuthProvider = ({ children }) => {
       setState({
         user,
         isAuthenticated: true,
+        loaded: true,
+      });
+    }
+    else {
+      setState({
+        isAuthenticated: false,
+        loaded: true,
       });
     }
   }, []);
 
   const registration = (email, password) => {
     return axios
-      .post(`${ENTRYPOINT}/users`, {
+      .post(`${process.env.REACT_APP_ENTRYPOINT}/users`, {
         email,
         plainPassword: password,
       })
@@ -42,7 +48,7 @@ const AuthProvider = ({ children }) => {
 
   const login = (email, password) => {
     return axios
-      .post(`${ENTRYPOINT}/login`, {
+      .post(`${process.env.REACT_APP_ENTRYPOINT}/login`, {
         email,
         password,
       })
@@ -75,7 +81,7 @@ const AuthProvider = ({ children }) => {
     if (refreshToken) {
       return axios
         .post(
-          `${ENTRYPOINT}/refresh/token`,
+          `${process.env.REACT_APP_ENTRYPOINT}/refresh/token`,
           {
             refresh_token: refreshToken,
           },
@@ -107,6 +113,7 @@ const AuthProvider = ({ children }) => {
       value={{
         user: state.user,
         isAuthenticated: state.isAuthenticated,
+        loaded: state.loaded,
         login,
         logout,
         registration,

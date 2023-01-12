@@ -24,6 +24,8 @@ function ProductCard({ product, featured }) {
   } else {
     stock = <p className="text-red-600 font-semibold">Out of stock</p>;
   }
+
+  console.log(product)
   return (
     <>
       <div className="relative">

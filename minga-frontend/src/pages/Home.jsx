@@ -4,13 +4,13 @@ import Hero from "../components/HomePage/Hero";
 
 import ProductCarousel from "../components/utils/ProductCarousel";
 
-function Accueil() {
+function Home() {
   const [products, setProducts] = useState([]);
   const [featuredProducts, setFeaturedProducts] = useState([]);
   useEffect(() => {
     axios({
       method: "GET",
-      url: "https://localhost:8000/api/products/popular",
+      url: "http://localhost:8000/api/products/popular",
       headers: { "content-type": "application/json" },
     }).then((response) => {
       //console.log(response.data);
@@ -18,7 +18,7 @@ function Accueil() {
     });
     axios({
       method: "GET",
-      url: "https://localhost:8000/api/products/?featured=true",
+      url: "http://localhost:8000/api/products/?featured=true",
       headers: { "content-type": "application/json" },
     }).then((response) => {
       //console.log(response.data);
@@ -46,4 +46,4 @@ function Accueil() {
   );
 }
 
-export default Accueil;
+export default Home

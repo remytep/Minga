@@ -70,11 +70,11 @@ class Product
 
     #[ORM\Column(length: 255, unique: true)]
     #[ApiProperty(identifier: true)]
-    #[Groups(['product.read', 'product.write', 'product_sub_category.item.get', 'order.read'])]
+    #[Groups(['product.read', 'product.write', 'product_sub_category.item.get', 'sku.read', 'sku_value.read', 'order.read'])]
     private ?string $slug = null;
 
     #[ORM\Column(type: Types::TEXT)]
-    #[Groups(['product.read', 'product.write', 'product_sub_category.item.get', 'order.read']), Length(min: 10)]
+    #[Groups(['product.read', 'product.write', 'product_sub_category.item.get', 'sku.read', 'sku_value.read', 'order.read']), Length(min: 10)]
     private ?string $description = null;
 
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
@@ -83,7 +83,7 @@ class Product
 
     #[ORM\ManyToOne(inversedBy: 'products')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['product.read', 'product.write', 'product_sub_category.item.get', 'order.read'])]
+    #[Groups(['product.read', 'product.write', 'product_sub_category.item.get'])]
     private ?ProductSubCategory $productSubCategory;
 
     #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductOption::class, cascade: ["persist"], orphanRemoval: true)]
@@ -100,10 +100,10 @@ class Product
     private ?bool $featured = null;
 
     #[ORM\Column(length: 255, nullable: false)]
-    #[Groups(['product.read', 'product.write', 'sku.read', 'product_sub_category.item.get'])]
+    #[Groups(['product.read', 'product.write'])]
     private ?string $thumbnail = null;
 
-    #[ORM\Column]
+    #[ORM\Column(nullable: true)]
     #[Groups(['product.read'])]
     private ?int $viewCount = null;
 

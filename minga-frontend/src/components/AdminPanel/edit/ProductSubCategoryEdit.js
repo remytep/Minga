@@ -23,7 +23,7 @@ const ProductSubCategoryEdit = (props) => (
       render={(record) => (
         <img
           className="thumbnail"
-          src={`https://localhost:8000/uploads/${record.thumbnail}`}
+          src={`${process.env.REACT_APP_UPLOADS}/${record.thumbnail}`}
         />
       )}
     />

@@ -6,7 +6,6 @@ import Product from "./Product";
 
 // cart context
 import { CartContext } from "../../contexts/CartContext";
-import { ENTRYPOINT } from "../../config";
 
 function ProductList({ product }) {
   const [products, setProducts] = useState([]);
@@ -14,7 +13,7 @@ function ProductList({ product }) {
   useEffect(() => {
     axios({
       method: "GET",
-      url: `${ENTRYPOINT}/products`,
+      url: `${process.env.REACT_APP_ENTRYPOINT}/products`,
       headers: { "content-type": "application/json" },
     }).then((response) => {
       setProducts(response.data["hydra:member"]);
