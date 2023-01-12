@@ -69,7 +69,7 @@ const SkuValueEdit = () => {
           setProductOption(formData.productOption);
           setProduct(formData.product["@id"]);
           setSku(formData.Sku);
-          console.log(formData);
+          //console.log(formData);
 
           return (
             <>

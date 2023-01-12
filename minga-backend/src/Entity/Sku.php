@@ -71,7 +71,7 @@ class Sku
             "type" => "string",
         ]
     )]
-    #[Groups(['sku.read', 'sku.write', 'product.read', 'order.read'])]
+    #[Groups(['sku.read', 'sku.write', 'product.read', 'order.read', 'product_sub_category.read'])]
     private ?string $thumbnail = null;
 
     #[ORM\Column]
@@ -79,7 +79,7 @@ class Sku
     private ?float $weight = null;
 
     #[ORM\Column]
-    #[Groups(['sku.read', 'sku.write', 'product.read', 'order.read'])]
+    #[Groups(['sku.read', 'sku.write', 'product.read', 'order.read', 'product_sub_category.read'])]
     private ?int $discountPercent = null;
 
 

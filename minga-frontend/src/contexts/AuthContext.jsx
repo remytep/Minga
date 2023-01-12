@@ -55,6 +55,7 @@ const AuthProvider = ({ children }) => {
             user,
             isAuthenticated: true,
           });
+          localStorage.removeItem("CART");
         }
         navigate("/");
         return response.data;

@@ -13,7 +13,7 @@ function SubCategory() {
       url: "https://localhost:8000/api/product_sub_categories/" + subcategory,
       headers: { "content-type": "application/json" },
     }).then((response) => {
-      console.log(response.data.products);
+      //console.log(response.data.products);
       setProducts(response.data.products);
     });
   }, [subcategory]);

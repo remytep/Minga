@@ -35,12 +35,12 @@ function Accueil() {
           </h2>
           <ProductCarousel products={products} featured={false} />
         </div>
-        <div className="">
+        {/*         <div className="">
           <h2 className="text-2xl font-bold py-3 px-5 md:px-6 lg:px-10 xl:px-16">
             Featured
           </h2>
           <ProductCarousel products={featuredProducts} featured={true} />
-        </div>
+        </div> */}
       </main>
     </>
   );

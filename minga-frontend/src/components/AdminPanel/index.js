@@ -73,12 +73,7 @@ const AdminPanel = () => (
       edit={edit.SkuValueEdit}
       show={show.SkuValueShow}
     />
-    <Resource
-      name={"users"}
-      list={list.UserList}
-      create={create.UserCreate}
-      recordRepresentation="email"
-    />
+    <Resource name={"users"} list={list.UserList} create={create.UserCreate} />
     <Resource
       name={"orders"}
       list={list.OrderList}

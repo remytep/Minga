@@ -12,7 +12,7 @@ function Category() {
       url: "https://localhost:8000/api/product_categories/" + category,
       headers: { "content-type": "application/json" },
     }).then((response) => {
-      console.log(response.data);
+      //console.log(response.data);
       setSubCategories(response.data.productSubCategories);
     });
   }, [category]);

@@ -23,14 +23,12 @@ use Symfony\Component\Serializer\Annotation\Groups;
 #[ApiFilter(SearchFilter::class, properties: ['status' => 'exact'])]
 class Order
 {
-
     /**
      * An order that is in progress, not placed yet.
      *
      * @var string
      */
     const STATUS_CART = 'CART';
-
 
     #[ORM\Id]
     #[ORM\GeneratedValue]
@@ -51,7 +49,7 @@ class Order
     private ?int $totalAmount = 0;
 
     #[ORM\OneToMany(mappedBy: 'orderNumber', targetEntity: OrderItem::class, orphanRemoval: true)]
-    #[Groups(['order.read', 'order.write'])]
+    #[Groups(['order.read'])]
     private Collection $orderItems;
 
     #[ORM\Column(length: 255)]

@@ -96,8 +96,8 @@ function Product() {
             className="object-cover"
           />
           {variant && variant.discountPercent !== 0 ? (
-            <span className="absolute top-1 right-1 text-4xl">
-              {"-" + variant.discountPercent + "%"}
+            <span className="absolute top-4 right-0 text-4xl bg-white bg-opacity-30">
+              <p className="p-1">{"-" + variant.discountPercent + "%"}</p>
             </span>
           ) : null}
         </div>
@@ -117,11 +117,24 @@ function Product() {
                 <>
                   <h1 className="text-3xl md:text-4xl text-right font-semibold">
                     {variant.discountPercent !== 0 ? (
-                      <span className="text-gray-400 line-through">
-                        {variant.price + "€ "}
-                      </span>
-                    ) : null}
-                    {(variant.price * (100 - variant.discountPercent)) / 100}€
+                      <div className="flex items-center">
+                        <p className="text-gray-400 line-through text-lg">
+                          {variant.price + "€ "}
+                        </p>
+                        &nbsp;
+                        <p className="text-red-600">
+                          {(variant.price * (100 - variant.discountPercent)) /
+                            100}
+                          €
+                        </p>
+                      </div>
+                    ) : (
+                      <p>
+                        {(variant.price * (100 - variant.discountPercent)) /
+                          100}
+                        €
+                      </p>
+                    )}
                   </h1>
                   <p className="text-gray-500">{variant.reference_number}</p>
                   <div className="text-right">{stock}</div>

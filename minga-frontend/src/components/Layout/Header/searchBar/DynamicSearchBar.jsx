@@ -82,9 +82,13 @@ export default function DynamicSearchBar() {
           >
             <Link
               to={`/${results.productSubCategory.productCategory.name}/${results.productSubCategory.name}/${results.slug}`}
-              className="flex items-center w-full"
+              className="flex items-center justify-center w-full border-b-2 p-3"
             >
-              <Avatar src={results.thumbnail} alt="cats"></Avatar>
+              <img
+                src={`http://localhost:8000/uploads/${results.thumbnail}`}
+                alt={results.description}
+                className="h-28"
+              />
               <div className="flex justify-between w-full">
                 <Box sx={{ marginLeft: 5, marginRight: 10 }}>
                   {results.name}
