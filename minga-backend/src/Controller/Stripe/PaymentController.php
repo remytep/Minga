@@ -120,6 +120,7 @@ class PaymentController{
             }
 
             $checkout_session = \Stripe\Checkout\Session::create([
+                'allow_promotion_codes' => true,
                 'billing_address_collection' => 'required',
                 'customer' => $id,
                 'customer_email' => $email,

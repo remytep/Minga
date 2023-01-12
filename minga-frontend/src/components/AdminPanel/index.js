@@ -14,6 +14,12 @@ import { dataProvider } from "./config";
 import { MyLayout } from "./Layout";
 import { AuthContext } from "../../contexts/AuthContext";
 import { Navigate } from "react-router-dom";
+import { Route } from "react-router-dom";
+import { CustomRoutes } from 'react-admin';
+import StripeCouponCreate from "./create/StripeCouponCreate";
+import StripeCouponList from "./list/StripeCouponList";
+import StripeCouponEdit from "./edit/StripeCouponEdit";
+import StripeCouponShow from "./show/StripeCouponShow";
 
 const AdminPanel = () =>
 // const { user, loaded, logout } = useContext(AuthContext);
@@ -93,6 +99,15 @@ const AdminPanel = () =>
       list={list.UserList}
       create={create.UserCreate}
     />
+    <CustomRoutes>
+      <Route path="/coupon/">
+        <Route index element={<StripeCouponList />} />
+        <Route path="create" element={<StripeCouponCreate />} />
+        <Route path="edit/:id" element={<StripeCouponEdit />} />
+        <Route path="show/:id" element={<StripeCouponShow />} />
+      </Route>
+      <Route path="/profile" />
+    </CustomRoutes>
   </HydraAdmin>
 );
 

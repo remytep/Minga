@@ -4,7 +4,7 @@ import { useLocation } from "react-router-dom";
 function CartBreadcrumb() {
 
     const location = useLocation();
-    console.log(location.pathname)
+    //console.log(location.pathname)
     const background = {
         active: "bg-[#C9C5BA]",
         default: "bg-[#dbdbdb]"
@@ -12,7 +12,9 @@ function CartBreadcrumb() {
 
     const steps = [
         { name: "Cart", url: "/cart" },
-        { name: "Shipping", url: "/order/shipping" }
+        { name: "Shipping", url: "/order/shipping" },
+        { name: "Payment", url: "/order/payment" }
+
     ]
 
     return (

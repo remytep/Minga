@@ -17,7 +17,7 @@ import "./shipping.css";
 
 const Shipping = (props) => {
     const { cart, total, itemAmount } = useContext(CartContext);
-    const { user } = useContext(AuthContext);
+    const { user, loaded } = useContext(AuthContext);
     const [customerInfos, setCustomerInfos] = useState({});
     const [country, setCountry] = useState();
     let cartStorage = localStorage.getItem("Mon panier");
@@ -44,7 +44,7 @@ const Shipping = (props) => {
         resolver: yupResolver(schema)
     });
 
-    const handleClick = (data) => {
+    const handleClick = () => {
         axios.post(`${process.env.REACT_APP_ENTRYPOINT}/pay`, { id: user && user.id, customerInfos, cart })
             .then((res) => {
                 window.open(res.data);
@@ -54,13 +54,12 @@ const Shipping = (props) => {
             })
     }
 
-    if (!cartStorage) {
+    if (!cartStorage || (total > 1000 && !user && loaded)) {
         return (
             <Navigate to="/" replace={true} />
         )
     }
 
-    console.log(errors);
     return (
         <>
             <CartBreadcrumb />
