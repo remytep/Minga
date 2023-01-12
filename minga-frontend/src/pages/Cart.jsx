@@ -60,7 +60,7 @@ function Cart() {
                             </div>
                             <h3 className="py-2">Excluding shopping fees</h3>
                         </div>
-                        {(total <= 1000 && !user && loaded || (user && itemAmount > 0)) &&
+                        {((itemAmount > 0 && total <= 1000 && !user && loaded) || (user && itemAmount > 0)) &&
                             <div className="mt-5 flex-col text-white text-center bg-[#060606] rounded-md">
                                 <button
                                     className="font-bold uppercase text-sm px-6 py-3 rounded shadow hover:shadow-lg outline-none focus:outline-none mr-1 mb-1 ease-linear transition-all duration-150"

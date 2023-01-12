@@ -83,7 +83,7 @@ class Product
 
     #[ORM\ManyToOne(inversedBy: 'products')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['product.read', 'product.write', 'product_sub_category.item.get'])]
+    #[Groups(['product.read', 'product.write', 'product_sub_category.item.get', 'sku.read'])]
     private ?ProductSubCategory $productSubCategory;
 
     #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductOption::class, cascade: ["persist"], orphanRemoval: true)]

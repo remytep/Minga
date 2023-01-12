@@ -57,7 +57,7 @@ class ProductSubCategory
 
     #[ORM\ManyToOne(inversedBy: 'productSubCategories')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['product_sub_category.read', 'product_sub_category.write', 'product.read'])]
+    #[Groups(['product_sub_category.read', 'product_sub_category.write', 'product.read', 'sku.read'])]
     private ?ProductCategory $productCategory = null;
 
     #[ORM\Column(length: 255, nullable: true)]

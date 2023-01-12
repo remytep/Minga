@@ -56,23 +56,29 @@ function CartItem({ product, readonly }) {
 
           <div className="flex text-xl justify-between">
             <div className="flex">
-              <div
-                onClick={() => decreaseAmount(product.id)}
-                className="flex justify-center items-center cursor-pointer px-2 h-full bg-black text-white"
-              >
-                <IoMdRemove />
-              </div>
+              {!readonly &&
+                <div
+                  onClick={() => decreaseAmount(product.id)}
+                  className="flex justify-center items-center cursor-pointer px-2 h-full bg-black text-white"
+                >
+                  <IoMdRemove />
+                </div>
+              }
+
 
               <div className="h-full flex justify-center items-center px-4 bg-white text-gray-700">
                 {product.amount}
               </div>
 
-              <div
-                onClick={() => increaseAmount(product.id)}
-                className="h-full flex justify-center items-center cursor-pointer px-2 bg-black text-white"
-              >
-                <IoMdAdd />
-              </div>
+              {!readonly &&
+
+                <div
+                  onClick={() => increaseAmount(product.id)}
+                  className="h-full flex justify-center items-center cursor-pointer px-2 bg-black text-white"
+                >
+                  <IoMdAdd />
+                </div>
+              }
             </div>
             <span>
               {(product.price * (100 - product.discountPercent)) / 100 + "€"}

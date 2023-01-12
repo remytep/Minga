@@ -41,13 +41,13 @@ const StripeCouponList = () => {
                 <>
                     <Link component="button" underline="none" variant="h5"
                         onClick={() => {
-                            navigate("/admin/coupon/show/" + params.row.id)
+                            navigate("/admin/panel/coupon/show/" + params.row.id)
                         }}>
                         <VisibilityIcon />
                     </Link>
                     <Link component="button" underline="none" variant="h6"
                         onClick={() => {
-                            navigate("/admin/coupon/edit/" + params.row.id)
+                            navigate("/admin/panel/coupon/edit/" + params.row.id)
                         }}>
                         <EditIcon />
                     </Link>
@@ -64,7 +64,7 @@ const StripeCouponList = () => {
                 <div>
                     <Link component="button" underline="none" variant="h6"
                         onClick={() => {
-                            navigate("/admin/coupon/create")
+                            navigate("/admin/panel/coupon/create")
                         }}>
                         Create coupon
                     </Link>

@@ -14,7 +14,7 @@ const MyMenu = () => {
             {Object.keys(resources).map(name => (
                 <Menu.ResourceItem key={name} name={name} />
             ))}
-            <Menu.Item to="/admin/coupon" primaryText="Coupon" leftIcon={<ViewListSharpIcon />} />
+            <Menu.Item to="/admin/panel/coupon" primaryText="Coupon" leftIcon={<ViewListSharpIcon />} />
         </Menu>
     );
 };

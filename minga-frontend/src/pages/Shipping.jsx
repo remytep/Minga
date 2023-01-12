@@ -20,7 +20,7 @@ const Shipping = (props) => {
     const { user, loaded } = useContext(AuthContext);
     const [customerInfos, setCustomerInfos] = useState({});
     const [country, setCountry] = useState();
-    let cartStorage = localStorage.getItem("Mon panier");
+    let cartStorage = localStorage.getItem("CART");
 
 
     const schema = yup.object({
@@ -54,7 +54,7 @@ const Shipping = (props) => {
             })
     }
 
-    if (!cartStorage || (total > 1000 && !user && loaded)) {
+    if (cartStorage.length === 0 || (total > 1000 && !user && loaded)) {
         return (
             <Navigate to="/" replace={true} />
         )

@@ -12,7 +12,7 @@ function Search() {
       setProducts([]);
       axios({
         method: "GET",
-        url: "https://localhost:8000/api/products?name=" + searchTerms,
+        url: "http://localhost:8000/api/products?name=" + searchTerms,
         headers: { "content-type": "application/json" },
       }).then((response) => {
         setProducts(response.data["hydra:member"]);

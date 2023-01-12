@@ -11,7 +11,7 @@ import SubCategory from "./pages/SubCategory";
 import Login from "./components/Auth/Login";
 import Register from "./components/Auth/Register";
 import Cart from "./pages/Cart";
-import Success from "./pages/OrderSucess";
+import Success from "./pages/OrderSuccess";
 import Cancel from "./pages/OrderCancel";
 import Shipping from "./pages/Shipping";
 
@@ -31,7 +31,7 @@ function App() {
       <AuthProvider>
         <CartProvider>
           <Routes>
-            <Route path="/admin/*" element={<AdminPanel />} />
+            <Route path="/admin/panel/*" element={<AdminPanel />} />
             <Route element={<Layout />}>
               <Route path="/" element={<Home />} />
               <Route path="/login" element={<Login />} />
@@ -51,6 +51,7 @@ function App() {
               <Route path="/search/" element={<Search />}>
                 <Route path=":searchTerms" element={<Search />} />
               </Route>
+              <Route path="cart" element={<Cart />} />
             </Route>
           </Routes>
         </CartProvider>

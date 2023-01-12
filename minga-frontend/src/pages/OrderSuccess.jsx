@@ -34,7 +34,7 @@ function Success() {
 
 
     if (loaded) {
-        localStorage.removeItem("Mon panier");
+        localStorage.removeItem("CART");
         return (
             <div className="h-screen">
                 <div className="bg-white p-6  md:mx-auto">
