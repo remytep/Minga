@@ -6,6 +6,8 @@ import ProductOptionValueCreate from "./ProductOptionValueCreate";
 import SkuCreate from "./SkuCreate";
 import SkuValueCreate from "./SkuValueCreate";
 import UserCreate from "./UserCreate";
+import OrderCreate from "./OrderCreate";
+import OrderItemCreate from "./OrderItemCreate";
 
 export {
   ProductCreate,
@@ -16,4 +18,6 @@ export {
   SkuCreate,
   SkuValueCreate,
   UserCreate,
+  OrderCreate,
+  OrderItemCreate,
 };

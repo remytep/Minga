@@ -1,21 +1,43 @@
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext, useState, useEffect, useContext } from "react";
+import { AuthContext } from "./AuthContext";
+import axios from "axios";
 
 export const CartContext = createContext();
 
-const localStoragePanier = JSON.parse(
-  localStorage.getItem("Mon panier") || "[]"
-);
+const localStoragePanier = JSON.parse(localStorage.getItem("CART") || "[]");
 
 function CartProvider({ children }) {
+  const { user } = useContext(AuthContext);
   // cart state
   const [cart, setCart] = useState(localStoragePanier);
-
+  const [cartIri, setCartIri] = useState(null);
   // total price state
   const [total, setTotal] = useState(0);
 
   // item amount state
   const [itemAmount, setItemAmount] = useState(0);
-
+  useEffect(() => {
+    if (user) {
+      axios
+        .post("https://localhost:8000/order", {
+          user: "/api/users/" + user.id,
+        })
+        .then((response) => {
+          //console.log(response.data.id);
+          setCartIri("/api/orders/" + response.data.id);
+        })
+        .catch((error) => console.log(error));
+      if (cartIri) {
+        axios.get("https://localhost:8000" + cartIri).then((response) => {
+          setCart(
+            response.data.orderItems.map((orderItem) => {
+              return { ...orderItem.sku, amount: orderItem.quantity };
+            })
+          );
+        });
+      }
+    }
+  }, [user, cartIri]);
   useEffect(() => {
     // update total amount
     if (cart) {
@@ -27,12 +49,16 @@ function CartProvider({ children }) {
 
     // total price
     const total = cart.reduce((accumulator, currentItem) => {
-      return accumulator + currentItem.price * currentItem.amount;
+      return (
+        accumulator +
+        ((currentItem.price * (100 - currentItem.discountPercent)) / 100) *
+          currentItem.amount
+      );
     }, 0);
     setTotal(total);
 
-    localStorage.setItem("Mon panier", JSON.stringify(cart));
-  }, [cart]);
+    localStorage.setItem("CART", JSON.stringify(cart));
+  }, [cart, user]);
 
   // add to cart
   const addToCart = (product, id, amount) => {
@@ -41,7 +67,6 @@ function CartProvider({ children }) {
     const cartItem = cart.find((item) => {
       return item.id === id;
     });
-
     if (cartItem) {
       const newCart = [...cart].map((item) => {
         if (item.id === id) {
@@ -52,21 +77,55 @@ function CartProvider({ children }) {
       });
       setCart(newCart);
     } else {
+      if (user) {
+        axios
+          .post("https://localhost:8000/order_items", {
+            orderNumber: "/api/orders/1",
+            sku: product["@id"],
+            quantity: amount,
+          })
+          .then((response) => {
+            //console.log(response);
+          })
+          .catch((error) => console.log(error));
+      }
       setCart([...cart, newItem]);
     }
   };
 
   // delete item from cart
   const deleteItem = (id) => {
+    //console.log(id);
     const newCart = cart.filter((item) => {
       return item.id !== id;
     });
+    axios
+      .delete("https://localhost:8000/order_items", {
+        data: {
+          orderNumber: "/api/orders/1",
+          sku: "/api/skus/" + id,
+        },
+      })
+      .then((response) => {
+        //console.log(response);
+      })
+      .catch((error) => console.log(error));
     setCart(newCart);
   };
 
   // increase amount
   const increaseAmount = (id) => {
     const cartItem = cart.find((item) => item.id === id);
+    axios
+      .put("https://localhost:8000/order_items", {
+        orderNumber: "/api/orders/1",
+        sku: "/api/skus/" + id,
+        quantity: cartItem.amount + 1,
+      })
+      .then((response) => {
+        //console.log(response);
+      })
+      .catch((error) => console.log(error));
     addToCart(cartItem, id, 1);
   };
 
@@ -78,6 +137,16 @@ function CartProvider({ children }) {
     if (cartItem) {
       const newCart = cart.map((item) => {
         if (item.id === id) {
+          axios
+            .put("https://localhost:8000/order_items", {
+              orderNumber: "/api/orders/1",
+              sku: "/api/skus/" + id,
+              quantity: cartItem.amount - 1,
+            })
+            .then((response) => {
+              //console.log(response);
+            })
+            .catch((error) => console.log(error));
           return { ...item, amount: cartItem.amount - 1 };
         } else {
           return item;

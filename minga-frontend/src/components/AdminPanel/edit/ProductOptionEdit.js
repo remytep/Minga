@@ -1,17 +1,17 @@
 import { EditGuesser, InputGuesser } from "@api-platform/admin";
 import { AutocompleteInput, ReferenceInput, required } from "react-admin";
 
-const transform = data => ({
-    ...data,
-    product: `${data.product["@id"]}`
+const transform = (data) => ({
+  ...data,
+  product: `${data.product["@id"]}`,
 });
 
 const ProductOptionEdit = () => (
-    <EditGuesser transform={transform}>
-        <ReferenceInput source="product" reference="products">
-            <AutocompleteInput source="name" validate={required()} fullWidth />
-        </ReferenceInput>
-        <InputGuesser source="name" validate={required()} fullWidth />
-    </EditGuesser>
-)
-export default ProductOptionEdit
+  <EditGuesser transform={transform}>
+    <ReferenceInput source="products" reference="products">
+      <AutocompleteInput source="name" validate={required()} fullWidth />
+    </ReferenceInput>
+    <InputGuesser source="name" validate={required()} fullWidth />
+  </EditGuesser>
+);
+export default ProductOptionEdit;

@@ -20,14 +20,14 @@ import CartProvider from "./contexts/CartContext";
 function App() {
   return (
     <Router>
-      <CartProvider>
-        <AuthProvider>
+      <AuthProvider>
+        <CartProvider>
           <Routes>
             <Route element={<Layout />}>
               <Route path="/" element={<Accueil />} />
+              <Route path="/admin/panel/*" element={<AdminPanel />} />
               <Route path="/login" element={<Login />} />
               <Route path="/register" element={<Register />} />
-              <Route path="/admin/*" element={<AdminPanel />} />
               <Route path="/:category" element={<Category />} />
               <Route path="/:category/:subcategory" element={<SubCategory />} />
               <Route
@@ -39,8 +39,8 @@ function App() {
               </Route>
             </Route>
           </Routes>
-        </AuthProvider>
-      </CartProvider>
+        </CartProvider>
+      </AuthProvider>
     </Router>
   );
 }

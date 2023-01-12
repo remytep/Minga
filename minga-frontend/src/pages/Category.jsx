@@ -12,23 +12,25 @@ function Category() {
       url: "https://localhost:8000/api/product_categories/" + category,
       headers: { "content-type": "application/json" },
     }).then((response) => {
-      console.log(response.data);
+      //console.log(response.data);
       setSubCategories(response.data.productSubCategories);
     });
   }, [category]);
   return (
     <main className="px-5 md:px-6 lg:px-10 xl:px-16">
-      <h2 className="text-2xl font-bold text-gray-900">
-        {category
-          .replace("-", " ")
-          .split(" ")
-          .map(
-            (element) =>
-              element.charAt(0).toUpperCase() + element.slice(1).toLowerCase()
-          )
-          .join(" ")}
-      </h2>
-      <div className="flex mt-6 space-y-12 lg:grid lg:grid-cols-3 lg:gap-x-6 lg:space-y-0">
+      <div className="flex items-baseline justify-between border-b border-gray-200 py-6">
+        <h1 className="text-4xl font-bold tracking-tight text-gray-900">
+          {category
+            .replace("-", " ")
+            .split(" ")
+            .map(
+              (element) =>
+                element.charAt(0).toUpperCase() + element.slice(1).toLowerCase()
+            )
+            .join(" ")}
+        </h1>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 pt-6 pb-24">
         {subCategories.map((subcategory) => (
           <Link key={subcategory.name} to={`/${category}/${subcategory.name}`}>
             <SubcategoryCard subcategory={subcategory} />

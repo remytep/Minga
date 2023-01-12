@@ -33,12 +33,12 @@ class ProductOptionValue
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['product_option_value.read','product_option.read', 'product.read', 'product.write', 'product_option.write'])]
+    #[Groups(['product_option_value.read', 'product_option.read', 'product.read', 'product.write', 'product_option.write'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['product_option_value.read', 'product_option_value.write','product_option.read', 'product.write', 'product_option.write'])]
+    #[Groups(['product_option_value.read', 'product_option_value.write', 'product_option.read', 'product.write', 'product_option.write'])]
     private ?Product $product = null;
 
     #[ORM\ManyToOne(inversedBy: 'productOptionValues')]
@@ -47,7 +47,7 @@ class ProductOptionValue
     private ?ProductOption $productOption = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['product_option_value.read', 'product_option.item.get','product_option.read', 'product.read', 'product.write',  'product_option.write', 'sku_value.read', 'sku.read'])]
+    #[Groups(['product_option_value.read', 'product_option.item.get', 'product_option.read', 'product.read', 'product.write',  'product_option.write', 'sku_value.read', 'sku.read', 'order.read'])]
     private ?string $value = null;
 
     public function getId(): ?int

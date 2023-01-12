@@ -13,6 +13,7 @@ function Accueil() {
       url: "https://localhost:8000/api/products/popular",
       headers: { "content-type": "application/json" },
     }).then((response) => {
+      //console.log(response.data);
       setProducts(response.data["hydra:member"].slice(0, 6));
     });
     axios({
@@ -20,6 +21,7 @@ function Accueil() {
       url: "https://localhost:8000/api/products/?featured=true",
       headers: { "content-type": "application/json" },
     }).then((response) => {
+      //console.log(response.data);
       setFeaturedProducts(response.data["hydra:member"].slice(0, 6));
     });
   }, []);
@@ -33,12 +35,12 @@ function Accueil() {
           </h2>
           <ProductCarousel products={products} featured={false} />
         </div>
-        <div className="">
+        {/*         <div className="">
           <h2 className="text-2xl font-bold py-3 px-5 md:px-6 lg:px-10 xl:px-16">
             Featured
           </h2>
           <ProductCarousel products={featuredProducts} featured={true} />
-        </div>
+        </div> */}
       </main>
     </>
   );
