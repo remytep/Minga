@@ -37,9 +37,10 @@ final class UploadFileController extends AbstractController
         $sku->setWeight($request->get('weight'));
         $sku->setProduct($product);
         $sku->setReferenceNumber($request->get('referenceNumber'));
+        $sku->setDiscountPercent($request->get('discountPercent'));
         // upload the file and save its filename
         $sku->setThumbnail($fileUploader->upload(
-            $uploadedFile, 
+            $uploadedFile,
             $request->get('referenceNumber'),
             "sku"
         ));

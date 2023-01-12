@@ -13,6 +13,7 @@ function Accueil() {
       url: "http://localhost:8000/api/products/popular",
       headers: { "content-type": "application/json" },
     }).then((response) => {
+      //console.log(response.data);
       setProducts(response.data["hydra:member"].slice(0, 6));
     });
     axios({
@@ -20,6 +21,7 @@ function Accueil() {
       url: "http://localhost:8000/api/products/?featured=true",
       headers: { "content-type": "application/json" },
     }).then((response) => {
+      //console.log(response.data);
       setFeaturedProducts(response.data["hydra:member"].slice(0, 6));
     });
   }, []);

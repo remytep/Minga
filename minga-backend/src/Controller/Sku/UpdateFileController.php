@@ -45,6 +45,7 @@ final class UpdateFileController extends AbstractController
                     $path
                 )
             );
+            $sku->setDiscountPercent($data->discountPercent);
         } else {
             $sku = $entityManager
                 ->getRepository(Sku::class)
@@ -66,6 +67,7 @@ final class UpdateFileController extends AbstractController
                 $path,
                 $request->get("previous_data")->getThumbnail(),
             ));
+            $sku->setDiscountPercent($data->inputs["discountPercent"]);
         }
 
 

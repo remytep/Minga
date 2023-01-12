@@ -45,12 +45,12 @@ class SkuValue
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['sku_value.read', 'sku.read', 'sku_value.write'])]
+    #[Groups(['sku_value.read', 'sku.read', 'sku_value.write', 'order.read'])]
     private ?ProductOption $productOption = null;
 
     #[ORM\ManyToOne]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['sku_value.read', 'sku.read', 'sku_value.write'])]
+    #[Groups(['sku_value.read', 'sku.read', 'sku_value.write', 'order.read'])]
     private ?ProductOptionValue $productOptionValue = null;
 
     #[ORM\ManyToOne(inversedBy: 'skuValues')]

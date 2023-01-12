@@ -5,6 +5,8 @@ import ProductOptionEdit from "./ProductOptionEdit";
 import ProductOptionValueEdit from "./ProductOptionValueEdit";
 import SkuEdit from "./SkuEdit";
 import SkuValueEdit from "./SkuValueEdit";
+import OrderEdit from "./OrderEdit";
+import OrderItemEdit from "./OrderItemEdit";
 
 export {
   ProductEdit,
@@ -14,4 +16,6 @@ export {
   ProductOptionValueEdit,
   SkuEdit,
   SkuValueEdit,
+  OrderEdit,
+  OrderItemEdit,
 };

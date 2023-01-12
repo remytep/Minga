@@ -65,7 +65,7 @@ function Options2({ product, setVariant }) {
         headers: { "content-type": "application/json" },
       })
         .then((response) => {
-          console.log(response.data);
+          //console.log(response.data);
           setVariant(response.data);
         })
         .catch((error) => {

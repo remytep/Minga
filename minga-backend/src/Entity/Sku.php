@@ -40,28 +40,28 @@ class Sku
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
-    #[Groups(['sku.read', 'product.read'])]
+    #[Groups(['sku.read', 'product.read', 'order.read'])]
     private ?int $id = null;
 
     #[ORM\ManyToOne(inversedBy: 'skus')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['sku.read', 'sku.write'])]
+    #[Groups(['sku.read', 'sku.write', 'order.read', 'order.read'])]
     private ?Product $product = null;
 
     #[ORM\Column]
-    #[Groups(['sku.read', 'sku.write', 'product.read', 'product_sub_category.read'])]
+    #[Groups(['sku.read', 'sku.write', 'product.read', 'product_sub_category.read', 'order.read'])]
     private ?float $price = null;
 
     #[ORM\Column]
-    #[Groups(['sku.read', 'sku.write', 'product.read', 'product_sub_category.read'])]
+    #[Groups(['sku.read', 'sku.write', 'product.read', 'product_sub_category.read', 'order.read'])]
     private ?int $stock = null;
 
     #[ORM\Column(length: 255)]
-    #[Groups(['sku.read', 'sku.write', 'product.read'])]
+    #[Groups(['sku.read', 'sku.write', 'product.read', 'order.read'])]
     private ?string $referenceNumber = null;
 
     #[ORM\OneToMany(mappedBy: 'Sku', targetEntity: SkuValue::class, cascade: ['persist'], orphanRemoval: true)]
-    #[Groups(['sku.read', 'sku.write', 'product.read'])]
+    #[Groups(['sku.read', 'sku.write', 'product.read', 'order.read'])]
     private Collection $skuValues;
 
     #[ORM\Column(length: 255)]
@@ -71,12 +71,16 @@ class Sku
             "type" => "string",
         ]
     )]
-    #[Groups(['sku.read', 'sku.write', 'product.read'])]
+    #[Groups(['sku.read', 'sku.write', 'product.read', 'order.read', 'product_sub_category.read'])]
     private ?string $thumbnail = null;
 
     #[ORM\Column]
-    #[Groups(['sku.read', 'sku.write', 'product.read'])]
+    #[Groups(['sku.read', 'sku.write', 'product.read', 'order.read'])]
     private ?float $weight = null;
+
+    #[ORM\Column]
+    #[Groups(['sku.read', 'sku.write', 'product.read', 'order.read', 'product_sub_category.read'])]
+    private ?int $discountPercent = null;
 
 
     public function __construct()
@@ -191,4 +195,15 @@ class Sku
         return $this;
     }
 
+    public function getDiscountPercent(): ?int
+    {
+        return $this->discountPercent;
+    }
+
+    public function setDiscountPercent(?int $discountPercent): self
+    {
+        $this->discountPercent = $discountPercent;
+
+        return $this;
+    }
 }

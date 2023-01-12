@@ -1,9 +1,11 @@
 import { Fragment, useContext } from "react";
 import { Menu, Transition } from "@headlessui/react";
 import { AuthContext } from "../../../../contexts/AuthContext";
+import { CartContext } from "../../../../contexts/CartContext";
 
 export default function ProfileDropdown() {
   const { user, logout } = useContext(AuthContext);
+  const { clearCart } = useContext(CartContext);
   return (
     <Menu as="div" className="relative inline-block text-left ">
       <Menu.Button className="flex w-full justify-center items-center">
@@ -52,7 +54,7 @@ export default function ProfileDropdown() {
               {user.roles.includes("ROLE_ADMIN") ? (
                 <Menu.Item>
                   <a
-                    href="/admin"
+                    href="/admin/panel"
                     className="text-gray-900 block px-4 py-2 text-sm"
                   >
                     Admin Panel
@@ -62,7 +64,10 @@ export default function ProfileDropdown() {
               <Menu.Item>
                 <a
                   href="/"
-                  onClick={() => logout()}
+                  onClick={() => {
+                    clearCart();
+                    logout();
+                  }}
                   className={"text-gray-900 block px-4 py-2 text-sm"}
                 >
                   Logout

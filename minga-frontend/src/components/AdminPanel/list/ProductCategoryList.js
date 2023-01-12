@@ -1,30 +1,34 @@
 import { FieldGuesser, ListGuesser } from "@api-platform/admin";
 import {
-    ArrayField,
-    FunctionField,
-    ReferenceArrayField,
-    ReferenceField,
-    SingleFieldList,
-    WithRecord,
+  ArrayField,
+  FunctionField,
+  ReferenceArrayField,
+  ReferenceField,
+  SingleFieldList,
+  WithRecord,
 } from "react-admin";
 import Chip from "@mui/material/Chip";
 
 const ProductCategoryList = (props) => (
-    <ListGuesser {...props}>
-        <FieldGuesser source={"name"} />
+  <ListGuesser {...props}>
+    <FieldGuesser source={"name"} />
+    <ArrayField source="productSubCategories">
+      <SingleFieldList>
         <WithRecord
-            label="Subcategories"
-            render={(record) =>
-                record.productSubCategories.length === 0 ? (
-                    <span>No subcategories found</span>
-                ) : (
-                    <ReferenceArrayField
-                        source="productSubCategories"
-                        reference="product_sub_categories"
-                    />
-                )
-            }
+          label="Subcategories"
+          render={(record) =>
+            record && (
+              <Chip
+                label={record.name}
+                onClick={() =>
+                  (window.location.href = `/admin/panel/product_sub_categories/%2Fapi%2Fproduct_sub_categories%2F${record.name}/`)
+                }
+              />
+            )
+          }
         />
-    </ListGuesser>
+      </SingleFieldList>
+    </ArrayField>
+  </ListGuesser>
 );
 export default ProductCategoryList;

@@ -4,13 +4,16 @@ import { IoMdClose, IoMdRemove, IoMdAdd } from "react-icons/io";
 import { CartContext } from "../../../../contexts/CartContext";
 
 function CartItem({ product }) {
-  console.log(product);
   const { deleteItem, increaseAmount, decreaseAmount } =
     useContext(CartContext);
-
+  console.log(product);
   return (
-    <div className="flex bg-[#C9C5BA]">
-      <img src="/product.webp" alt="desk" className="w-1/2" />
+    <div className="flex bg-[#C9C5BA] h-36">
+      <img
+        src={`http://localhost:8000/uploads/${product.thumbnail}`}
+        alt="desk"
+        className="object-contain h-full"
+      />
       <div className="flex-1 flex flex-col p-3">
         <div className="flex-1 flex flex-col gap-2">
           <div className="flex justify-between">
@@ -33,7 +36,6 @@ function CartItem({ product }) {
           <div className="flex flex-col">
             {product.skuValues.map((skuvalue, i) => (
               <div className="flex" key={i}>
-                {console.log(skuvalue)}
                 <p className="text-gray-600 text-sm">
                   {/* {skuvalue.productOption.name}: */}
                 </p>
@@ -44,27 +46,39 @@ function CartItem({ product }) {
             ))}
           </div>
         </div>
-        <div className="flex justify-between">
-          <div className="flex items-center">
-            <div
-              onClick={() => decreaseAmount(product.id)}
-              className="flex justify-center items-center cursor-pointer px-2 h-full bg-black text-white"
-            >
-              <IoMdRemove />
-            </div>
-
-            <div className="h-full flex justify-center items-center px-4 bg-white text-gray-700">
-              {product.amount}
-            </div>
-
-            <div
-              onClick={() => increaseAmount(product.id)}
-              className="h-full flex justify-center items-center cursor-pointer px-2 bg-black text-white"
-            >
-              <IoMdAdd />
-            </div>
+        <div className="flex flex-col justify-between">
+          <div className="flex justify-end">
+            {product.discountPercent !== 0 ? (
+              <span className="text-gray-400 line-through">
+                {product.price + "€ "}
+              </span>
+            ) : null}
           </div>
-          <div className="flex text-xl">{`${product.price} €`}</div>
+
+          <div className="flex text-xl justify-between">
+            <div className="flex">
+              <div
+                onClick={() => decreaseAmount(product.id)}
+                className="flex justify-center items-center cursor-pointer px-2 h-full bg-black text-white"
+              >
+                <IoMdRemove />
+              </div>
+
+              <div className="h-full flex justify-center items-center px-4 bg-white text-gray-700">
+                {product.amount}
+              </div>
+
+              <div
+                onClick={() => increaseAmount(product.id)}
+                className="h-full flex justify-center items-center cursor-pointer px-2 bg-black text-white"
+              >
+                <IoMdAdd />
+              </div>
+            </div>
+            <span>
+              {(product.price * (100 - product.discountPercent)) / 100 + "€"}
+            </span>
+          </div>
         </div>
       </div>
     </div>

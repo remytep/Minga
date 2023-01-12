@@ -10,7 +10,7 @@ import Options2 from "../components/ProductPage/Options2";
 import Options3 from "../components/ProductPage/Options3";
 
 function Product() {
-  let { subcategory, slug } = useParams();
+  let { category, subcategory, slug } = useParams();
   const { addToCart } = useContext(CartContext);
   const [quantity, setQuantity] = useState(1);
   const [product, setProduct] = useState(null);
@@ -18,18 +18,20 @@ function Product() {
   const [optionGroup, setOptionGroup] = useState(null);
 
   useEffect(() => {
-    axios({
-      method: "GET",
-      url: "http://localhost:8000/api/products/" + slug,
-      headers: { "content-type": "application/json" },
-    })
-      .then((response) => {
-        //console.log(response.data);
-        if (response.data.productSubCategory.name === subcategory) {
-          setProduct(response.data);
-        }
+    if (category !== "admin") {
+      axios({
+        method: "GET",
+        url: "https://localhost:8000/api/products/" + slug,
+        headers: { "content-type": "application/json" },
       })
-      .catch((error) => console.log(error));
+        .then((response) => {
+          //console.log(response.data);
+          if (response.data.productSubCategory.name === subcategory) {
+            setProduct(response.data);
+          }
+        })
+        .catch((error) => console.log(error));
+    }
   }, [slug]);
 
   useEffect(() => {
@@ -58,7 +60,7 @@ function Product() {
           withCredentials: true,
         })
         .then((response) => {
-          console.log(response.data);
+          //console.log(response.data);
         })
         .catch((error) => console.log(error));
     }
@@ -80,10 +82,25 @@ function Product() {
   const handleMore = () => {
     if (quantity < variant.stock) setQuantity(quantity + 1);
   };
-  if (product) {
+  if (product && category !== "admin") {
     return (
       <main className="flex flex-col lg:flex-row gap-6 py-2 px-5 md:px-6 lg:px-10 xl:px-16 w-screen md:h-full">
-        <img src="/product.webp" alt="" className="lg:w-1/2 object-cover" />
+        <div className="lg:w-1/2 relative">
+          <img
+            src={
+              variant
+                ? `http://localhost:8000/uploads/${variant.thumbnail}`
+                : `http://localhost:8000/uploads/${product.thumbnail}`
+            }
+            alt=""
+            className="object-cover"
+          />
+          {variant && variant.discountPercent !== 0 ? (
+            <span className="absolute top-4 right-0 text-4xl bg-white bg-opacity-30">
+              <p className="p-1">{"-" + variant.discountPercent + "%"}</p>
+            </span>
+          ) : null}
+        </div>
         <div className="flex flex-col gap-2 justify-between lg:w-1/2">
           <div id="name" className="flex justify-between h-18 md:h-24">
             <div className="flex flex-col">
@@ -99,7 +116,25 @@ function Product() {
               {variant ? (
                 <>
                   <h1 className="text-3xl md:text-4xl text-right font-semibold">
-                    {variant.price}€
+                    {variant.discountPercent !== 0 ? (
+                      <div className="flex items-center">
+                        <p className="text-gray-400 line-through text-lg">
+                          {variant.price + "€ "}
+                        </p>
+                        &nbsp;
+                        <p className="text-red-600">
+                          {(variant.price * (100 - variant.discountPercent)) /
+                            100}
+                          €
+                        </p>
+                      </div>
+                    ) : (
+                      <p>
+                        {(variant.price * (100 - variant.discountPercent)) /
+                          100}
+                        €
+                      </p>
+                    )}
                   </h1>
                   <p className="text-gray-500">{variant.reference_number}</p>
                   <div className="text-right">{stock}</div>
