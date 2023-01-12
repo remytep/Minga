@@ -1,6 +1,6 @@
 import React from "react";
 function ProductCard({ product, featured }) {
-  console.log(product.skus);
+  //console.log(product.skus);
   let sale = 0;
   let originalPrice;
   let min =

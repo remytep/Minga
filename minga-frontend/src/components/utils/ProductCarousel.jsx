@@ -22,19 +22,19 @@ function ProductCarousel({ products, category, subcategory, featured }) {
 
   useEffect(() => {
     window.addEventListener("resize", handleResize);
-    console.log(windowDimensions);
+    //console.log(windowDimensions);
     return () => window.removeEventListener("resize", handleResize);
   }, []);
 
   useEffect(() => {
     let array = [];
     let columns = [];
-    console.log("troisieme", windowDimensions);
+    //console.log("troisieme", windowDimensions);
     if (windowDimensions) {
-      console.log("1");
+      //console.log("1");
       switch (true) {
         case windowDimensions.width < 640:
-          console.log("small");
+          //console.log("small");
           products.forEach((product) => {
             array.push(
               <Link
@@ -54,7 +54,7 @@ function ProductCarousel({ products, category, subcategory, featured }) {
           });
           break;
         case windowDimensions.width < 1024:
-          console.log("large");
+          //console.log("large");
           products.forEach((product, i) => {
             columns.push(
               <Link
@@ -107,7 +107,7 @@ function ProductCarousel({ products, category, subcategory, featured }) {
           });
           break;
         default:
-          console.log("xl");
+          //console.log("xl");
           products.forEach((product, i) => {
             columns.push(
               <Link
@@ -162,14 +162,14 @@ function ProductCarousel({ products, category, subcategory, featured }) {
       }
     }
     setCarouselContent(array);
-    console.log(carouselContent);
+    //console.log(carouselContent);
     //console.log(windowDimensions, carouselContent);
   }, [windowDimensions]);
 
   useEffect(() => {
     setTimeout(() => {
       setWindowDimensions(getWindowDimensions());
-      console.log("deuxieme", windowDimensions);
+      //console.log("deuxieme", windowDimensions);
     }, 750);
   }, []);
 
