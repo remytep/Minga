@@ -44,6 +44,10 @@ class FileUploader
         $fullPath = $this->getuploadPath(). "/" . $path;
         //$originalFilename = pathinfo($file["name"], PATHINFO_FILENAME);
         //$safeFilename = $this->slugger->slug($originalFilename);
+        //prevent unlink error
+        if (!$oldThumbnail){
+            $oldThumbnail = uniqid();
+        }
         $fileName = $name.'.'.pathinfo($file["name"])["extension"];
         try {
             //unlink when update image
@@ -62,7 +66,7 @@ class FileUploader
         $fullPath = $this->getuploadPath(). "/" . $path;
 
         if (!file_exists($this->getuploadPath() . "/" . $oldName)){
-            throw new BadRequestHttpException('Thumbnail cannot be updated');
+            throw new BadRequestHttpException('Thumbnail cannot be updated or does not exist');
         }
         try {
             $extension = pathinfo($fullPath . "/" . $oldName)["extension"];

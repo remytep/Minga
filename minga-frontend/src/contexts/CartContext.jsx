@@ -19,16 +19,16 @@ function CartProvider({ children }) {
   useEffect(() => {
     if (user) {
       axios
-        .post("https://localhost:8000/order", {
+        .post("http://localhost:8000/order", {
           user: "/api/users/" + user.id,
         })
         .then((response) => {
-          //console.log(response.data.id);
+          //console.log(response.data);
           setCartIri("/api/orders/" + response.data.id);
         })
         .catch((error) => console.log(error));
       if (cartIri) {
-        axios.get("https://localhost:8000" + cartIri).then((response) => {
+        axios.get("http://localhost:8000" + cartIri).then((response) => {
           setCart(
             response.data.orderItems.map((orderItem) => {
               return { ...orderItem.sku, amount: orderItem.quantity };
@@ -53,7 +53,7 @@ function CartProvider({ children }) {
       return (
         accumulator +
         ((currentItem.price * (100 - currentItem.discountPercent)) / 100) *
-          currentItem.amount
+        currentItem.amount
       );
     }, 0);
     setTotal(total);
@@ -65,6 +65,7 @@ function CartProvider({ children }) {
   const addToCart = (product, id, amount) => {
     const newItem = { ...product, amount };
     // check if item is already in cart
+    console.log(newItem);
     const cartItem = cart.find((item) => {
       return item.id === id;
     });
@@ -80,13 +81,13 @@ function CartProvider({ children }) {
     } else {
       if (user) {
         axios
-          .post("https://localhost:8000/order_items", {
-            orderNumber: "/api/orders/1",
+          .post("http://localhost:8000/order_items", {
+            orderNumber: cartIri,
             sku: product["@id"],
             quantity: amount,
           })
           .then((response) => {
-            //console.log(response);
+            console.log(response);
           })
           .catch((error) => console.log(error));
       }
@@ -101,9 +102,9 @@ function CartProvider({ children }) {
       return item.id !== id;
     });
     axios
-      .delete("https://localhost:8000/order_items", {
+      .delete("http://localhost:8000/order_items", {
         data: {
-          orderNumber: "/api/orders/1",
+          orderNumber: cartIri,
           sku: "/api/skus/" + id,
         },
       })
@@ -118,8 +119,8 @@ function CartProvider({ children }) {
   const increaseAmount = (id) => {
     const cartItem = cart.find((item) => item.id === id);
     axios
-      .put("https://localhost:8000/order_items", {
-        orderNumber: "/api/orders/1",
+      .put("http://localhost:8000/order_items", {
+        orderNumber: cartIri,
         sku: "/api/skus/" + id,
         quantity: cartItem.amount + 1,
       })
@@ -139,8 +140,8 @@ function CartProvider({ children }) {
       const newCart = cart.map((item) => {
         if (item.id === id) {
           axios
-            .put("https://localhost:8000/order_items", {
-              orderNumber: "/api/orders/1",
+            .put("http://localhost:8000/order_items", {
+              orderNumber: cartIri,
               sku: "/api/skus/" + id,
               quantity: cartItem.amount - 1,
             })

@@ -46,7 +46,7 @@ class Order
 
     #[ORM\Column]
     #[Groups(['order.read', 'order.write'])]
-    private ?int $totalAmount = 0;
+    private ?float $totalAmount = 0;
 
     #[ORM\OneToMany(mappedBy: 'orderNumber', targetEntity: OrderItem::class, orphanRemoval: true)]
     #[Groups(['order.read'])]
@@ -67,6 +67,10 @@ class Order
     #[ORM\Column(length: 255, nullable: true)]
     #[Groups(['order.read', 'order.write'])]
     private ?string $stripeCustomerId = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    #[Groups(['order.read', 'order.write'])]
+    private ?string $idEasypostTracking = null;
 
     public function __construct()
     {
@@ -104,7 +108,7 @@ class Order
         return $this;
     }
 
-    public function getTotalAmount(): ?int
+    public function getTotalAmount(): ?float
     {
         foreach ($this->getOrderItems() as $item) {
             $this->totalAmount += $item->getTotal();
@@ -113,7 +117,7 @@ class Order
         return $this->totalAmount;
     }
 
-    public function setTotalAmount(int $totalAmount): self
+    public function setTotalAmount(float $totalAmount): self
     {
         $this->totalAmount = $totalAmount;
 
@@ -211,6 +215,18 @@ class Order
     public function setStripeCustomerId(?string $stripeCustomerId): self
     {
         $this->stripeCustomerId = $stripeCustomerId;
+
+        return $this;
+    }
+
+    public function getIdEasypostTracking(): ?string
+    {
+        return $this->idEasypostTracking;
+    }
+
+    public function setIdEasypostTracking(?string $idEasypostTracking): self
+    {
+        $this->idEasypostTracking = $idEasypostTracking;
 
         return $this;
     }

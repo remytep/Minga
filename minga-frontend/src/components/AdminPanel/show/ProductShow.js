@@ -16,6 +16,7 @@ import {
 } from "react-admin";
 import { ProductTitle } from "../TitleComponents";
 import Chip from "@mui/material/Chip";
+import { useNavigate } from "react-router-dom";
 
 const AddSkuValue = () => {
   const record = useRecordContext();
@@ -47,101 +48,106 @@ const AddOptionValue = () => {
   );
 };
 
-const EditSku = (id, resource, record) => {
-  window.location.href = `/admin/skus/%2Fapi%2Fskus%2F${record.id}/show`;
-};
 
-const ProductShow = (props) => (
-  <ShowGuesser title={<ProductTitle />} {...props}>
-    <TabbedShowLayout>
-      <Tab label="product info">
-        <FieldGuesser source="name" />
-        <FieldGuesser source="description" />
-        <DateField source={"createdAt"} showTime />
-        <WithRecord
-          label="thumbnail"
-          render={(record) => (
-            <img
-              className="thumbnail"
-              src={`http://localhost:8000/uploads/${record.thumbnail}`}
-            />
-          )}
-        />
-        <ReferenceField
-          source="productSubCategory.@id"
-          reference="product_sub_categories"
-        />
-        <FieldGuesser source="slug" />
-        <FunctionField
-          label="featured"
-          render={(record) => (record["featured"] ? "true" : "false")}
-        />
-      </Tab>
 
-      <Tab label="option value">
-        <ArrayField source="productOptions">
+const ProductShow = (props) => {
+  const navigate = useNavigate();
+  const EditSku = (id, resource, record) => {
+    navigate("/admin/skus/%2Fapi%2Fskus%2F" + record.id + "/show");
+  };
+  return (
+    <ShowGuesser title={<ProductTitle />} {...props}>
+      <TabbedShowLayout>
+        <Tab label="product info">
+          <FieldGuesser source="name" />
+          <FieldGuesser source="description" />
+          <DateField source={"createdAt"} showTime />
+          <WithRecord
+            label="thumbnail"
+            render={(record) => (
+              <img
+                className="thumbnail"
+                src={`${process.env.REACT_APP_UPLOADS}/${record.thumbnail}`}
+              />
+            )}
+          />
+          <ReferenceField
+            source="productSubCategory.@id"
+            reference="product_sub_categories"
+          />
+          <FieldGuesser source="slug" />
           <FunctionField
             label="featured"
-            render={(record) =>
-              record["productOptions"].length === 0 && <p>No options found</p>
-            }
+            render={(record) => (record["featured"] ? "true" : "false")}
           />
-          <SingleFieldList linkType={false}>
-            <WithRecord
-              render={(record) =>
-                record && (
-                  <Chip
-                    label={record.name}
-                    onClick={() =>
-                      (window.location.href = `/admin/product_options/%2Fapi%2Fproduct_options%2F${record.id}/edit`)
-                    }
-                  />
-                )
-              }
-            />
-          </SingleFieldList>
-          <AddOptionValue {...props} />
-        </ArrayField>
-      </Tab>
+        </Tab>
 
-      <Tab label="SKU">
-        <ArrayField source="skus">
-          <FunctionField
-            render={(record) =>
-              record.skus.length === 0 && <p>No skus found</p>
-            }
-          />
-          <Datagrid rowClick={EditSku}>
+        <Tab label="option value">
+          <ArrayField source="productOptions">
             <FunctionField
-              label="Price"
-              render={(record) => record && record.price + " €"}
-            />
-            <WithRecord
-              label="Stock"
+              label="featured"
               render={(record) =>
-                record.stock === 0 ? (
-                  <span className="no-stock">Out of stock</span>
-                ) : (
-                  <span className="in-stock">{record.stock}</span>
-                )
+                record["productOptions"].length === 0 && <p>No options found</p>
               }
             />
-            <WithRecord
-              label="Weight"
+            <SingleFieldList linkType={false}>
+              <WithRecord
+                render={(record) =>
+                  record && (
+                    <Chip
+                      label={record.name}
+                      onClick={() =>
+                        (navigate(`/admin/product_options/%2Fapi%2Fproduct_options%2F${record.id}/edit`))
+                      }
+                    />
+                  )
+                }
+              />
+            </SingleFieldList>
+            <AddOptionValue {...props} />
+          </ArrayField>
+        </Tab>
+
+        <Tab label="SKU">
+          <ArrayField source="skus">
+            <FunctionField
               render={(record) =>
-                record.weight >= 1000 ? (
-                  <span>{record.weight / 1000} kg</span>
-                ) : (
-                  <span>{record.weight} g</span>
-                )
+                record.skus.length === 0 && <p>No skus found</p>
               }
             />
-            <TextField source="referenceNumber" />
-          </Datagrid>
-        </ArrayField>
-        <AddSkuValue {...props} />
-      </Tab>
-    </TabbedShowLayout>
-  </ShowGuesser>
-);
+            <Datagrid rowClick={EditSku}>
+              <FunctionField
+                label="Price"
+                render={(record) => record && record.price + " €"}
+              />
+              <WithRecord
+                label="Stock"
+                render={(record) =>
+                  record.stock === 0 ? (
+                    <span className="no-stock">Out of stock</span>
+                  ) : (
+                    <span className="in-stock">{record.stock}</span>
+                  )
+                }
+              />
+              <WithRecord
+                label="Weight"
+                render={(record) =>
+                  record.weight >= 1000 ? (
+                    <span>{record.weight / 1000} kg</span>
+                  ) : (
+                    <span>{record.weight} g</span>
+
+                  )
+                }
+              />
+              <TextField source="referenceNumber" />
+            </Datagrid>
+          </ArrayField>
+          <AddSkuValue {...props} />
+        </Tab>
+      </TabbedShowLayout>
+    </ShowGuesser>
+  );
+}
 export default ProductShow;

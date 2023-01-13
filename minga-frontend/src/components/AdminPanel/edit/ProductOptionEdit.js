@@ -8,10 +8,10 @@ const transform = (data) => ({
 
 const ProductOptionEdit = () => (
   <EditGuesser transform={transform}>
-    <ReferenceInput source="products" reference="products">
+    <ReferenceInput source="product.@id" reference="products">
       <AutocompleteInput source="name" validate={required()} fullWidth />
     </ReferenceInput>
     <InputGuesser source="name" validate={required()} fullWidth />
   </EditGuesser>
-);
-export default ProductOptionEdit;
+)
+export default ProductOptionEdit

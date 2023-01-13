@@ -9,10 +9,31 @@ import * as create from "./create";
 import * as edit from "./edit";
 import * as list from "./list";
 import * as show from "./show";
-import { Edit, Resource } from "react-admin";
-import { dataProvider, MyLayout } from "./config";
+import { Resource } from "react-admin";
+import { dataProvider } from "./config";
+import { MyLayout } from "./Layout";
+import { AuthContext } from "../../contexts/AuthContext";
+import { Navigate } from "react-router-dom";
+import { Route } from "react-router-dom";
+import { CustomRoutes } from 'react-admin';
+import StripeCouponCreate from "./create/StripeCouponCreate";
+import StripeCouponList from "./list/StripeCouponList";
+import StripeCouponEdit from "./edit/StripeCouponEdit";
+import StripeCouponShow from "./show/StripeCouponShow";
 
-const AdminPanel = () => (
+const AdminPanel = () =>
+// const { user, loaded, logout } = useContext(AuthContext);
+
+// //if there is a user which is not an admin or a guest, then navigate to home page
+// if (loaded &&
+//   (!user || (user && !user.roles.includes("ROLE_ADMIN")))
+// ) {
+//   return (
+//     <Navigate to="/" />
+//   )
+// }
+
+(
   <HydraAdmin
     layout={MyLayout}
     dataProvider={dataProvider()}
@@ -89,6 +110,21 @@ const AdminPanel = () => (
       edit={edit.OrderItemEdit}
       show={show.OrderItemShow}
     />
+    <Resource
+      name={"users"}
+      list={list.UserList}
+      create={create.UserCreate}
+      recordRepresentation="email"
+    />
+    <CustomRoutes>
+      <Route path="/coupon/">
+        <Route index element={<StripeCouponList />} />
+        <Route path="create" element={<StripeCouponCreate />} />
+        <Route path="edit/:id" element={<StripeCouponEdit />} />
+        <Route path="show/:id" element={<StripeCouponShow />} />
+      </Route>
+      <Route path="/profile" />
+    </CustomRoutes>
   </HydraAdmin>
 );
 

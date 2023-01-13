@@ -44,7 +44,7 @@ class ProductCategory
 
     #[ORM\Column(length: 255)]
     #[ApiProperty(identifier: true)]
-    #[Groups(['product_category.read', 'product_category.write', 'product.read', 'order.read'])]
+    #[Groups(['product_category.read', 'product_category.write', 'product.read', 'sku.read', 'sku_value.read', 'order.read'])]
     private ?string $name = null;
 
     #[ORM\OneToMany(mappedBy: 'productCategory', targetEntity: ProductSubCategory::class, orphanRemoval: true)]

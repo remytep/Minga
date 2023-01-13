@@ -38,8 +38,9 @@ const OrderList = (props) => {
             render={(record) =>
               record && (
                 <Chip
-                  label={record["@id"]}
+                  label={record.sku.referenceNumber}
                   onClick={() => {
+                    console.log(record)
                     navigate(
                       `/admin/panel/order_items/%2Fapi%2Forder_items%2F${record.id}/show`
                     );
@@ -51,6 +52,22 @@ const OrderList = (props) => {
         </SingleFieldList>
       </ArrayField>
       <FieldGuesser source="status" />
+      <WithRecord
+        label="ID Stripe"
+        render={(record) =>
+          typeof record.stripeCustomerId !== "undefined" ? (
+            <span>{record.stripeCustomerId}</span>
+          ) : <span>null</span>
+        }
+      />
+      <WithRecord
+        label="Tracking "
+        render={(record) =>
+          typeof record.idEasypostTracking !== "undefined" ? (
+            <span>{record.idEasypostTracking}</span>
+          ) : <span>null</span>
+        }
+      />
       <FieldGuesser source="totalAmount" />
       <DateField source="createdAt" showTime />
       <DateField source="updatedAt" showTime />

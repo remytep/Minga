@@ -35,6 +35,7 @@ final class UpdateFileController extends AbstractController
             $product->setName($data->name);
             $product->setDescription($data->description);
             $product->setSlug($data->slug);
+            $product->setFeatured($data->featured);
             $product->setProductSubCategory($productSubCategory);
             $product->setThumbnail(
                 $fileUploader->rename(
