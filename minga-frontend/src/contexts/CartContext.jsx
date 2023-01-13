@@ -38,6 +38,7 @@ function CartProvider({ children }) {
       }
     }
   }, [user, cartIri]);
+  
   useEffect(() => {
     // update total amount
     if (cart) {

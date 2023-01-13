@@ -21,7 +21,7 @@ function Product() {
     if (category !== "admin") {
       axios({
         method: "GET",
-        url: "https://localhost:8000/api/products/" + slug,
+        url: "http://localhost:8000/api/products/" + slug,
         headers: { "content-type": "application/json" },
       })
         .then((response) => {
