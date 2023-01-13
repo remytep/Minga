@@ -83,7 +83,7 @@ class Product
 
     #[ORM\ManyToOne(inversedBy: 'products')]
     #[ORM\JoinColumn(nullable: false)]
-    #[Groups(['product.read', 'product.write', 'product_sub_category.item.get', 'sku.read'])]
+    #[Groups(['product.read', 'product.write', 'product_sub_category.item.get', 'sku.read', 'order.read'])]
     private ?ProductSubCategory $productSubCategory;
 
     #[ORM\OneToMany(mappedBy: 'product', targetEntity: ProductOption::class, cascade: ["persist"], orphanRemoval: true)]
@@ -100,7 +100,7 @@ class Product
     private ?bool $featured = null;
 
     #[ORM\Column(length: 255, nullable: false)]
-    #[Groups(['product.read', 'product.write'])]
+    #[Groups(['product.read', 'product.write', 'product_sub_category.item.get'])]
     private ?string $thumbnail = null;
 
     #[ORM\Column(nullable: true)]

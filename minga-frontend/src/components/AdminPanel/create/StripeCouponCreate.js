@@ -28,6 +28,8 @@ const StripeCouponCreate = () => {
     const schema = yup.object({
         name: yup.string().required("Name is empty."),
         type: yup.string(),
+        customer: yup.string(),
+        code: yup.string(),
         percent_off: yup.mixed().nullable()
             .when("type", {
                 is: "percent_off",
@@ -44,6 +46,8 @@ const StripeCouponCreate = () => {
                     .required()
                     .min(0, 'Value must be greater than or equal to 0.'),
             }),
+        first_time_transaction: yup.boolean(),
+
         max_redemptions: yup.number().min(0, "Number of redemptions must be greater than or equal to 0.")
     }).required();
 

@@ -114,6 +114,7 @@ const AdminPanel = () =>
       name={"users"}
       list={list.UserList}
       create={create.UserCreate}
+      recordRepresentation="email"
     />
     <CustomRoutes>
       <Route path="/coupon/">

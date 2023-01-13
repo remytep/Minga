@@ -3,23 +3,14 @@
 namespace App\Controller\Stripe;
 
 use App\Controller\Easypost\ShippingController;
+use App\Entity\Order;
+use App\Entity\User;
+use Doctrine\Persistence\ManagerRegistry;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Routing\Annotation\Route;
-
-function calculateOrderAmount(array $items): int {
-    // Replace this constant with a calculation of the order's amount
-    // Calculate the order total on the server to prevent
-    // people from directly manipulating the amount on the client
-    $totalAmount = 0;
-    foreach ($items as $item) {
-        $totalAmount += $item->price;
-    }
-    //stripe takes the amout starting from penny
-    return $totalAmount;
-}
 
 function getLineItems($items): array {
     $line_items = [];
@@ -66,11 +57,12 @@ function getShippingRates($rates){
     return $shipping_rates;
 }
 
-class PaymentController{
+class PaymentController extends AbstractController{
 
     #[Route('/api/pay', name: 'create', methods: ['POST'])]
-    public function pay(){
+    public function pay(ManagerRegistry $doctrine){
         \Stripe\Stripe::setApiKey($_SERVER['STRIPE_PRIVATE_KEY']);
+        $entityManager = $doctrine->getManager();
 
         try {
             // retrieve JSON from POST body
@@ -110,18 +102,29 @@ class PaymentController{
                     'metadata' => ["id" => $jsonObj->id]
                 ]);
             }
-
+            $user = $entityManager
+                ->getRepository(User::class)
+                ->find($jsonObj->id);
+            $order = $entityManager
+                ->getRepository(Order::class)
+                ->findOneBy(["user" => $user, "status" => "CART"]);
             $id = null;
             $email = $customer->email;
             //if is connected, we give id to the session
             if (isset($stripe_customer)){
                 $id = $stripe_customer->data[0]->id;
                 $email = null;
+                if (!$order->getStripeCustomerId()){
+                    $order->setStripeCustomerId($id);
+                    $entityManager->persist($order);
+                    $entityManager->flush();
+                }
             }
 
             $checkout_session = \Stripe\Checkout\Session::create([
                 'allow_promotion_codes' => true,
                 'billing_address_collection' => 'required',
+                'client_reference_id' => $order->getId(),
                 'customer' => $id,
                 'customer_email' => $email,
                 //automatically update address if it's needed

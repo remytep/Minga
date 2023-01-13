@@ -4,6 +4,7 @@ namespace App\Controller\Stripe;
 
 use App\Controller\Easypost\ShippingController;
 use App\Entity\Sku;
+use App\Entity\Order;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -53,9 +54,12 @@ class CheckoutStripeController extends AbstractController{
             $selected_rate_id = $rate->metadata->id;
             $shipment = ShippingController::retrieveShipping($session->metadata->shipping);
             $line_items = $stripe->checkout->sessions->allLineItems($session_id);
+            $order = $entityManager
+                        ->getRepository(Order::class)
+                        ->find($session->client_reference_id);
             
             //we buy the selected rate for shipping
-            if (!isset($shipment->selected_rate)){
+            if ($order->getStatus() === "CART"){
                 foreach ($shipment->rates as $rate){
                     if ($rate->id === $selected_rate_id){
                         $shipment->buy([
@@ -74,13 +78,17 @@ class CheckoutStripeController extends AbstractController{
                     $entityManager->persist($sku);
                     $entityManager->flush();
                 }
+                //create a fake tracker for shipment
+                $tracker = \EasyPost\Tracker::create([
+                    'tracking_code' => "EZ1000000001",
+                    'carrier' => $shipment->selected_rate->carrier
+                ]);
+                $order->setStatus("COMPLETED");
+                $order->setIdEasypostTracking($tracker->id);
+                $entityManager->persist($order);
+                $entityManager->flush();
             }
-            dd($session);
-            //create a fake tracker for shipment
-            $tracker = \EasyPost\Tracker::create([
-                'tracking_code' => "EZ1000000001",
-                'carrier' => $shipment->selected_rate->carrier
-            ]);
+
             if ($session->customer_details){
                 return new JsonResponse(json_encode(["name" => $session->customer_details->name]));
             }

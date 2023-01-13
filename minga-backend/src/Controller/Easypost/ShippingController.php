@@ -40,7 +40,7 @@ class ShippingController extends AbstractController
         $parcel_weight = calculateTotalWeightInOz($cart);
         $customer = $jsonObj->customerInfos; 
         $custom_items = getCustomItems($cart);
-        //dd($customer->phone);
+//        dd($customer->address);
         $shipment = \EasyPost\Shipment::create([
             'to_address' => [
                 'name' => $customer->name,

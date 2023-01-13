@@ -23,7 +23,7 @@ function CartProvider({ children }) {
           user: "/api/users/" + user.id,
         })
         .then((response) => {
-          //console.log(response.data.id);
+          //console.log(response.data);
           setCartIri("/api/orders/" + response.data.id);
         })
         .catch((error) => console.log(error));
@@ -81,12 +81,12 @@ function CartProvider({ children }) {
       if (user) {
         axios
           .post("http://localhost:8000/order_items", {
-            orderNumber: "/api/orders/1",
+            orderNumber: cartIri,
             sku: product["@id"],
             quantity: amount,
           })
           .then((response) => {
-            //console.log(response);
+            console.log(response);
           })
           .catch((error) => console.log(error));
       }
@@ -103,7 +103,7 @@ function CartProvider({ children }) {
     axios
       .delete("http://localhost:8000/order_items", {
         data: {
-          orderNumber: "/api/orders/1",
+          orderNumber: cartIri,
           sku: "/api/skus/" + id,
         },
       })
@@ -119,7 +119,7 @@ function CartProvider({ children }) {
     const cartItem = cart.find((item) => item.id === id);
     axios
       .put("http://localhost:8000/order_items", {
-        orderNumber: "/api/orders/1",
+        orderNumber: cartIri,
         sku: "/api/skus/" + id,
         quantity: cartItem.amount + 1,
       })
@@ -140,7 +140,7 @@ function CartProvider({ children }) {
         if (item.id === id) {
           axios
             .put("http://localhost:8000/order_items", {
-              orderNumber: "/api/orders/1",
+              orderNumber: cartIri,
               sku: "/api/skus/" + id,
               quantity: cartItem.amount - 1,
             })

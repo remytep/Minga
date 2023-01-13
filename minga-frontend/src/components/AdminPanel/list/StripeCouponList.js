@@ -74,7 +74,7 @@ const StripeCouponList = () => {
                     <DataGrid
                         columns={columns}
                         rows={coupons}
-                        pageSize={5}
+                        rowsPerPageOptions={[25, 50, 100]}
                         autoHeight
                         checkboxSelection
                     />
