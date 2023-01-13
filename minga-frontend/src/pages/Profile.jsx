@@ -17,8 +17,8 @@ function Profile() {
         { name: "welcome", component: <ProfileWelcome /> },
         { name: "commandes", component: <ProfileMesCommandes /> },
         { name: "adresses", component: <ProfileAdresse /> },
-
     ]
+
     return (
         <div className='bg-[#C9C5BA] w-screen lg:h-screen'>
             <header className='h-24 p-6'>

@@ -3,6 +3,7 @@
 namespace App\Controller\Easypost;
 
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -85,6 +86,19 @@ class ShippingController extends AbstractController
 
         $shipment = \EasyPost\Shipment::retrieve($id);
         return $shipment;
+    }
+
+    #[Route('/api/tracking/{id}', name: 'get_tracking', methods: ['GET'])]
+    public static function retrieveTracking($id) {
+        \EasyPost\EasyPost::setApiKey($_SERVER["EASYPOST_KEY"]);
+
+        try {
+            $tracker = \EasyPost\Tracker::retrieve($id);
+            return new Response($tracker);
+        } catch (Error $e) {
+            http_response_code(500);
+            return new JsonResponse(json_encode(['error' => $e->getMessage()]));
+        }
     }
 
 }

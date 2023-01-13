@@ -16,7 +16,6 @@ class CheckoutStripeController extends AbstractController{
     #[Route('/api/clientsecret', name: 'clientsecret', methods: ['POST'])]
     public function getClientSecret(){    
         \Stripe\Stripe::setApiKey($_SERVER['STRIPE_PRIVATE_KEY']);
-
         try {
             // retrieve JSON from POST body
             $jsonStr = file_get_contents('php://input');
@@ -38,9 +37,17 @@ class CheckoutStripeController extends AbstractController{
     }
     
     #[Route('/api/checkout', name: 'checkout', methods: ['POST'])]
-    public function getCustomerName(ManagerRegistry $doctrine) {
+    public function checkout(ManagerRegistry $doctrine) {
         $stripe = new \Stripe\StripeClient($_SERVER['STRIPE_PRIVATE_KEY']);
         $entityManager = $doctrine->getManager();
+        $tracking_codes = ["EZ1000000001", 
+            "EZ2000000002", 
+            "EZ3000000003", 
+            "EZ4000000004", 
+            "EZ5000000005", 
+            "EZ6000000006",
+            "EZ7000000007",
+        ];
 
         try {
             // retrieve JSON from POST body
@@ -80,7 +87,7 @@ class CheckoutStripeController extends AbstractController{
                 }
                 //create a fake tracker for shipment
                 $tracker = \EasyPost\Tracker::create([
-                    'tracking_code' => "EZ1000000001",
+                    'tracking_code' => $tracking_codes[array_rand($tracking_codes)],
                     'carrier' => $shipment->selected_rate->carrier
                 ]);
                 $order->setStatus("COMPLETED");
