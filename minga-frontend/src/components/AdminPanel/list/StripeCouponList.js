@@ -27,14 +27,12 @@ const StripeCouponList = () => {
 
     const columns = [
         { field: 'id', headerName: 'ID' },
-        { field: 'name', headerName: 'Name' },
-        { field: 'duration', headerName: 'Duration' },
-        { field: 'percent_off', headerName: 'Percent', valueGetter: ({ value }) => value ? value + "%" : "null" },
-        { field: 'amount_off', headerName: 'Amount', valueGetter: (params) => params.row.amount_off ? params.row.amount_off + " " + params.row.currency.toUpperCase() : "null" },
-        { field: 'valid', flex: 1, headerName: 'Valid' },
-
+        { field: 'code', headerName: 'Name' },
+        { field: 'percent_off', headerName: 'Percent', valueGetter: (params) => params.row.coupon.percent_off ? params.row.coupon.percent_off + "%" : "null" },
+        { field: 'amount_off', headerName: 'Amount', valueGetter: (params) => params.row.coupon.amount_off ? params.row.coupon.amount_off + " " + params.row.coupon.currency.toUpperCase() : "null" },
+        { field: 'valid', flex: 1, headerName: 'Valid', valueGetter: (params) => params.row.coupon.valid },
         { field: 'created', flex: 1, type: 'dateTime', headerName: 'Created at', valueGetter: ({ value }) => value && new Date(value * 1000).toLocaleString() },
-        { field: 'redeem_by', flex: 1, type: 'dateTime', headerName: 'Expires in', valueGetter: ({ value }) => value ? new Date(value * 1000).toLocaleString() : "null" },
+        { field: 'redeem_by', flex: 1, type: 'dateTime', headerName: 'Expires in', valueGetter: (params) => params.row.coupon.redeem_by ? new Date(params.row.coupon.redeem_by * 1000).toLocaleString() : "null" },
         {
             field: 'actions',
             renderCell: (params) => (

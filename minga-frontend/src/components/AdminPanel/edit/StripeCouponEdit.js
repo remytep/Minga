@@ -47,7 +47,7 @@ const StripeCouponEdit = () => {
     const putCoupon = () => {
         axios.put(process.env.REACT_APP_ENTRYPOINT + "/coupon", coupon)
             .then((res) => {
-                navigate('/admin/coupon', {
+                navigate('/admin/panel/coupon', {
                     state: 'updated'
                 });
             })

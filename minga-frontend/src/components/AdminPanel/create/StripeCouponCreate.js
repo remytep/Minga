@@ -6,7 +6,9 @@ import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
 import Button from '@mui/material/Button';
-import { useState } from "react";
+import Checkbox from '@mui/material/Checkbox';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import { useState, useEffect } from "react";
 import axios from "axios";
 import { useForm } from "react-hook-form";
 import { yupResolver } from '@hookform/resolvers/yup';
@@ -19,36 +21,51 @@ const StripeCouponCreate = () => {
     const navigate = useNavigate();
 
     const currencies = ["USD", "EUR", "GBP", "JPY", "CHF"];
+    const [customers, setCustomers] = useState();
     const [coupon, setCoupon] = useState({
         type: "percent_off",
         currency: "EUR",
         redeem_by: null,
         max_redemptions: null
     });
+    const [codePromo, setCodePromo] = useState({
+        restrictions: {
+            minimum_amount_currency: "EUR",
+        }
+    })
     const schema = yup.object({
         name: yup.string().required("Name is empty."),
         type: yup.string(),
         customer: yup.string(),
-        code: yup.string(),
-        percent_off: yup.mixed().nullable()
+        code: yup.string().required("Code is empty."),
+        minimum_amount: yup.number()
+            .nullable(true)
+            .min(100)
+            .transform((_, val) => !isNaN(Math.sign(val)) ? Number(val) : null),
+
+        percent_off: yup.mixed()
             .when("type", {
                 is: "percent_off",
                 then: yup
-                    .number("Value is not a number.")
-                    .required()
+                    .number()
                     .min(0, 'Value must be greater than or equal to 0.')
-                    .max(100, 'Value must be less than or equal to 100.'),
+                    .max(100, 'Value must be less than or equal to 100.')
+                    //check if the value is null
+                    .transform((_, val) => !isNaN(Math.sign(val)) ? Number(val) : null)
             }),
-        amount_off: yup.mixed().nullable()
+        amount_off: yup.mixed()
             .when("type", {
                 is: "amount_off",
                 then: yup.number()
-                    .required()
-                    .min(0, 'Value must be greater than or equal to 0.'),
+                    .min(0, 'Value must be greater than or equal to 0.')
+                    .transform((_, val) => !isNaN(Math.sign(val)) ? Number(val) : null)
             }),
         first_time_transaction: yup.boolean(),
 
-        max_redemptions: yup.number().min(0, "Number of redemptions must be greater than or equal to 0.")
+        max_redemptions: yup.number()
+            .min(0, "Number of redemptions must be greater than or equal to 0.")
+            .transform((_, val) => !isNaN(Math.sign(val)) ? Number(val) : null)
+
     }).required();
 
     const { register, handleSubmit, setValue, formState: { errors } } = useForm({
@@ -57,12 +74,9 @@ const StripeCouponCreate = () => {
 
 
     const postCoupon = () => {
-        if (coupon.type === "percent_off") {
-            setCoupon({ ...coupon, currency: null });
-        }
-        axios.post(process.env.REACT_APP_ENTRYPOINT + "/coupon", coupon)
+        axios.post(process.env.REACT_APP_ENTRYPOINT + "/coupon", { coupon, codePromo })
             .then((res) => {
-                navigate('/admin/coupon', {
+                navigate('/admin/panel/coupon', {
                     state: 'created'
                 });
             })
@@ -70,6 +84,24 @@ const StripeCouponCreate = () => {
                 console.log(err);
             })
     }
+
+    useEffect(() => {
+        axios.get(process.env.REACT_APP_ENTRYPOINT + "/customers")
+            .then((res) => {
+                let filteredCustomers = res.data.filter((customer) => {
+                    if (Object.keys(customer.metadata).length > 0) {
+                        return customer;
+                    }
+                })
+                setCustomers(filteredCustomers);
+            })
+            .catch((err) => {
+                console.log(err);
+            })
+    }, [true])
+
+
+    console.log(coupon)
 
     return (
 
@@ -85,7 +117,7 @@ const StripeCouponCreate = () => {
                 }}
             >
                 <TextField
-                    label="Name"
+                    label="Name *"
                     variant="outlined"
                     {...register("name")}
                     error={!!errors.name}
@@ -95,6 +127,33 @@ const StripeCouponCreate = () => {
                         setCoupon({ ...coupon, name: e.target.value });
                     }}
                 />
+
+                <InputLabel id="type">Customer</InputLabel>
+                <Select
+                    labelId="type"
+                    {...register("customer")}
+                    fullWidth
+                    onChange={(e) => {
+                        setCodePromo({ ...codePromo, customer: e.target.value });
+                    }}
+                >
+                    {customers && customers.map((customer, i) => (
+                        <MenuItem key={i} value={customer.id}>{customer.email}</MenuItem>
+                    ))}
+
+                </Select>
+
+                <FormControlLabel
+                    {...register("first_time_transaction")}
+                    control={<Checkbox
+                        onChange={(e) => {
+                            setCodePromo({ ...codePromo, restrictions: { ...codePromo.restrictions, first_time_transaction: e.target.checked } });
+                        }} />}
+                    label="First time transaction only"
+
+                />
+
+
 
                 <InputLabel id="type">Type</InputLabel>
                 <Select
@@ -115,7 +174,7 @@ const StripeCouponCreate = () => {
                         inputProps={{
                             step: "0.01"
                         }}
-                        label="Value"
+                        label="Value *"
                         {...register("percent_off")}
                         error={!!errors.percent_off}
                         helperText={errors.percent_off && errors.percent_off.message}
@@ -131,14 +190,14 @@ const StripeCouponCreate = () => {
                     <>
                         <TextField
                             type="number"
-                            label="Value"
+                            label="Value *"
                             {...register("amount_off")}
                             error={!!errors.amount_off}
                             helperText={errors.amount_off && errors.amount_off.message}
                             fullWidth
                             onChange={(e) => {
                                 setCoupon({
-                                    ...coupon, amount_off: e.target.value
+                                    ...coupon, amount_off: e.target.value, percent_off: null
                                 });
                             }}
                         />
@@ -162,9 +221,59 @@ const StripeCouponCreate = () => {
                     </>
                 }
                 <TextField
+                    label="Promotion code *"
+                    {...register("code")}
+                    error={!!errors.code}
+                    helperText={errors.code && errors.code.message}
+                    fullWidth
+                    onChange={(e) => {
+                        setCodePromo({
+                            ...codePromo, code: e.target.value
+                        });
+                    }}
+                />
+                <div className="flex w-full items-center justify-evenly">
+                    <TextField
+                        type="number"
+                        fullWidth
+                        label="Minimum amout of transaction"
+                        {...register("minimum_amount")}
+                        error={!!errors.minimum_amount}
+                        helperText={errors.minimum_amount && errors.minimum_amount.message}
+                        onChange={(e) => {
+                            setCodePromo({
+                                ...codePromo, restrictions: { ...codePromo.restrictions, minimum_amount: e.target.value }
+                            });
+                        }}
+                    />
+                    {coupon.type === "percent_off" &&
+
+                        <div className="w-full">
+                            <InputLabel id="currency">Currency</InputLabel>
+                            <Select
+                                fullWidth
+                                labelId="currency"
+                                defaultValue={"EUR"}
+                                onChange={(e) => {
+                                    setCodePromo({ ...codePromo, restrictions: { ...codePromo.restrictions, minimum_amount_currency: e.target.value } });
+                                }}
+                            >
+                                {currencies.map((currency, i) => {
+                                    return (
+                                        <MenuItem key={i} value={currency}>
+                                            {currency}
+                                        </MenuItem>
+                                    )
+                                })}
+                            </Select>
+                        </div>
+                    }
+
+                </div>
+
+                <TextField
                     type="number"
                     label="Number of redemptions"
-                    defaultValue="0"
                     {...register("max_redemptions")}
                     error={!!errors.max_redemptions}
                     helperText={errors.max_redemptions && errors.max_redemptions.message}
@@ -202,7 +311,7 @@ const StripeCouponCreate = () => {
 
             </Box>
 
-        </form>
+        </form >
     );
 }
 
