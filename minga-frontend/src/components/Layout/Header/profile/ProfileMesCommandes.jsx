@@ -59,32 +59,23 @@ function ProfileMesCommandes() {
 
                         <div className="w-full flex flex-col items-center border-t-2 border-gray-400">
                             <div className="flex flex-row space-x-6 p-3">
-
-
-                                {trackings.find((obj) => obj.id === order.idEasypostTracking) &&
-                                    <>
-                                        <div className="text-3xl flex items-center pt-2">
-                                            {trackings.find((obj) => obj.id === order.idEasypostTracking).status === "delivered" ? (
-                                                <div className="text-3xl text-green-600 flex items-center pt-2">
-                                                    <ImCheckboxChecked />
-                                                </div>
-                                            ) : (<GiSandsOfTime />
-                                            )}
+                                <div className="text-3xl flex items-center pt-2">
+                                    {trackings[i] && trackings[i].status === "delivered" ? (
+                                        <div className="text-3xl text-green-600 flex items-center pt-2">
+                                            <ImCheckboxChecked />
                                         </div>
-                                        <div>
+                                    ) : (<GiSandsOfTime />
+                                    )}
+                                </div>
+                                <div>
 
-                                            <a href={trackings.find((obj) => obj.id === order.idEasypostTracking).public_url} className="text-xl text-gray-500">{trackings.find((obj) => obj.id === order.idEasypostTracking).tracking_code}</a>
-                                            <p className="text-lg font-bold uppercase">
-                                                {trackings.find((obj) => obj.id === order.idEasypostTracking).status}
-                                            </p>
-                                            <p className="font-medium opacity-70">Commande passée le {new Date(trackings.find((obj) => obj.id === order.idEasypostTracking).created_at).toLocaleString()}
-                                            </p>
-                                        </div>
-
-                                    </>
-
-
-                                }
+                                    <a href={trackings[i] && trackings[i].public_url} className="text-xl text-gray-500">{trackings[i] && trackings[i].tracking_code}</a>
+                                    <p className="text-lg font-bold uppercase">
+                                        {trackings[i] && trackings[i].status}
+                                    </p>
+                                    <p className="font-medium opacity-70">Commande passée le {trackings[i] && new Date(trackings[i].created_at).toLocaleString()}
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>

@@ -82,6 +82,9 @@ class CouponController{
                 if ($key === "restrictions"){
                     $paramsCodePromo[$key] = (array)$value;
                 }
+                else if ($key === "amount_off"){
+                    $paramsCodePromo[$key] = $value * 100;
+                }
                 else {
                     $paramsCodePromo[$key] = $value;
                 }

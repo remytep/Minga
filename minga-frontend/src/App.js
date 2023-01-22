@@ -25,7 +25,6 @@ import Profile from "./pages/Profile";
 
 function App() {
   const { user, logout } = useContext(AuthContext);
-  console.log(window.location.pathname);
   return (
     <Router>
       <AuthProvider>
