@@ -54,6 +54,11 @@ class CheckoutStripeController extends AbstractController{
             $session_id = file_get_contents('php://input');
 
             $session = $stripe->checkout->sessions->retrieve($session_id);
+            //if user is a guest, we don't need to check his order
+            if (str_contains($session->client_reference_id, '@')){
+                return new JsonResponse(json_encode(["name" => $session->client_reference_id]));
+            }
+
             $rate = $stripe->shippingRates->retrieve(
                 $session->shipping_cost->shipping_rate,
                 []

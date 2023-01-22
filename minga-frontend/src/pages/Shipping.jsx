@@ -52,7 +52,7 @@ const Shipping = (props) => {
             })
     }
 
-    if (itemAmount === 0 || (total > 1000 && !user && loaded)) {
+    if ((itemAmount === 0 && loaded) || (total > 1000 && !user && loaded)) {
         return (
             <Navigate to="/" replace={true} />
         )

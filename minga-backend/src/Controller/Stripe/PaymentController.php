@@ -102,19 +102,21 @@ class PaymentController extends AbstractController{
                     'metadata' => ["id" => $jsonObj->id]
                 ]);
             }
-            $user = $entityManager
+            if (isset($jsonObj->id)){
+                $user = $entityManager
                 ->getRepository(User::class)
                 ->find($jsonObj->id);
-            $order = $entityManager
+                $order = $entityManager
                 ->getRepository(Order::class)
                 ->findOneBy(["user" => $user, "status" => "CART"]);
+            }
             $id = null;
             $email = $customer->email;
             //if is connected, we give id to the session
             if (isset($stripe_customer)){
                 $id = $stripe_customer->data[0]->id;
                 $email = null;
-                if (!$order->getStripeCustomerId()){
+                if (isset($order) && !$order->getStripeCustomerId()){
                     $order->setStripeCustomerId($id);
                     $entityManager->persist($order);
                     $entityManager->flush();
@@ -124,7 +126,7 @@ class PaymentController extends AbstractController{
             $checkout_session = \Stripe\Checkout\Session::create([
                 'allow_promotion_codes' => true,
                 'billing_address_collection' => 'required',
-                'client_reference_id' => $order->getId(),
+                'client_reference_id' => isset($order) ?  $order->getId() : $email,
                 'customer' => $id,
                 'customer_email' => $email,
                 //automatically update address if it's needed
