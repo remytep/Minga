@@ -27,7 +27,7 @@ function Profile() {
                         <a href="/">MINGA</a>
                     </div>
                     <div className='text-xl font-bold'>
-                        <h4>MON COMPTE</h4>
+                        <h4>MY ACCOUNT</h4>
                     </div>
                     <div className='text-xl font-bold'>
                         <a
@@ -53,18 +53,18 @@ function Profile() {
                         </div>
                         <div
                             onClick={() => setTab("welcome")}
-                            className="mt-2 flex justify-center text-white text-center bg-[#060606] font-bold uppercase text-sm px-6 py-3 hover:cursor-pointer"
+                            className="mt-2 flex text-white text-center bg-[#060606] font-bold uppercase text-sm px-6 py-3 hover:cursor-pointer"
                         >
-                            <h4 className='mt-1'>Mon compte</h4>
+                            <h4 className='mt-1'>My account</h4>
                         </div>
                         <div
                             onClick={() => setTab("commandes")}
                             className="mt-2 flex text-white text-center bg-[#060606] font-bold uppercase text-sm px-2 py-3 hover:cursor-pointer"
                         >
                             <HiShoppingCart className='text-2xl mr-5' />
-                            <h4 className='mt-1'>Mes commande</h4>
+                            <h4 className='mt-1'>My orders</h4>
                         </div>
-                        <div
+                        {/* <div
                             onClick={() => setTab("adresses")}
                             className="mt-2 flex text-white text-center bg-[#060606] font-bold uppercase text-sm px-2 py-3 hover:cursor-pointer"
                         >
@@ -74,7 +74,7 @@ function Profile() {
                         <div className="mt-2 flex text-white text-center bg-[#060606] font-bold uppercase text-sm px-2 py-3 hover:cursor-pointer">
                             <AiFillCreditCard className='text-2xl mr-5' />
                             <p className='mt-1'>Mes moyens de paiement</p>
-                        </div>
+                        </div> */}
                     </div>
 
                     {
