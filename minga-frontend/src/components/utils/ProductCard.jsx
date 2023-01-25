@@ -25,13 +25,13 @@ function ProductCard({ product, featured }) {
     stock = <p className="text-red-600 font-semibold">Out of stock</p>;
   }
 
-  console.log(product)
+  console.log(product);
   return (
     <>
       <div className="relative">
         <img
           className="object-cover h-full sm:h-[20rem] md:h-[28rem] lg:h-[24rem] xl:h-[40rem]"
-          src={`http://localhost:8000/uploads/${product.thumbnail}`}
+          src={`https://localhost:8000/uploads/${product.thumbnail}`}
           alt=""
         />
         {sale !== 0 ? (

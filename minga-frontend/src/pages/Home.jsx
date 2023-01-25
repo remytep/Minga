@@ -10,7 +10,7 @@ function Home() {
   useEffect(() => {
     axios({
       method: "GET",
-      url: "http://localhost:8000/api/products/popular",
+      url: "https://localhost:8000/api/products/popular",
       headers: { "content-type": "application/json" },
     }).then((response) => {
       //console.log(response.data);
@@ -18,7 +18,7 @@ function Home() {
     });
     axios({
       method: "GET",
-      url: "http://localhost:8000/api/products/?featured=true",
+      url: "https://localhost:8000/api/products/?featured=true",
       headers: { "content-type": "application/json" },
     }).then((response) => {
       //console.log(response.data);
@@ -46,4 +46,4 @@ function Home() {
   );
 }
 
-export default Home
+export default Home;

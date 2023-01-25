@@ -28,7 +28,7 @@ function Product() {
     if (category !== "admin") {
       axios({
         method: "GET",
-        url: "http://localhost:8000/api/products/" + slug,
+        url: "https://localhost:8000/api/products/" + slug,
         headers: { "content-type": "application/json" },
       })
         .then((response) => {
@@ -63,7 +63,7 @@ function Product() {
           return;
       }
       axios
-        .post("http://localhost:8000/api/products/viewCount/" + product.id, {
+        .post("https://localhost:8000/api/products/viewCount/" + product.id, {
           withCredentials: true,
         })
         .then((response) => {
@@ -93,8 +93,15 @@ function Product() {
   if (product && category !== "admin") {
     return (
       <main className="flex flex-col lg:flex-row gap-6 py-2 px-5 md:px-6 lg:px-10 xl:px-16 w-screen md:h-full">
-        <img src={variant ? `${process.env.REACT_APP_UPLOADS}/${variant.thumbnail}`
-          : `${process.env.REACT_APP_UPLOADS}/${product.thumbnail}`} alt="" className="lg:w-1/2 object-cover" />
+        <img
+          src={
+            variant
+              ? `${process.env.REACT_APP_UPLOADS}/${variant.thumbnail}`
+              : `${process.env.REACT_APP_UPLOADS}/${product.thumbnail}`
+          }
+          alt=""
+          className="lg:w-1/2 object-cover"
+        />
         <div className="flex flex-col gap-2 justify-between lg:w-1/2">
           <div id="name" className="flex justify-between h-18 md:h-24">
             <div className="flex flex-col">

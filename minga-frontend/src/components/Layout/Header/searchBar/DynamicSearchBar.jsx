@@ -43,7 +43,7 @@ export default function DynamicSearchBar() {
   const navigate = useNavigate();
   useEffect(() => {
     axios
-      .get("http://localhost:8000/api/products")
+      .get("https://localhost:8000/api/products")
       .then((res) => {
         //console.log(Object.values(res.data["hydra:member"]));
         setProducts(Object.values(res.data["hydra:member"]));
@@ -85,7 +85,7 @@ export default function DynamicSearchBar() {
               className="flex items-center justify-center w-full border-b-2 p-3"
             >
               <img
-                src={`http://localhost:8000/uploads/${results.thumbnail}`}
+                src={`https://localhost:8000/uploads/${results.thumbnail}`}
                 alt={results.description}
                 className="h-28"
               />

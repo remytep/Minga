@@ -13,7 +13,7 @@ function Options2({ product, setVariant }) {
     axios({
       method: "GET",
       url:
-        "http://localhost:8000/api/sku_values?productOptionValue=" + option1,
+        "https://localhost:8000/api/sku_values?productOptionValue=" + option1,
       headers: { "content-type": "application/json" },
     })
       .then((response) => {
@@ -26,7 +26,7 @@ function Options2({ product, setVariant }) {
     axios({
       method: "GET",
       url:
-        "http://localhost:8000/api/sku_values?productOptionValue=" + option2,
+        "https://localhost:8000/api/sku_values?productOptionValue=" + option2,
       headers: { "content-type": "application/json" },
     })
       .then((response) => {
@@ -61,7 +61,7 @@ function Options2({ product, setVariant }) {
     if (commonSkuValues.length === 2) {
       axios({
         method: "GET",
-        url: "http://localhost:8000" + commonSkuValues[0].Sku,
+        url: "https://localhost:8000" + commonSkuValues[0].Sku,
         headers: { "content-type": "application/json" },
       })
         .then((response) => {

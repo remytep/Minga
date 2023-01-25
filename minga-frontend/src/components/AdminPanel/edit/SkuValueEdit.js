@@ -25,7 +25,7 @@ const SkuValueEdit = () => {
   useEffect(() => {
     if (product) {
       axios
-        .get(`http://localhost:8000${product}`)
+        .get(`https://localhost:8000${product}`)
         .then((res) => {
           // console.log(res.data)
           setSkuByProduct(res.data.skus);
@@ -37,7 +37,7 @@ const SkuValueEdit = () => {
     }
     if (productOption) {
       axios
-        .get(`http://localhost:8000${productOption}`)
+        .get(`https://localhost:8000${productOption}`)
         .then((res) => {
           // console.log(res.data);
           return setOptionValuesByOption(res.data.productOptionValues);
